@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "faaast-service.fullname" . }}-config
+  labels:
+    {{- include "faaast-service.labels" . | nindent 4 }}
+data:
+  config.json: |
+    {
+      "persistence": {
+        "@class": "{{ .Values.persistence.class }}"
+      },
+      "messageBus": {
+        "@class": "{{ .Values.messageBus.class }}",
+        "host": "{{ .Values.messageBus.host }}",
+        "user": "{{ .Values.messageBus.user }}",
+        "password": "{{ .Values.messageBus.password }}"
+      },
+      "endpoints": [
+        {
+          "@class": "{{ (index .Values.endpoints 0).class }}",
+          "port": {{ (index .Values.endpoints 0).port }},
+          "corsEnabled": {{ (index .Values.endpoints 0).corsEnabled }},
+          "sslEnabled": {{ (index .Values.endpoints 0).sslEnabled }}
+        }
+      ]
+    }

@@ -1,0 +1,52 @@
+# values.yaml
+
+image:
+  repository: volzfr/faaast-service
+  tag: cloudd
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 443
+
+fullnameOverride: faaast-service
+
+ingress:
+  enabled: true
+  annotations:
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: 10m
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  tls:
+    - hosts:
+        - faaast-service.factory-x.catena-x.net
+      secretName: tls-secret-faaast-service
+  hosts:
+    - host: faaast-service.factory-x.catena-x.net
+      paths:
+        - path: /
+          pathType: Prefix
+
+config:
+  mountPath: "/app/config/config.json"
+
+persistence:
+  class: "de.fraunhofer.iosb.ilt.faaast.service.persistence.memory.PersistenceInMemory"
+
+messageBus:
+  class: "de.fraunhofer.iosb.ilt.faaast.service.messagebus.cloudevents.MessageBusCloudevents"
+  host: ""
+  user: ""
+  password: ""
+
+endpoints:
+  - class: "de.fraunhofer.iosb.ilt.faaast.service.endpoint.http.HttpEndpoint"
+    port: 8080
+    corsEnabled: true
+    sslEnabled: false
+
+autoscaling:
+  enabled: false
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false

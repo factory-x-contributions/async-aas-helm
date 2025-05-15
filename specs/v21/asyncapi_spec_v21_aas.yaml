@@ -1,0 +1,243 @@
+asyncapi: 3.0.0
+info:
+  title: AAS ASYNC API with CloudEvents
+  version: 0.2.1
+  description: >-
+    The specification defines how ElementCreated and ValueChanged events of an
+    asset administration shell are transmitted to the MQTT broker.
+channels:
+  aas/update/valuechanged:
+    address: >-
+      uri:aas:shells/{aasid}/submodels/{submodelid}/submodel-elements/{smec-idshort.property-idshort}
+    messages:
+      publish.message:
+        $ref: '#/components/messages/valueChanged'
+    parameters:
+      aasid:
+        $ref: '#/components/parameters/aasid'
+      submodelid:
+        $ref: '#/components/parameters/submodelid'
+      smec-idshort.property-idshort:
+        $ref: '#/components/parameters/smec-idshort.property-idshort'
+  aas/update/elementcreated:
+    address: aas/update/elementcreated
+    messages:
+      publish.message:
+        $ref: '#/components/messages/elementCreated'
+operations:
+  aas/update/valuechanged.publish:
+    action: send
+    channel:
+      $ref: '#/channels/aas~1update~1valuechanged'
+    messages:
+      - $ref: '#/channels/aas~1update~1valuechanged/messages/publish.message'
+  aas/update/elementcreated.publish:
+    action: send
+    channel:
+      $ref: '#/channels/aas~1update~1elementcreated'
+    messages:
+      - $ref: '#/channels/aas~1update~1elementcreated/messages/publish.message'
+components:
+  messages:
+    valueChanged:
+      name: AASvalueChanged
+      title: AAS Value Change message
+      summary: Emitted when a AAS property is changed
+      payload:
+        $ref: '#/components/schemas/valueChangedEvent'
+    elementCreated:
+      name: AASelementCreated
+      title: AAS Element Create message
+      summary: Emitted when a AAS element is created
+      payload:
+        $ref: '#/components/schemas/elementCreatedEvent'
+  parameters:
+    aasid:
+      description: The Id of the asset administration shell.
+    submodelid:
+      description: The Id of the submodel in the Asset Administration Shell with aasId.
+    smec-idshort.property-idshort:
+      description: The Id of a property in a Submodel Element Collection.
+  schemas:
+    valueChangedEvent:
+      properties:
+        specversion:
+          description: The version of the CloudEvents specification which the event uses.
+          type: string
+          const: '1.0'
+        id:
+          description: Identifies the event.
+          type: string
+          examples:
+            - 358c02f2-3a11-4836-971b-43a05550bf97
+        source:
+          description: Identifies the instance the event originated in.
+          type: string
+          format: uri-reference
+          examples:
+            - $ref: '#/channels/aas~1update~1valuechanged/address'
+        type:
+          description: >-
+            Describes the type of the event related to the source the event
+            originated in.
+          type: string
+          examples:
+            - org.factory-x.events.v1.AASValueChanged
+        datacontenttype:
+          description: Content type of the event data.
+          type: string
+          const: application/json
+        dataschema:
+          description: Identifies the schema that the event data adheres to.
+          type: string
+          format: uri
+          examples:
+            - >-
+              https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/Property
+        time:
+          description: Timestamp of when the occurrence happened.
+          format: date-time
+          type: string
+          examples:
+            - '2024-11-26T10:46:33.2171298+01:00'
+        data:
+          $ref: '#/components/schemas/valueChangedEventData'
+    valueChangedEventData:
+      type: object
+      properties:
+        modelType:
+          type: string
+          examples:
+            - Property
+        dataType:
+          type: string
+          example: xs:string
+        value:
+          type:
+            - string
+            - number
+          examples:
+            - Christian X
+        idShort:
+          type: string
+          examples:
+            - property-idShort
+    elementCreatedEvent:
+      type: object
+      properties:
+        specversion:
+          description: The version of the CloudEvents specification which the event uses.
+          type: string
+          const: '1.0'
+        id:
+          description: Identifies the event.
+          type: string
+          examples:
+            - ecbd132e-d834-4528-bb30-6790104ca474
+        source:
+          description: Identifies the instance the event originated in.
+          type: string
+          format: uri-reference
+          examples:
+            - urn:shells/base64url(https://example.com/ids/aas/123)
+        type:
+          description: >-
+            Describes the type of the event related to the source the event
+            originated in.
+          type: string
+          examples:
+            - org.factory-x.events.v1.AASElementCreated
+        datacontenttype:
+          description: Content type of the event data.
+          type: string
+          const: application/json
+        dataschema:
+          description: Identifies the schema that the event data adheres to.
+          type: string
+          format: uri
+          examples:
+            - >-
+              https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/AssetAdministrationShell
+        time:
+          description: Timestamp of when the occurrence happened.
+          format: date-time
+          type: string
+          examples:
+            - '2024-11-26T10:44:11.9367113+01:00'
+        data:
+          $ref: '#/components/schemas/elementCreatedEventData'
+    elementCreatedEventData:
+      type: object
+      properties:
+        modelType:
+          type: string
+          examples:
+            - AssetAdministrationShell
+        assetInformation:
+          type: object
+          properties:
+            assetKind:
+              type: string
+              examples:
+                - Instance
+            defaultThumbnail:
+              type: object
+              properties:
+                contentType:
+                  type: string
+                  examples:
+                    - image/jpeg
+                path:
+                  type: string
+                  examples:
+                    - /aasx/files/w86TSNER_400x400.jpg
+        submodels:
+          type: array
+          items:
+            - type: object
+              properties:
+                keys:
+                  type: array
+                  items:
+                    - type: object
+                      properties:
+                        type:
+                          type: string
+                          examples:
+                            - Submodel
+                        value:
+                          type: string
+                          examples:
+                            - https://example.com/ids/sm/5120_2111_9032_9005
+                type:
+                  type: string
+                  examples:
+                    - ExternalReference
+            - type: object
+              properties:
+                keys:
+                  type: array
+                  items:
+                    - type: object
+                      properties:
+                        type:
+                          type: string
+                          examples:
+                            - Submodel
+                        value:
+                          type: string
+                          examples:
+                            - https://example.com/ids/sm/7230_2111_9032_0866
+                type:
+                  type: string
+                  examples:
+                    - ExternalReference
+        id:
+          type: string
+          description: The Id of the created Submodel.
+          examples:
+            - https://example.com/ids/sm/7230_2111_9032_9766
+        idShort:
+          type: string
+          examples:
+            - festotest2

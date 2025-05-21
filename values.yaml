@@ -76,6 +76,10 @@ aas-basyx-v2-full:
     ingress:
       enabled: true
       hostname: <path:factory-x-ci-cd/data/async-aas#keycloak-url>
+      tls: true
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-prod
+        nginx.ingress.kubernetes.io/enable-cors: 'true'
     auth:
       adminUser: <path:factory-x-ci-cd/data/async-aas#keycloak-user>
       adminPassword: <path:factory-x-ci-cd/data/async-aas#keycloak-pw>
@@ -127,7 +131,7 @@ aas-basyx-v2-full:
       basyx.feature.authorization.type = rbac
       basyx.feature.authorization.jwtBearerTokenProvider = keycloak
       basyx.feature.authorization.rbac.file = file:/application/rbac_rules.json
-      spring.security.oauth2.resourceserver.jwt.issuer-uri = http://<path:factory-x-ci-cd/data/async-aas#keycloak-url>:8080/realms/BaSyx
+      spring.security.oauth2.resourceserver.jwt.issuer-uri = https://<path:factory-x-ci-cd/data/async-aas#keycloak-url>/realms/BaSyx
     ingress:
       enabled: true
       host: <path:factory-x-ci-cd/data/async-aas#basyx-disco-url>
@@ -164,6 +168,13 @@ aas-basyx-v2-full:
       mqtt.port=443
       mqtt.username=<path:factory-x-ci-cd/data/async-aas#broker-user>
       mqtt.password=<path:factory-x-ci-cd/data/async-aas#broker-pw>
+      
+      basyx.feature.authorization.enabled = true
+      basyx.feature.authorization.type = rbac
+      basyx.feature.authorization.jwtBearerTokenProvider = keycloak
+      basyx.feature.authorization.rbac.file = file:/application/rbac_rules.json
+      spring.security.oauth2.resourceserver.jwt.issuer-uri = https://<path:factory-x-ci-cd/data/async-aas#keycloak-url>/realms/BaSyx
+
     ingress:
       enabled: true
       host: <path:factory-x-ci-cd/data/async-aas#basyx-env-url>

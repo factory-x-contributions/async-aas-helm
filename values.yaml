@@ -66,7 +66,19 @@ aas-basyx-v2-full:
               access: readwrite
 
   keycloak:
-    enabled: false
+    enabled: true
+    postgresql:
+      enabled: true
+      auth:
+        username: <path:factory-x-ci-cd/data/async-aas#kc-pg-user>
+        password: <path:factory-x-ci-cd/data/async-aas#kc-pg-pw>
+        database: <path:factory-x-ci-cd/data/async-aas#kc-pg-db>
+    ingress:
+      enabled: true
+      hostname: <path:factory-x-ci-cd/data/async-aas#keycloak-url>
+    auth:
+      adminUser: <path:factory-x-ci-cd/data/async-aas#keycloak-user>
+      adminPassword: <path:factory-x-ci-cd/data/async-aas#keycloak-pw>
 
   aas-registry:
     enabled: true

@@ -79,6 +79,7 @@ aas-basyx-v2-full:
     auth:
       adminUser: <path:factory-x-ci-cd/data/async-aas#keycloak-user>
       adminPassword: <path:factory-x-ci-cd/data/async-aas#keycloak-pw>
+    args: ["kc.sh import --file /opt/keycloak/data/import/BaSyx-realm.json; kc.sh start-dev --hostname=<path:factory-x-ci-cd/data/async-aas#keycloak-url> --hostname-strict=false --hostname-debug=true"]
 
   aas-registry:
     enabled: true

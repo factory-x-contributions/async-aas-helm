@@ -3,7 +3,7 @@
 keycloak:
   ## @param keycloak.enabled Enable Keycloak 
   ##
-  enabled: true
+  enabled: false
   ## Keycloak PostgreSQL parameters
   ##
   postgresql:
@@ -28,7 +28,7 @@ keycloak:
   ingress:
     ## @param keycloak.ingress.enabled Enable ingress for Keycloak
     ##
-    enabled: true
+    enabled: false
     ## @param keycloak.ingress.ingressClassName IngressClass for the ingress
     ##
     ingressClassName: ""

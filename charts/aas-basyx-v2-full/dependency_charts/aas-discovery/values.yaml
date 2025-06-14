@@ -15,6 +15,7 @@ service:
   port: 8080
 
 ingress:
+  ingressClassName: ""
   enabled: false
   host: aas-discovery.local
 

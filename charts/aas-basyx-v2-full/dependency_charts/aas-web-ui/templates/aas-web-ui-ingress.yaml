@@ -5,16 +5,20 @@ metadata:
   labels:
     {{- include "aas-web-ui.labels" . | nindent 4 }}
   name: {{ include "aas-web-ui.fullname" . }}
+  {{- with .Values.ingress.annotations }}
   annotations:
-      kubernetes.io/ingress.class: nginx
-      cert-manager.io/cluster-issuer: letsencrypt-prod
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
+  {{- with .Values.ingress.ingressClassName }}
+  ingressClassName: {{ . }}
+  {{- end }}
   tls:
     - hosts:
-        - {{ .Values.ingress.host }}
+        - {{ .Values.ingress.host | quote }}
       secretName: {{ include "aas-web-ui.fullname" . }}-tls
   rules:
-  - host: {{ .Values.ingress.host }}
+  - host: {{ .Values.ingress.host | quote }}
     http:
       paths:
       - path: /

@@ -18,14 +18,13 @@ ingress:
     nginx.ingress.kubernetes.io/proxy-body-size: 10m
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
   tls:
-    - hosts:
-        - faaast-service.factory-x.catena-x.net
-      secretName: tls-secret-faaast-service
-  hosts:
-    - host: faaast-service.factory-x.catena-x.net
-      paths:
-        - path: /
-          pathType: Prefix
+    - hosts: []
+      secretName: ""
+  hosts: []
+#    - host: ""
+#      paths:
+#        - path: /
+#          pathType: Prefix
 
 config:
   mountPath: "/app/config/config.json"

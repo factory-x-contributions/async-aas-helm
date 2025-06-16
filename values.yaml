@@ -3,6 +3,16 @@ faaast-service:
     host: "wss://<path:factory-x-ci-cd/data/async-aas#broker-url>:443"
     user: "<path:factory-x-ci-cd/data/async-aas#broker-user>"
     password: "<path:factory-x-ci-cd/data/async-aas#broker-pw>"
+  ingress:
+    tls:
+      - hosts:
+        - "<path:factory-x-ci-cd/data/async-aas#faaast-url>"
+        secretName: "tls-secret-faaast-service"
+    hosts:
+      - host: "<path:factory-x-ci-cd/data/async-aas#faaast-url>"
+        paths:
+        - path: /
+          pathType: Prefix
 
 aas-basyx-v2-full:
   mqtt:
@@ -75,15 +85,17 @@ aas-basyx-v2-full:
         database: <path:factory-x-ci-cd/data/async-aas#kc-pg-db>
     ingress:
       enabled: true
+      ingressClassName: "nginx"
       hostname: <path:factory-x-ci-cd/data/async-aas#keycloak-url>
       tls: true
       annotations:
+        kubernetes.io/ingress.class: nginx
         cert-manager.io/cluster-issuer: letsencrypt-prod
         nginx.ingress.kubernetes.io/enable-cors: 'true'
     auth:
       adminUser: <path:factory-x-ci-cd/data/async-aas#keycloak-user>
       adminPassword: <path:factory-x-ci-cd/data/async-aas#keycloak-pw>
-    args: ["kc.sh import --file /opt/keycloak/data/import/BaSyx-realm.json; kc.sh start-dev --hostname=<path:factory-x-ci-cd/data/async-aas#keycloak-url> --hostname-strict=false --hostname-debug=true"]
+    args: ["/bin/sh -c 'kc.sh import --file /opt/keycloak/data/import/BaSyx-realm.json; kc.sh start-dev --hostname-strict=false --proxy-headers=xforwarded --http-enabled=true --features=token-exchange'"]
 
   aas-registry:
     enabled: true
@@ -98,7 +110,15 @@ aas-basyx-v2-full:
       connectionString: null
     ingress:
       enabled: true
-      host: <path:factory-x-ci-cd/data/async-aas#basyx-reg-url>
+      host: "<path:factory-x-ci-cd/data/async-aas#basyx-reg-url>"
+      tls: true
+      ingressClassName: "nginx"
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        cert-manager.io/cluster-issuer: letsencrypt-prod
+        nginx.ingress.kubernetes.io/enable-cors: "true"
+        nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+        nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
     config: |-
       basyx:
         cors:
@@ -119,6 +139,7 @@ aas-basyx-v2-full:
     config: |-
       server.port=8081
       spring.application.name=AAS Discovery Service
+      logging.level.root=TRACE
 
       basyx.aasdiscoveryservice.name=aas-discovery-service
 
@@ -127,14 +148,23 @@ aas-basyx-v2-full:
       basyx.cors.allowed-origins=*
       basyx.cors.allowed-methods=GET,POST,PATCH,DELETE,PUT,OPTIONS,HEAD
 
-      basyx.feature.authorization.enabled = true
-      basyx.feature.authorization.type = rbac
-      basyx.feature.authorization.jwtBearerTokenProvider = keycloak
-      basyx.feature.authorization.rbac.file = file:/application/rbac_rules.json
-      spring.security.oauth2.resourceserver.jwt.issuer-uri = https://<path:factory-x-ci-cd/data/async-aas#keycloak-url>/realms/BaSyx
+      basyx.feature.authorization.enabled=true
+      basyx.feature.authorization.type=rbac
+      basyx.feature.authorization.jwtBearerTokenProvider=keycloak
+      basyx.feature.authorization.rbac.file=file:/application/rbac-rules.json
+      spring.security.oauth2.resourceserver.jwt.issuer-uri=https://<path:factory-x-ci-cd/data/async-aas#keycloak-url>/realms/BaSyx
+
     ingress:
       enabled: true
-      host: <path:factory-x-ci-cd/data/async-aas#basyx-disco-url>
+      host: "<path:factory-x-ci-cd/data/async-aas#basyx-disco-url>"
+      tls: true
+      ingressClassName: "nginx"
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        cert-manager.io/cluster-issuer: letsencrypt-prod
+        nginx.ingress.kubernetes.io/enable-cors: "true"
+        nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+        nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
 
   # Also needs an ingress.
   aas-environment:
@@ -172,12 +202,20 @@ aas-basyx-v2-full:
       basyx.feature.authorization.enabled = true
       basyx.feature.authorization.type = rbac
       basyx.feature.authorization.jwtBearerTokenProvider = keycloak
-      basyx.feature.authorization.rbac.file = file:/application/rbac_rules.json
+      basyx.feature.authorization.rbac.file = file:/application/rbac-rules.json
       spring.security.oauth2.resourceserver.jwt.issuer-uri = https://<path:factory-x-ci-cd/data/async-aas#keycloak-url>/realms/BaSyx
 
     ingress:
       enabled: true
       host: <path:factory-x-ci-cd/data/async-aas#basyx-env-url>
+      tls: true
+      ingressClassName: "nginx"
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        nginx.ingress.kubernetes.io/enable-cors: "true"
+        cert-manager.io/cluster-issuer: letsencrypt-prod
+        nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+        nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
 
   # Needs specific ingress.
   aas-web-ui:

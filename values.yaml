@@ -153,7 +153,6 @@ aas-basyx-v2-full:
       basyx.feature.authorization.jwtBearerTokenProvider=keycloak
       basyx.feature.authorization.rbac.file=file:/application/rbac-rules.json
       spring.security.oauth2.resourceserver.jwt.issuer-uri=https://<path:factory-x-ci-cd/data/async-aas#keycloak-url>/realms/BaSyx
-
     ingress:
       enabled: true
       host: "<path:factory-x-ci-cd/data/async-aas#basyx-disco-url>"
@@ -203,6 +202,7 @@ aas-basyx-v2-full:
       basyx.feature.authorization.type = rbac
       basyx.feature.authorization.jwtBearerTokenProvider = keycloak
       basyx.feature.authorization.rbac.file = file:/application/rbac-rules.json
+
       spring.security.oauth2.resourceserver.jwt.issuer-uri = https://<path:factory-x-ci-cd/data/async-aas#keycloak-url>/realms/BaSyx
 
     ingress:

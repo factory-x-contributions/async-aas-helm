@@ -6,8 +6,8 @@ dependencies:
     version: 0.1.0
     repository: "file://charts/faaast-service"
   - name: aas-basyx-v2-full
-    version: 0.0.2
-    repository: "file://charts/aas-basyx-v2-full"
+    version: 2.0.0
+    repository: "https://eclipse-basyx.github.io/charts/"
 
 # A chart can be either an 'application' or a 'library' chart.
 #

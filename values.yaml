@@ -6,13 +6,13 @@ faaast-service:
   ingress:
     tls:
       - hosts:
-        - "<path:factory-x-ci-cd/data/async-aas#faaast-url>"
+          - "<path:factory-x-ci-cd/data/async-aas#faaast-url>"
         secretName: "tls-secret-faaast-service"
     hosts:
       - host: "<path:factory-x-ci-cd/data/async-aas#faaast-url>"
         paths:
-        - path: /
-          pathType: Prefix
+          - path: /
+            pathType: Prefix
 
 aas-basyx-v2-full:
   mqtt:
@@ -23,13 +23,13 @@ aas-basyx-v2-full:
       enabled: true
       ingressClassName: "nginx"
       annotations:
-       kubernetes.io/ingress.class: nginx
-       kubernetes.io/tls-acme: "true"
-       nginx.ingress.kubernetes.io/enable-cors: "true"
-       cert-manager.io/cluster-issuer: "letsencrypt-prod"
-       nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
-       nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-       nginx.ingress.kubernetes.io/websocket-services: mqttbroker-websockets-service
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: "true"
+        nginx.ingress.kubernetes.io/enable-cors: "true"
+        cert-manager.io/cluster-issuer: "letsencrypt-prod"
+        nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+        nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+        nginx.ingress.kubernetes.io/websocket-services: mqttbroker-websockets-service
       hosts:
         - host: <path:factory-x-ci-cd/data/async-aas#broker-url>
           type: websockets
@@ -100,7 +100,7 @@ aas-basyx-v2-full:
   aas-registry:
     enabled: true
     image:
-            # If Kafka is used, then the appropriate Bootstrap connection string must be provided.
+      # If Kafka is used, then the appropriate Bootstrap connection string must be provided.
       name: eclipsebasyx/aas-registry-log-mem:2.0.0-SNAPSHOT
       pullPolicy: IfNotPresent
     service:
@@ -120,10 +120,8 @@ aas-basyx-v2-full:
         nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
         nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
     config: |-
-      basyx:
-        cors:
-          allowed-origins: "*"
-          allowed-methods: "GET,POST,PATCH,DELETE,PUT,OPTIONS,HEAD"
+      basyx.cors.allowed-origins=*
+      basyx.cors.allowed-methods=GET,POST,PATCH,DELETE,PUT,OPTIONS,HEAD
 
 
   sm-registry:

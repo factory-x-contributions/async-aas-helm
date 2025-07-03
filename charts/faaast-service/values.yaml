@@ -1,8 +1,8 @@
 # values.yaml
 
 image:
-  repository: volzfr/faaast-service
-  tag: cloudd
+  repository: ghcr.io/factory-x-contributions/fa3st-service
+  tag: cloud
   pullPolicy: IfNotPresent
 
 service:

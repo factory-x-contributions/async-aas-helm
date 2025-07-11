@@ -29,6 +29,10 @@ ingress:
 #        - path: /
 #          pathType: Prefix
 
+faaast_basic_auth:
+  user: "<path:factory-x-ci-cd/data/async-aas#faaast-basic-auth-user>"
+  password: "<path:factory-x-ci-cd/data/async-aas#faaast-basic-auth-pw>"
+
 config:
   mountPath: "/app/config/config.json"
 

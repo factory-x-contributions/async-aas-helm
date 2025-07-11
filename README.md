@@ -12,10 +12,11 @@ AAS-implementations. Currently, it hosts two helm dependency charts. One for the
 latter hosts an MQTT broker. The Basyx helm chart is largely copied from upstream - only the values are different. Once 
 these open source projects expose their own helm repositories, the entire `charts` folder will be removed.
 
-![aas-async-umbrella.png](specs/artifacts/aas-async-umbrella.png)
+![aas-async-umbrella.png](./specs/artifacts/aas-async-umbrella.png)
 
 2. Specification Documents
 
 In order to provide implementations with an abstract spec document that they can use to implement, the `specs`
 folder contains a set of [asyncAPI](https://www.asyncapi.com/) files that describe in a transport-agnostic manner the
-payload and topic structure for AAS messages. More details on that in the [spec folder](specs).
+payload and topic structure for AAS messages. There's a human-readable spec [deployed via github pages](https://factory-x-contributions.github.io/async-aas-helm).
+The sources can be found on [Github](specs).

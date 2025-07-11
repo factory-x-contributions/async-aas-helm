@@ -15,6 +15,9 @@ jobs:
       - name: Remove git folder
         run: rm -rf .git
 
+      - name: Move frontpage
+        run: mv .github/resources/index.html .
+
       - name: Generating HTML for AAS document
         uses: asyncapi/cli@v3.2.0
         with:

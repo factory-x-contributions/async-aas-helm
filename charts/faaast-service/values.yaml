@@ -11,6 +11,10 @@ service:
 
 fullnameOverride: faaast-service
 
+faaast_basic_auth:
+  user: ""
+  password: ""
+
 ingress:
   enabled: true
   annotations:
@@ -28,10 +32,6 @@ ingress:
 #      paths:
 #        - path: /
 #          pathType: Prefix
-
-faaast_basic_auth:
-  user: "<path:factory-x-ci-cd/data/async-aas#faaast-basic-auth-user>"
-  password: "<path:factory-x-ci-cd/data/async-aas#faaast-basic-auth-pw>"
 
 config:
   mountPath: "/app/config/config.json"

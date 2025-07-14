@@ -14,7 +14,7 @@ faaast-service:
           - path: /
             pathType: Prefix
 
-  faaast_basic_auth:
+  basicAuth:
     user: "<path:factory-x-ci-cd/data/async-aas#faaast-basic-auth-user>"
     password: "<path:factory-x-ci-cd/data/async-aas#faaast-basic-auth-pw>"
 

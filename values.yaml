@@ -14,6 +14,10 @@ faaast-service:
           - path: /
             pathType: Prefix
 
+  basicAuth:
+    user: "<path:factory-x-ci-cd/data/async-aas#faaast-basic-auth-user>"
+    password: "<path:factory-x-ci-cd/data/async-aas#faaast-basic-auth-pw>"
+
 aas-basyx-v2-full:
   mqtt:
     enabled: true

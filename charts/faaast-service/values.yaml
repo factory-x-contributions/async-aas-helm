@@ -11,12 +11,16 @@ service:
 
 fullnameOverride: faaast-service
 
+basicAuth:
+  user: ""
+  password: ""
+
 ingress:
   enabled: true
   annotations:
     nginx.ingress.kubernetes.io/auth-type: basic
     nginx.ingress.kubernetes.io/auth-secret: faaast-basic-auth-secret
-    nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required - FA³ST'
+    nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required - FAAAST'
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: 10m
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
@@ -28,10 +32,6 @@ ingress:
 #      paths:
 #        - path: /
 #          pathType: Prefix
-
-faaast_basic_auth:
-  user: "<path:factory-x-ci-cd/data/async-aas#faaast-basic-auth-user>"
-  password: "<path:factory-x-ci-cd/data/async-aas#faaast-basic-auth-pw>"
 
 config:
   mountPath: "/app/config/config.json"

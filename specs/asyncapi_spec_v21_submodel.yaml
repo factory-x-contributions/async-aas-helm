@@ -64,9 +64,9 @@ components:
           examples:
             - 358c02f2-3a11-4836-971b-43a05550bf97
         source:
-          description: Identifies the instance the event originated in.
+          description: The URL the emitting Referable can be obtained from.
           type: string
-          format: uri-reference
+          pattern: ^https?:\/\/[^\s/$.?#].[^\s]*$
           examples:
             - $ref: '#/channels/submodel~1update~1valuechanged/address'
         type:
@@ -128,12 +128,12 @@ components:
           examples:
             - ecbd132e-d834-4528-bb30-6790104ca474
         source:
-          description: Identifies the instance the event originated in.
+          description: The URL the emitting Referable can be obtained from.
           type: string
-          format: uri-reference
+          pattern: ^https?:\/\/[^\s/$.?#].[^\s]*$
           examples:
             - >-
-              urn:submodels/base64url(https://example.com/ids/sm/7230_2111_9032_9766)
+              https://mycorp.com/aas-repo/submodels/bXktc3VibW9kZWwK/submodel-elements/bXktcHJvcGVydHkK
         type:
           description: >-
             Describes the type of the event related to the source the event

@@ -8,8 +8,10 @@ data:
   config.json: |
     {
       "persistence": {
-        "@class": "{{ .Values.persistence.class }}",
-        "initialModelFile": "{{ .Values.init.mountPath }}/{{ .Values.initialModelFileName }}"
+        {{- if .Values.initialModelFile }}
+        "initialModelFile": "{{ .Values.init.mountPath }}/{{ .Values.initialModelFileName }}",
+        {{- end }}
+        "@class": "{{ .Values.persistence.class }}"
       },
       "messageBus": {
         "@class": "{{ .Values.messageBus.class }}",

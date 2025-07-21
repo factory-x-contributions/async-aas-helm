@@ -32,6 +32,7 @@ spec:
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- if .Values.initialModelFile }}
       initContainers:
         - image: alpine/git
           name: git
@@ -43,6 +44,7 @@ spec:
           volumeMounts:
             - name: aas-test-data-volume
               mountPath: {{ .Values.init.mountPath }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           {{- with .Values.securityContext }}
@@ -77,9 +79,11 @@ spec:
             {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
+            {{- if .Values.initialModelFile }}
             - name: aas-test-data-volume
               mountPath:  {{ .Values.init.mountPath }}/{{ .Values.initialModelFileName }}
               subPath: {{ .Values.initialModelFileName }}
+            {{- end }}
       volumes:
         - name: config-volume
           configMap:
@@ -87,8 +91,10 @@ spec:
         {{- with .Values.volumes }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
+        {{- if .Values.initialModelFile }}
         - name: aas-test-data-volume
-        emptyDir: { }
+          emptyDir: { }
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

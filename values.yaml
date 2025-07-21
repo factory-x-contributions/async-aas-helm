@@ -14,10 +14,12 @@ faaast-service:
           - path: /
             pathType: Prefix
 
-  initialModelFile: true
-  initialModelFileName: "<path:factory-x-ci-cd/data/async-aas#initial-aas-file-name>"
-  initialModelFileLocation: "<path:factory-x-ci-cd/data/async-aas#initial-aas-file-location>"
-  githubPersonalAccessToken: "<path:factory-x-ci-cd/data/async-aas#github-personal-access-token>"
+  seeding:
+    enabled: true
+    filename: "<path:factory-x-ci-cd/data/async-aas#initial-aas-file-name>"
+    github:
+      repository: "<path:factory-x-ci-cd/data/async-aas#initial-aas-file-location>"
+      personalAccessToken: "<path:factory-x-ci-cd/data/async-aas#initial-aas-github-token>"
 
   basicAuth:
     user: "<path:factory-x-ci-cd/data/async-aas#faaast-basic-auth-user>"

@@ -36,12 +36,12 @@ ingress:
 config:
   mountPath: "/app/config/config.json"
 
-init:
+seeding:
   mountPath: "/app/resources"
-
-initialModelFileName: ""
-initialModelFileLocation: ""
-githubPersonalAccessToken: ""
+  filename: ""
+  github:
+    repository: ""
+    personalAccessToken: ""
 
 persistence:
   class: "de.fraunhofer.iosb.ilt.faaast.service.persistence.memory.PersistenceInMemory"

@@ -8,8 +8,8 @@ data:
   config.json: |
     {
       "persistence": {
-        {{- if .Values.initialModelFile }}
-        "initialModelFile": "{{ .Values.init.mountPath }}/{{ .Values.initialModelFileName }}",
+        {{- if .Values.seeding.enabled }}
+        "initialModelFile": "{{ .Values.seeding.mountPath }}/{{ .Values.seeding.filename }}",
         {{- end }}
         "@class": "{{ .Values.persistence.class }}"
       },

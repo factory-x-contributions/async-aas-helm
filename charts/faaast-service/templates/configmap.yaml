@@ -8,6 +8,9 @@ data:
   config.json: |
     {
       "persistence": {
+        {{- if .Values.seeding.enabled }}
+        "initialModelFile": "{{ .Values.seeding.mountPath }}/{{ .Values.seeding.filename }}",
+        {{- end }}
         "@class": "{{ .Values.persistence.class }}"
       },
       "messageBus": {

@@ -32,6 +32,19 @@ spec:
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- if .Values.seeding.enabled }}
+      initContainers:
+        - image: alpine/git
+          name: git
+          command:
+            - git
+            - clone
+            - https://{{ .Values.seeding.github.personalAccessToken }}@github.com/{{ .Values.seeding.github.repository }}
+            - {{ .Values.seeding.mountPath }}
+          volumeMounts:
+            - name: aas-test-data-volume
+              mountPath: {{ .Values.seeding.mountPath }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           {{- with .Values.securityContext }}
@@ -66,12 +79,21 @@ spec:
             {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
+            {{- if .Values.seeding.enabled }}
+            - name: aas-test-data-volume
+              mountPath:  {{ .Values.seeding.mountPath }}/{{ .Values.seeding.filename }}
+              subPath: {{ .Values.seeding.filename }}
+            {{- end }}
       volumes:
         - name: config-volume
           configMap:
             name: {{ include "faaast-service.fullname" . }}-config
         {{- with .Values.volumes }}
         {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.seeding.enabled }}
+        - name: aas-test-data-volume
+          emptyDir: { }
         {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

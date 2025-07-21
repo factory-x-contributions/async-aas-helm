@@ -14,7 +14,7 @@ faaast-service:
           - path: /
             pathType: Prefix
 
-  initialModelFile: false
+  initialModelFile: true
   initialModelFileName: "<path:factory-x-ci-cd/data/async-aas#initial-aas-file-name>"
   initialModelFileLocation: "<path:factory-x-ci-cd/data/async-aas#initial-aas-file-location>"
   githubPersonalAccessToken: "<path:factory-x-ci-cd/data/async-aas#github-personal-access-token>"

@@ -1,6 +1,6 @@
 faaast-service:
   messageBus:
-    host: "wss://<path:factory-x-ci-cd/data/async-aas#broker-url>:443"
+    host: "wss://<path:factory-x-ci-cd/data/async-aas#broker-url>:443/ws"
     user: "<path:factory-x-ci-cd/data/async-aas#broker-user>"
     password: "<path:factory-x-ci-cd/data/async-aas#broker-pw>"
   ingress:
@@ -33,65 +33,7 @@ faaast-service:
 
 aas-basyx-v2-full:
   mqtt:
-    enabled: true
-    websockets:
-      enabled: true
-    ingress:
-      enabled: true
-      ingressClassName: "nginx"
-      annotations:
-        kubernetes.io/ingress.class: nginx
-        kubernetes.io/tls-acme: "true"
-        nginx.ingress.kubernetes.io/enable-cors: "true"
-        cert-manager.io/cluster-issuer: "letsencrypt-prod"
-        nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
-        nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-        nginx.ingress.kubernetes.io/websocket-services: mqttbroker-websockets-service
-      hosts:
-        - host: <path:factory-x-ci-cd/data/async-aas#broker-url>
-          type: websockets
-          paths:
-            - path: /
-              pathType: ImplementationSpecific
-      tls:
-        - secretName: chart-example-tls
-          hosts:
-            - <path:factory-x-ci-cd/data/async-aas#broker-url>
-    apirule:
-      - enabled: false
-    auth:
-      enabled: true
-      users:
-        - username: fx-factory
-          password: <path:factory-x-ci-cd/data/async-aas#broker-pw-hash>
-          acl:
-            - topic: "#"
-              access: readwrite
-        - username: fx-publisher
-          password: <path:factory-x-ci-cd/data/async-aas#broker-pw-hash>
-          acl:
-            - topic: "#"
-              access: readwrite
-        - username: fx-subscriber
-          password: <path:factory-x-ci-cd/data/async-aas#broker-pw-hash>
-          acl:
-            - topic: "#"
-              access: readwrite
-        - username: fx-factory2
-          password: <path:factory-x-ci-cd/data/async-aas#broker-pw-hash>
-          acl:
-            - topic: "#"
-              access: readwrite
-        - username: fx-publisher2
-          password: <path:factory-x-ci-cd/data/async-aas#broker-pw-hash>
-          acl:
-            - topic: "#"
-              access: readwrite
-        - username: fx-subscriber2
-          password: <path:factory-x-ci-cd/data/async-aas#broker-pw-hash>
-          acl:
-            - topic: "#"
-              access: readwrite
+    enabled: false
 
   keycloak:
     enabled: true
@@ -213,6 +155,7 @@ aas-basyx-v2-full:
       mqtt.port=443
       mqtt.username=<path:factory-x-ci-cd/data/async-aas#broker-user>
       mqtt.password=<path:factory-x-ci-cd/data/async-aas#broker-pw>
+      mqtt.ws_path=/ws  # TODO must be implemented in Basyx
       
       basyx.feature.authorization.enabled = true
       basyx.feature.authorization.type = rbac
@@ -417,3 +360,79 @@ aas-basyx-v2-full:
   # Needs specific ingress.
   aas-web-ui:
     enabled: false
+
+rabbitmq:
+  image:
+    debug: false
+
+  extraContainerPorts:
+  - name: websocket-mqtt
+    containerPort: 9001
+
+  # select exposed ports
+  service:
+    portEnabled: false  # AMQP
+    distPortEnabled: false  # Erlang distribution server
+    managerPortEnabled: false  # RabbitMQ Manager
+    epmdPortEnabled: false  # RabbitMQ EPMD Discovery service
+    extraPorts:
+      - name: websocket-mqtt
+        port: 9001
+        targetPort: 9001
+
+  # disable persistence features using PVC
+  persistence:
+    enabled: false
+
+  # RabbitMQ / MQTT User
+  auth:
+    username: "<path:factory-x-ci-cd/data/async-aas#broker-user>"
+    password: "<path:factory-x-ci-cd/data/async-aas#broker-pw>"
+    updatePassword: true
+
+  # Enable MQTT + Websockets
+  extraPlugins: "rabbitmq_mqtt rabbitmq_web_mqtt"
+
+  # Additional RabbitMQ configuration
+  extraConfiguration: |-
+    vm_memory_high_watermark.relative = 0.8
+
+    web_mqtt.tcp.port = 9001
+    web_mqtt.ws_path = /ws
+
+    mqtt.vhost = /
+    mqtt.exchange = amq.topic
+    mqtt.allow_anonymous = false
+
+    #log.default.level = debug
+
+  ingress:
+    enabled: true
+    ingressClassName: "nginx"
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+      nginx.ingress.kubernetes.io/enable-cors: "true"
+      cert-manager.io/cluster-issuer: "letsencrypt-prod"
+      nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+      nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+      nginx.ingress.kubernetes.io/websocket-services: rabbitmqttbroker-websockets-service
+    
+    hostname: ""  # only for management interface, "disable"
+
+    extraRules:
+      - host: <path:factory-x-ci-cd/data/async-aas#broker-url>
+        http:
+          paths:
+            - path: /ws
+              pathType: ImplementationSpecific
+              backend:
+                service:
+                  name: rabbitmqttbroker-websockets-service  # TODO verify whether this just works or if we need to use "fullnameOverride"
+                  port: 9001
+
+    # need to use extraTls because the regular "tls" block is only for management interface
+    extraTls:
+      - hosts:
+        - <path:factory-x-ci-cd/data/async-aas#broker-url>
+        secretName: chart-example-tls  # TODO taken from basyx-mqtt config, does this need a CI variable?

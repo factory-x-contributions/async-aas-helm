@@ -1,6 +1,6 @@
 faaast-service:
   messageBus:
-    host: "wss://<path:factory-x-ci-cd/data/async-aas#broker-url>:443/ws"
+    host: "wss://<path:factory-x-ci-cd/data/async-aas#broker-url>:443/mqtt"
     user: "<path:factory-x-ci-cd/data/async-aas#broker-user>"
     password: "<path:factory-x-ci-cd/data/async-aas#broker-pw>"
   ingress:
@@ -155,7 +155,6 @@ aas-basyx-v2-full:
       mqtt.port=443
       mqtt.username=<path:factory-x-ci-cd/data/async-aas#broker-user>
       mqtt.password=<path:factory-x-ci-cd/data/async-aas#broker-pw>
-      mqtt.ws_path=/ws  # TODO must be implemented in Basyx
       
       basyx.feature.authorization.enabled = true
       basyx.feature.authorization.type = rbac
@@ -398,7 +397,7 @@ rabbitmq:
     vm_memory_high_watermark.relative = 0.8
 
     web_mqtt.tcp.port = 9001
-    web_mqtt.ws_path = /ws
+    web_mqtt.ws_path = /mqtt  # this MUST be set for Basyx (paho default, non-configurable in basyx)
 
     mqtt.vhost = /
     mqtt.exchange = amq.topic
@@ -424,7 +423,7 @@ rabbitmq:
       - host: <path:factory-x-ci-cd/data/async-aas#broker-url>
         http:
           paths:
-            - path: /ws
+            - path: /mqtt
               pathType: ImplementationSpecific
               backend:
                 service:

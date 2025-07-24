@@ -22,7 +22,6 @@ ingress:
     nginx.ingress.kubernetes.io/auth-secret: faaast-basic-auth-secret
     nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required - FAAAST'
     nginx.ingress.kubernetes.io/enable-cors: "true"
-    nginx.ingress.kubernetes.io/proxy-connect-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-body-size: 150m

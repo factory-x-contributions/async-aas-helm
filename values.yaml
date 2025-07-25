@@ -51,7 +51,8 @@ aas-basyx-v2-full:
         - secretName: chart-example-tls
           hosts:
             - <path:factory-x-ci-cd/data/async-aas#broker-url>
-    apirules: []
+    apirule:
+      - enabled: false
     auth:
       enabled: true
       users:

@@ -82,7 +82,7 @@ components:
             originated in.
           type: string
           examples:
-            - org.factory-x.events.v1.AASValueChanged
+            - io.admin-shell.events.v1.AASValueChanged
         datacontenttype:
           description: Content type of the event data.
           type: string
@@ -147,7 +147,7 @@ components:
             originated in.
           type: string
           examples:
-            - org.factory-x.events.v1.AASElementCreated
+            - io.admin-shell.events.v1.AASElementCreated
         datacontenttype:
           description: Content type of the event data.
           type: string

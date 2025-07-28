@@ -75,7 +75,7 @@ components:
             originated in.
           type: string
           examples:
-            - org.factory-x.events.v1.SubmodelValueChanged
+            - io.admin-shell.events.v1.SubmodelValueChanged
         datacontenttype:
           description: Content type of the event data.
           type: string
@@ -140,7 +140,7 @@ components:
             originated in.
           type: string
           examples:
-            - org.factory-x.events.v1.SubmodelElementCreated
+            - io.admin-shell.events.v1.SubmodelElementCreated
         datacontenttype:
           description: Content type of the event data.
           type: string

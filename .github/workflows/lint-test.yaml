@@ -6,14 +6,14 @@ on:
       - main
     paths:
       - '!**/README.md'
-      - '.github/workflows/tests.yaml'
+      - '.github/workflows/lint-test.yaml'
 
   push:
     branches:
       - main
     paths:
       - '!**/README.md'
-      - '.github/workflows/tests.yaml'
+      - '.github/workflows/lint-test.yaml'
   workflow_dispatch:
 
 jobs:

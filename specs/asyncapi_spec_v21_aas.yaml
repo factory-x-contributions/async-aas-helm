@@ -102,6 +102,16 @@ components:
             - '2024-11-26T10:46:33.2171298+01:00'
         data:
           $ref: '#/components/schemas/valueChangedEventData'
+      required:
+        - specversion
+        - id
+        - source
+        - type
+        - datacontenttype
+        - dataschema
+        - time
+      optional:
+        - data
     valueChangedEventData:
       type: object
       properties:
@@ -167,6 +177,16 @@ components:
             - '2024-11-26T10:44:11.9367113+01:00'
         data:
           $ref: '#/components/schemas/elementCreatedEventData'
+      required:
+        - specversion
+        - id
+        - source
+        - type
+        - datacontenttype
+        - dataschema
+        - time
+      optional:
+        - data
     elementCreatedEventData:
       type: object
       properties:

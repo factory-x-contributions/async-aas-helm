@@ -14,6 +14,7 @@ on:
     paths:
       - '!**/README.md'
       - '.github/workflows/tests.yaml'
+  workflow_dispatch:
 
 jobs:
   lint-test:
@@ -51,8 +52,18 @@ jobs:
 
       - name: Create kind cluster
         uses: helm/kind-action@v1.12.0
-        if: steps.list-changed.outputs.changed == 'true'
+        if: steps.list-changed.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
+
+      - name: Add repositories
+        run: helm dependency list . 2> /dev/null | tail +2 | head -n -1 | awk '$3 !~ /^file:/ { print "helm repo add " $1 " " $3 }' | while read cmd; do $cmd; done
+
+      - name: Remove deployment failure triggers
+        run: |
+          # Remove <path:... directives
+          sed -Ei 's/<path:factory-x-ci-cd\/data\/async-aas\#([a-zA-Z0-9-]+)>/\1/g' values.yaml
+          # Disable git init phase, we don't need initial model for testing the FA³ST deployment
+          sed -Ez 's/seeding:\n( *)enabled: true/seeding:\n\1enabled: false/' -i values.yaml
 
       - name: Run chart-testing (install)
-        run: ct install --target-branch ${{ github.event.repository.default_branch }}
-        if: steps.list-changed.outputs.changed == 'true'
+        run: ct install --target-branch ${{ github.event.repository.default_branch }} --charts .
+        if: steps.list-changed.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'

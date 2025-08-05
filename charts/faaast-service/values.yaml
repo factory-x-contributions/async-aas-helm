@@ -12,11 +12,13 @@ service:
 fullnameOverride: faaast-service
 
 basicAuth:
+  enabled: true
   user: ""
   password: ""
 
 ingress:
   enabled: true
+  className: "nginx"
   annotations:
     nginx.ingress.kubernetes.io/auth-type: basic
     nginx.ingress.kubernetes.io/auth-secret: faaast-basic-auth-secret

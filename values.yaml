@@ -1,6 +1,6 @@
 faaast-service:
   messageBus:
-    host: "wss://<path:factory-x-ci-cd/data/async-aas#broker-url>:443/mqtt"
+    host: "wss://<path:factory-x-ci-cd/data/async-aas#broker-url>:443"
     user: "<path:factory-x-ci-cd/data/async-aas#broker-user>"
     password: "<path:factory-x-ci-cd/data/async-aas#broker-pw>"
   ingress:
@@ -33,7 +33,65 @@ faaast-service:
 
 aas-basyx-v2-full:
   mqtt:
-    enabled: false
+    enabled: true
+    websockets:
+      enabled: true
+    ingress:
+      enabled: true
+      ingressClassName: "nginx"
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: "true"
+        nginx.ingress.kubernetes.io/enable-cors: "true"
+        cert-manager.io/cluster-issuer: "letsencrypt-prod"
+        nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+        nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+        nginx.ingress.kubernetes.io/websocket-services: mqttbroker-websockets-service
+      hosts:
+        - host: <path:factory-x-ci-cd/data/async-aas#broker-url>
+          type: websockets
+          paths:
+            - path: /
+              pathType: ImplementationSpecific
+      tls:
+        - secretName: chart-example-tls
+          hosts:
+            - <path:factory-x-ci-cd/data/async-aas#broker-url>
+    apirule:
+      - enabled: false
+    auth:
+      enabled: true
+      users:
+        - username: fx-factory
+          password: <path:factory-x-ci-cd/data/async-aas#broker-pw-hash>
+          acl:
+            - topic: "#"
+              access: readwrite
+        - username: fx-publisher
+          password: <path:factory-x-ci-cd/data/async-aas#broker-pw-hash>
+          acl:
+            - topic: "#"
+              access: readwrite
+        - username: fx-subscriber
+          password: <path:factory-x-ci-cd/data/async-aas#broker-pw-hash>
+          acl:
+            - topic: "#"
+              access: readwrite
+        - username: fx-factory2
+          password: <path:factory-x-ci-cd/data/async-aas#broker-pw-hash>
+          acl:
+            - topic: "#"
+              access: readwrite
+        - username: fx-publisher2
+          password: <path:factory-x-ci-cd/data/async-aas#broker-pw-hash>
+          acl:
+            - topic: "#"
+              access: readwrite
+        - username: fx-subscriber2
+          password: <path:factory-x-ci-cd/data/async-aas#broker-pw-hash>
+          acl:
+            - topic: "#"
+              access: readwrite
 
   keycloak:
     enabled: true
@@ -385,8 +443,8 @@ rabbitmq:
 
   # RabbitMQ / MQTT User
   auth:
-    username: "<path:factory-x-ci-cd/data/async-aas#broker-user>"
-    password: "<path:factory-x-ci-cd/data/async-aas#broker-pw>"
+    username: "<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-user>"
+    password: "<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-pw>"
     updatePassword: true
 
   # Enable MQTT + Websockets
@@ -420,7 +478,7 @@ rabbitmq:
     hostname: ""  # only for management interface, "disable"
 
     extraRules:
-      - host: <path:factory-x-ci-cd/data/async-aas#broker-url>
+      - host: <path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-url>
         http:
           paths:
             - path: /mqtt
@@ -433,5 +491,5 @@ rabbitmq:
     # need to use extraTls because the regular "tls" block is only for management interface
     extraTls:
       - hosts:
-        - <path:factory-x-ci-cd/data/async-aas#broker-url>
+        - <path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-url>
         secretName: chart-example-tls  # TODO taken from basyx-mqtt config, does this need a CI variable?

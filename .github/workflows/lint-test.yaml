@@ -6,14 +6,20 @@ on:
       - main
     paths:
       - '!**/README.md'
+      - '!specs/**'
       - '.github/workflows/lint-test.yaml'
+      - 'charts/**'
+      - 'Chart.yaml'
 
   push:
     branches:
       - main
     paths:
       - '!**/README.md'
+      - '!specs/**'
       - '.github/workflows/lint-test.yaml'
+      - 'charts/**'
+      - 'Chart.yaml'
   workflow_dispatch:
 
 jobs:

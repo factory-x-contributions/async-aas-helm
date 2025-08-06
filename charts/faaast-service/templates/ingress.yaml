@@ -5,8 +5,13 @@ metadata:
   name: {{ include "faaast-service.fullname" . }}
   labels:
     {{- include "faaast-service.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
   annotations:
+  {{- if and (.Values.basicAuth.enabled) (eq .Values.ingress.className "nginx") }}
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: faaast-basic-auth-secret
+    nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required - FAAAST'
+  {{- end }}
+  {{- with .Values.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:

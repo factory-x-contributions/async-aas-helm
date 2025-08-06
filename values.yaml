@@ -4,6 +4,12 @@ faaast-service:
     user: "<path:factory-x-ci-cd/data/async-aas#broker-user>"
     password: "<path:factory-x-ci-cd/data/async-aas#broker-pw>"
   ingress:
+    annotations:
+      nginx.ingress.kubernetes.io/enable-cors: "true"
+      nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+      nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+      nginx.ingress.kubernetes.io/proxy-body-size: 150m
+      cert-manager.io/cluster-issuer: "letsencrypt-prod"
     tls:
       - hosts:
           - "<path:factory-x-ci-cd/data/async-aas#faaast-url>"

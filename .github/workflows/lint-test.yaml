@@ -16,6 +16,7 @@ on:
       - main
     paths:
       - '!**/README.md'
+      - '!specs/**'
       - '.github/workflows/lint-test.yaml'
       - 'charts/**'
       - 'Chart.yaml'

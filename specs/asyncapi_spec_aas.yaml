@@ -1,7 +1,7 @@
 asyncapi: 3.0.0
 info:
   title: AAS ASYNC API with CloudEvents
-  version: 0.2.1
+  version: 0.3-SNAPSHOT
   description: >-
     The specification defines how ElementCreated and ValueChanged events of an
     asset administration shell are transmitted to the MQTT broker.

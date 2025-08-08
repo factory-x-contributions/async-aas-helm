@@ -68,7 +68,7 @@ components:
           type: string
           pattern: ^https?:\/\/[^\s/$.?#].[^\s]*$
           examples:
-            - $ref: '#/channels/submodel~1update~1valuechanged/address'
+            - $ref: 'https://providercorp.com/submodels/abcdef'
         type:
           description: >-
             Describes the type of the event related to the source the event
@@ -140,7 +140,7 @@ components:
         source:
           description: The URL the emitting Referable can be obtained from.
           type: string
-          pattern: ^https?:\/\/[^\s/$.?#].[^\s]*$
+          pattern: 'https://providercorp.com/submodels/abcde/submodel-elements/fghij'
           examples:
             - >-
               https://mycorp.com/aas-repo/submodels/bXktc3VibW9kZWwK/submodel-elements/bXktcHJvcGVydHkK

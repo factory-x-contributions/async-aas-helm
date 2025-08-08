@@ -1,52 +1,59 @@
 asyncapi: 3.0.0
 info:
-  title: AAS Submodel ASYNC API with CloudEvents
-  version: 0.2.1
+  title: AAS ASYNC API with CloudEvents
+  version: 0.3-SNAPSHOT
+  description: >-
+    The specification defines how ElementCreated and ValueChanged events of an
+    asset administration shell are transmitted to the MQTT broker.
 channels:
-  submodel/update/valuechanged:
+  aas/update/valuechanged:
     address: >-
-      uri:submodels/base64{submodelid}/submodel-elements/{smec-idshort.property-idshort}
+      uri:aas:shells/{aasid}/submodels/{submodelid}/submodel-elements/{smec-idshort.property-idshort}
     messages:
       publish.message:
         $ref: '#/components/messages/valueChanged'
     parameters:
+      aasid:
+        $ref: '#/components/parameters/aasid'
       submodelid:
         $ref: '#/components/parameters/submodelid'
       smec-idshort.property-idshort:
         $ref: '#/components/parameters/smec-idshort.property-idshort'
-  submodel/update/elementcreated:
-    address: submodel/update/elementcreated
+  aas/update/elementcreated:
+    address: aas/update/elementcreated
     messages:
       publish.message:
         $ref: '#/components/messages/elementCreated'
 operations:
-  submodel/update/valuechanged.publish:
+  aas/update/valuechanged.publish:
     action: send
     channel:
-      $ref: '#/channels/submodel~1update~1valuechanged'
+      $ref: '#/channels/aas~1update~1valuechanged'
     messages:
-      - $ref: '#/channels/submodel~1update~1valuechanged/messages/publish.message'
-  submodel/update/elementcreated.publish:
+      - $ref: '#/channels/aas~1update~1valuechanged/messages/publish.message'
+  aas/update/elementcreated.publish:
     action: send
     channel:
-      $ref: '#/channels/submodel~1update~1elementcreated'
+      $ref: '#/channels/aas~1update~1elementcreated'
     messages:
-      - $ref: '#/channels/submodel~1update~1elementcreated/messages/publish.message'
+      - $ref: '#/channels/aas~1update~1elementcreated/messages/publish.message'
 components:
   messages:
     valueChanged:
-      name: SubmodelValueChanged
-      title: Submodel Value Change message
-      summary: Emitted when a submodel property is changed
+      name: AASvalueChanged
+      title: AAS Value Change message
+      summary: Emitted when a AAS property is changed
       payload:
         $ref: '#/components/schemas/valueChangedEvent'
     elementCreated:
-      name: SubmodelElementCreated
-      title: Submodel Element Create message
-      summary: Emitted when a submodel element is created
+      name: AASelementCreated
+      title: AAS Element Create message
+      summary: Emitted when a AAS element is created
       payload:
         $ref: '#/components/schemas/elementCreatedEvent'
   parameters:
+    aasid:
+      description: The Id of the asset administration shell.
     submodelid:
       description: The Id of the submodel in the Asset Administration Shell with aasId.
     smec-idshort.property-idshort:
@@ -68,14 +75,14 @@ components:
           type: string
           pattern: ^https?:\/\/[^\s/$.?#].[^\s]*$
           examples:
-            - $ref: '#/channels/submodel~1update~1valuechanged/address'
+            - $ref: 'https://providercorp.com/shells/abcd'
         type:
           description: >-
             Describes the type of the event related to the source the event
             originated in.
           type: string
           examples:
-            - io.admin-shell.events.v1.SubmodelValueChanged
+            - io.admin-shell.events.v1.AASValueChanged
         datacontenttype:
           description: Content type of the event data.
           type: string
@@ -143,14 +150,14 @@ components:
           pattern: ^https?:\/\/[^\s/$.?#].[^\s]*$
           examples:
             - >-
-              https://mycorp.com/aas-repo/submodels/bXktc3VibW9kZWwK/submodel-elements/bXktcHJvcGVydHkK
+              https://mycorp.com/aas-repo/shells/bXktYWFzCg==/submodels/bXktc3VibW9kZWwK/submodel-elements/bXktcHJvcGVydHkK
         type:
           description: >-
             Describes the type of the event related to the source the event
             originated in.
           type: string
           examples:
-            - io.admin-shell.events.v1.SubmodelElementCreated
+            - io.admin-shell.events.v1.AASElementCreated
         datacontenttype:
           description: Content type of the event data.
           type: string
@@ -161,7 +168,7 @@ components:
           format: uri
           examples:
             - >-
-              https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/Submodel
+              https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/AssetAdministrationShell
         time:
           description: Timestamp of when the occurrence happened.
           format: date-time
@@ -183,6 +190,69 @@ components:
     elementCreatedEventData:
       type: object
       properties:
+        modelType:
+          type: string
+          examples:
+            - AssetAdministrationShell
+        assetInformation:
+          type: object
+          properties:
+            assetKind:
+              type: string
+              examples:
+                - Instance
+            defaultThumbnail:
+              type: object
+              properties:
+                contentType:
+                  type: string
+                  examples:
+                    - image/jpeg
+                path:
+                  type: string
+                  examples:
+                    - /aasx/files/w86TSNER_400x400.jpg
+        submodels:
+          type: array
+          items:
+            - type: object
+              properties:
+                keys:
+                  type: array
+                  items:
+                    - type: object
+                      properties:
+                        type:
+                          type: string
+                          examples:
+                            - Submodel
+                        value:
+                          type: string
+                          examples:
+                            - https://example.com/ids/sm/5120_2111_9032_9005
+                type:
+                  type: string
+                  examples:
+                    - ExternalReference
+            - type: object
+              properties:
+                keys:
+                  type: array
+                  items:
+                    - type: object
+                      properties:
+                        type:
+                          type: string
+                          examples:
+                            - Submodel
+                        value:
+                          type: string
+                          examples:
+                            - https://example.com/ids/sm/7230_2111_9032_0866
+                type:
+                  type: string
+                  examples:
+                    - ExternalReference
         id:
           type: string
           description: The Id of the created Submodel.
@@ -192,7 +262,3 @@ components:
           type: string
           examples:
             - festotest2
-        modelType:
-          type: string
-          examples:
-            - Submodel

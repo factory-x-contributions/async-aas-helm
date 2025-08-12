@@ -61,6 +61,6 @@ jobs:
 
           # Commit and push to gh-pages
           git add index.yaml helm-charts
-          git commit -s -m "Release ${{ needs.validation.outputs.RELEASE_VERSION }}"
+          git commit -s -m "Release charts"
 
           git push origin gh-pages

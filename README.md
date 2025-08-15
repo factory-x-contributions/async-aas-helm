@@ -20,3 +20,7 @@ In order to provide implementations with an abstract spec document that they can
 folder contains a set of [asyncAPI](https://www.asyncapi.com/) files that describe in a transport-agnostic manner the
 payload and topic structure for AAS messages. There's a human-readable spec [deployed via github pages](https://factory-x-contributions.github.io/async-aas-helm).
 The sources can be found on [Github](specs).
+
+3. MongoDB Install
+
+helm install -n basyx mongodb bitnami/mongodb --version 14.5.0 -f values.mongodb.yaml

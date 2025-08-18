@@ -93,6 +93,18 @@ aas-basyx-v2-full:
             - topic: "#"
               access: readwrite
 
+mongodb:
+  enabled: true
+  auth:
+    enabled: true
+    rootUser: <path:factory-x-ci-cd/data/async-aas#mongodb-admin-user>
+    rootPassword: <path:factory-x-ci-cd/data/async-aas#mongodb-admin-pw>
+  architecture: standalone
+  persistence:
+    size: 10Gi
+  service:
+    nameOverride: mongodb
+
   keycloak:
     enabled: true
     postgresql:

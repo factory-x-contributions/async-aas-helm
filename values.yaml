@@ -419,6 +419,8 @@ aas-basyx-v2-full:
     enabled: false
 
 rabbitmq:
+  fullnameOverride: rabbitmq
+
   image:
     debug: false
 
@@ -485,11 +487,12 @@ rabbitmq:
               pathType: ImplementationSpecific
               backend:
                 service:
-                  name: rabbitmqttbroker-websockets-service  # TODO verify whether this just works or if we need to use "fullnameOverride"
-                  port: 9001
+                  name: rabbitmq
+                  port:
+                    number: 9001
 
     # need to use extraTls because the regular "tls" block is only for management interface
     extraTls:
       - hosts:
         - <path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-url>
-        secretName: chart-example-tls  # TODO taken from basyx-mqtt config, does this need a CI variable?
+        secretName: chart-example-tls

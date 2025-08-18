@@ -68,7 +68,7 @@ components:
           type: string
           pattern: ^https?:\/\/[^\s/$.?#].[^\s]*$
           examples:
-            - $ref: 'https://providercorp.com/submodels/abcdef'
+            - 'https://providercorp.com/submodels/abcdef'
         type:
           description: >-
             Describes the type of the event related to the source the event

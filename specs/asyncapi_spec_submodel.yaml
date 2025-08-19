@@ -1,7 +1,7 @@
 asyncapi: 3.0.0
 info:
   title: AAS Submodel ASYNC API with CloudEvents
-  version: 0.2.1
+  version: 0.3-SNAPSHOT
 channels:
   submodel/update/valuechanged:
     address: >-
@@ -68,7 +68,7 @@ components:
           type: string
           pattern: ^https?:\/\/[^\s/$.?#].[^\s]*$
           examples:
-            - $ref: '#/channels/submodel~1update~1valuechanged/address'
+            - 'https://providercorp.com/submodels/abcdef'
         type:
           description: >-
             Describes the type of the event related to the source the event

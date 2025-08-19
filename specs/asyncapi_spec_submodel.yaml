@@ -140,7 +140,7 @@ components:
         source:
           description: The URL the emitting Referable can be obtained from.
           type: string
-          pattern: '^https?:\/\/[^\s/$.?#].[^\s]*$'
+          pattern: ^https?:\/\/[^\s/$.?#].[^\s]*$
           examples:
             - >-
               https://mycorp.com/aas-repo/submodels/bXktc3VibW9kZWwK/submodel-elements/bXktcHJvcGVydHkK

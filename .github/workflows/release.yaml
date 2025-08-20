@@ -1,66 +1,29 @@
-name: Chart Releaser
+name: Release Charts
 
 on:
   push:
-    branches: [ main ]
-  workflow_dispatch:
+    branches:
+      - main
 
 jobs:
-  
-  helm-release:
-    name: Publish helm charts
-    runs-on: ubuntu-latest
+  release:
+    # depending on default permission settings for your org (contents being read-only or read-write for workloads), you will have to add permissions
+    # see: https://docs.github.com/en/actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token
     permissions:
       contents: write
-      pages: write
-
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: gh-pages
           fetch-depth: 0
-      - name: Get GH Pages releases
+
+      - name: Configure Git
         run: |
-          if [ ! -d "helm-charts" ]; then exit 0; fi
-          find helm-charts/*.tgz > /tmp/released_packages
-          cat /tmp/released_packages
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: azure/setup-helm@v4
-        with:
-          version: v3.16.1
-      - name: Package helm, update index.yaml and push to gh-pages
-        run: |
-          # Prepare git env
-          git config user.name "factory-x-bot"
-          git config user.email "factory-x-bot@factory-x.org"
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
-          # Package all charts
-          find . -name Chart.yaml| xargs -n1 dirname | xargs -n1 helm package -u -d helm-charts
-
-          # Remove already released packages
-          if [ -f "/tmp/released_packages" ]; then cat /tmp/released_packages | xargs -n1 rm; fi
-          
-          # Remove charts/*.tgz -> Only release Chart.yamls from this repo
-          rm charts/*.tgz
-
-          git checkout -b gh-pages || git checkout gh-pages
-          
-          git pull --rebase origin gh-pages
-
-          # To keep `helm repo index` from re-releasing existing helm-charts .tgz-files, we shadow them while generating the index.yaml
-          if [ -f "/tmp/released_packages" ]; then cat /tmp/released_packages | xargs -I {} mv {} {}_bak; fi
-          
-          # Generate helm repo index.yaml
-          helm repo index . --merge index.yaml --url https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}/
-
-          if [ -f "/tmp/released_packages" ]; then cat /tmp/released_packages | xargs -I {} mv {}_bak {}; fi
-
-          # Commit and push to gh-pages
-          git add index.yaml helm-charts
-          git commit -s -m "Release charts"
-
-          git push origin gh-pages
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@v1.7.0
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"

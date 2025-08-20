@@ -439,6 +439,10 @@ rabbitmq:
         port: 9001
         targetPort: 9001
 
+  # disable metrics gathering
+  metrics:
+    enabled: false
+
   # disable persistence features using PVC
   persistence:
     enabled: false
@@ -452,9 +456,15 @@ rabbitmq:
   # Enable MQTT + Websockets
   extraPlugins: "rabbitmq_mqtt rabbitmq_web_mqtt"
 
+  # configure memory usage threshold for warnings
+  # memoryHighWatermark:
+  #   enabled: true
+  #   type: "relative"
+  #   value: 0.8
+
   # Additional RabbitMQ configuration
   extraConfiguration: |-
-    vm_memory_high_watermark.relative = 0.8
+    listeners.tcp = none  # disable AMQP
 
     web_mqtt.tcp.port = 9001
     web_mqtt.ws_path = /mqtt  # this MUST be set for Basyx (paho default, non-configurable in basyx)
@@ -483,7 +493,7 @@ rabbitmq:
       - host: <path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-url>
         http:
           paths:
-            - path: /mqtt
+            - path: /
               pathType: ImplementationSpecific
               backend:
                 service:
@@ -495,4 +505,4 @@ rabbitmq:
     extraTls:
       - hosts:
         - <path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-url>
-        secretName: chart-example-tls
+        secretName: chart-example-tls-rabbitmq

@@ -213,7 +213,7 @@ aas-basyx-v2-full:
       mqtt.port=443
       mqtt.username=<path:factory-x-ci-cd/data/async-aas#broker-user>
       mqtt.password=<path:factory-x-ci-cd/data/async-aas#broker-pw>
-      
+
       basyx.feature.authorization.enabled = true
       basyx.feature.authorization.type = rbac
       basyx.feature.authorization.jwtBearerTokenProvider = keycloak
@@ -486,7 +486,7 @@ rabbitmq:
       nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
       nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
       nginx.ingress.kubernetes.io/websocket-services: rabbitmqttbroker-websockets-service
-    
+
     hostname: ""  # only for management interface, "disable"
 
     extraRules:

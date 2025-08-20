@@ -8,6 +8,9 @@ dependencies:
   - name: aas-basyx-v2-full
     version: 2.0.6
     repository: "https://eclipse-basyx.github.io/charts/"
+  - name: rabbitmq
+    version: 16.0.11
+    repository: "https://charts.bitnami.com/bitnami"
 
 # A chart can be either an 'application' or a 'library' chart.
 #

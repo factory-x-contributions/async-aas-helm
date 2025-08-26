@@ -467,7 +467,7 @@ rabbitmq:
 
   # Enable MQTT, Websockets, and OAuth
   extraPlugins: "rabbitmq_mqtt rabbitmq_web_mqtt rabbitmq_auth_backend_oauth2"
-  
+
   # configure memory usage threshold for warnings
   # memoryHighWatermark:
   #   enabled: true

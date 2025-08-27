@@ -114,10 +114,16 @@ aas-basyx-v2-full:
       adminUser: <path:factory-x-ci-cd/data/async-aas#keycloak-user>
       adminPassword: <path:factory-x-ci-cd/data/async-aas#keycloak-pw>
     extraVolumes:
+      - name: basyx-keycloak-realm
+        configMap:
+          name: basyx-keycloak-realm
       - name: rabbitmq-realm
         configMap:
           name: rabbitmq-realm
     extraVolumeMounts:
+      - mountPath: /opt/keycloak/data/import/BaSyx-realm.json
+        subPath: BaSyx-realm.json
+        name: basyx-keycloak-realm
       - mountPath: /opt/keycloak/data/import/rabbitmq-realm.json
         subPath: rabbitmq-realm.json
         name: rabbitmq-realm

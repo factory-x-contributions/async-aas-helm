@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rabbitmq-realm
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+data:
+  rabbitmq-realm.json: |-
+{{- $file := .Files.Get "config/rabbitmq-realm.json" }}
+{{- $clientId := index (index (index .Values "aas-basyx-v2-full") "keycloak") "mqttClientId" }}
+{{- $clientSecret := index (index (index .Values "aas-basyx-v2-full") "keycloak") "mqttClientSecret" }}
+{{- $replaced := ($file | replace "CLIENTID-PLACEHOLDER" $clientId | replace "CLIENTSECRET-PLACEHOLDER" $clientSecret) }}
+{{ $replaced | nindent 4 }}

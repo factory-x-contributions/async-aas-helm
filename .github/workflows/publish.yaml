@@ -22,14 +22,14 @@ jobs:
         uses: asyncapi/cli@v3.2.0
         with:
           template: '@asyncapi/html-template@2.3.14'
-          filepath: specs/asyncapi_spec_v21_aas.yaml
+          filepath: specs/asyncapi_spec_aas.yaml
           output: aas-repository
 
       - name: Generating HTML for Submodels document
         uses: asyncapi/cli@v3.2.0
         with:
           template: '@asyncapi/html-template@2.3.14'
-          filepath: specs/asyncapi_spec_v21_submodel.yaml
+          filepath: specs/asyncapi_spec_submodel.yaml
           output: submodel-repository
 
       - uses: actions/upload-pages-artifact@v3

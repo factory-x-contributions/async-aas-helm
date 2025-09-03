@@ -9,7 +9,7 @@ dependencies:
     version: 2.0.6
     repository: "https://eclipse-basyx.github.io/charts/"
   - name: mongodb
-    version: 10.30.0
+    version: 10.26.0
     repository: "https://charts.bitnami.com/bitnami"
   - name: rabbitmq
     version: 16.0.14

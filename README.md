@@ -23,4 +23,4 @@ The sources can be found on [Github](specs).
 
 3. MongoDB Install
 
-helm install -n basyx mongodb bitnami/mongodb --version 14.5.0 -f values.mongodb.yaml
+helm install -n basyx mongodb bitnami/mongodb --version 16.5.45 -f values.mongodb.yaml

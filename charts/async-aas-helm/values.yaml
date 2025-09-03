@@ -447,6 +447,10 @@ aas-basyx-v2-full:
   aas-web-ui:
     enabled: false
 
+  externalAccess:
+    dnsCheck:
+      enabled: false
+      
 rabbitmq:
   fullnameOverride: rabbitmq
 

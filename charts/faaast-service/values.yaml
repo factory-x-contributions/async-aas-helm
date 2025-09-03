@@ -41,7 +41,7 @@ seeding:
 
 persistence:
   class: "de.fraunhofer.iosb.ilt.faaast.service.persistence.mongo.PersistenceMongo"
-  connectionString: mongodb://localhost:27017
+  connectionString: mongodb://mongodb:27017
   database: faaast-database
   override: true
 

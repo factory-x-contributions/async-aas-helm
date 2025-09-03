@@ -11,6 +11,8 @@ dependencies:
   - name: mongodb
     version: 16.5.45
     repository: "https://charts.bitnami.com/bitnami"
+    alias: mongodb
+    condition: mongodb.enabled
   - name: rabbitmq
     version: 16.0.14
     repository: "https://charts.bitnami.com/bitnami"

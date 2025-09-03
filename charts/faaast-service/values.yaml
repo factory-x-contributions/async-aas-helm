@@ -40,7 +40,10 @@ seeding:
     personalAccessToken: ""
 
 persistence:
-  class: "de.fraunhofer.iosb.ilt.faaast.service.persistence.memory.PersistenceInMemory"
+  class: "de.fraunhofer.iosb.ilt.faaast.service.persistence.mongo.PersistenceMongo"
+  connectionString: mongodb://mongodb:27017
+  database: faaast-database
+  override: true
 
 messageBus:
   class: "de.fraunhofer.iosb.ilt.faaast.service.messagebus.cloudevents.MessageBusCloudevents"

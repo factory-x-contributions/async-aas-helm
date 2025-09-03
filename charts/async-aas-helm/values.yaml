@@ -93,6 +93,18 @@ aas-basyx-v2-full:
             - topic: "#"
               access: readwrite
 
+  mongodb:
+    enabled: false
+    auth:
+      enabled: true
+      rootUser: <path:factory-x-ci-cd/data/async-aas#mongodb-admin-user>
+      rootPassword: <path:factory-x-ci-cd/data/async-aas#mongodb-admin-pw>
+    architecture: standalone
+    persistence:
+      size: 10Gi
+    service:
+      nameOverride: mongodb
+
   keycloak:
     enabled: true
     postgresql:
@@ -237,6 +249,12 @@ aas-basyx-v2-full:
       basyx.feature.authorization.rbac.file = file:/application/rbac-rules.json
 
       spring.security.oauth2.resourceserver.jwt.issuer-uri = https://<path:factory-x-ci-cd/data/async-aas#keycloak-url>/realms/BaSyx
+
+      spring.data.mongodb.uri=mongodb://mongodb
+      spring.data.mongodb.port=27017
+      spring.data.mongodb.database=factoryx-mongo-db
+      spring.data.mongodb.username=<path:factory-x-ci-cd/data/async-aas#mongodb-admin-user>
+      spring.data.mongodb.password=<path:factory-x-ci-cd/data/async-aas#mongodb-admin-pw>
 
     ingress:
       enabled: true

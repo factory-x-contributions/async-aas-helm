@@ -11,7 +11,10 @@ data:
         {{- if .Values.seeding.enabled }}
         "initialModelFile": "{{ .Values.seeding.mountPath }}/{{ .Values.seeding.filename }}",
         {{- end }}
-        "@class": "{{ .Values.persistence.class }}"
+        "@class": "{{ .Values.persistence.class }}",
+        "connectionString": "{{ .Values.persistence.connectionString }}",
+        "database": "{{ .Values.persistence.database }}",
+        "override": "{{ .Values.persistence.override }}"
       },
       "messageBus": {
         "@class": "{{ .Values.messageBus.class }}",

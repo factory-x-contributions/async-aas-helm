@@ -1,0 +1,10 @@
+architecture: standalone
+auth:
+  rootUser: <path:factory-x-ci-cd/data/async-aas#mongodb-admin-user>
+  rootPassword: <path:factory-x-ci-cd/data/async-aas#mongodb-admin-pw>
+replicaSetName: <path:factory-x-ci-cd/data/async-aas#mongodb-aas-dashboard>
+
+persistence:
+  size: 10Gi
+service:
+  nameOverride: mongodb

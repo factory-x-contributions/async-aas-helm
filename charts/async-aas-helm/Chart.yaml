@@ -3,7 +3,7 @@ name: umbrella-mqtt-aas
 description: A Helm chart for Kubernetes
 dependencies:
   - name: faaast-service
-    version: 0.1.2
+    version: 0.1.3
     repository: "file://../../charts/faaast-service"
   - name: aas-basyx-v2-full
     version: 2.0.6

@@ -41,7 +41,7 @@ seeding:
 
 persistence:
   class: "de.fraunhofer.iosb.ilt.faaast.service.persistence.mongo.PersistenceMongo"
-  connectionString: mongodb://mongodb:27017
+  connectionString: mongodb://<path:factory-x-ci-cd/data/async-aas#mongodb-admin-user>:<path:factory-x-ci-cd/data/async-aas#mongodb-admin-pw>@mongodb:27017
   database: faaast-database
   override: true
 

@@ -4,8 +4,7 @@ info:
   version: 0.3-SNAPSHOT
 channels:
   submodel/update/valuechanged:
-    address: >-
-      uri:submodels/base64{submodelid}/submodel-elements/{smec-idshort.property-idshort}
+    address: noauth or all or participantid
     messages:
       publish.message:
         $ref: '#/components/messages/valueChanged'
@@ -15,7 +14,7 @@ channels:
       smec-idshort.property-idshort:
         $ref: '#/components/parameters/smec-idshort.property-idshort'
   submodel/update/elementcreated:
-    address: submodel/update/elementcreated
+    address: noauth or all or participantid
     messages:
       publish.message:
         $ref: '#/components/messages/elementCreated'

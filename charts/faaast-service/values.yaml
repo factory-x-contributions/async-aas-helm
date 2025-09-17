@@ -2,7 +2,7 @@
 
 image:
   repository: ghcr.io/factory-x-contributions/fa3st-service
-  tag: cloud
+  tag: 0.1.0-cloudevents
   pullPolicy: IfNotPresent
 
 service:
@@ -50,6 +50,8 @@ messageBus:
   host: ""
   user: ""
   password: ""
+  slimEvents: true
+  eventCallbackAddress: ""
 
 endpoints:
   - class: "de.fraunhofer.iosb.ilt.faaast.service.endpoint.http.HttpEndpoint"

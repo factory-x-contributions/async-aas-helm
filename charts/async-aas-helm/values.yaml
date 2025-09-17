@@ -3,6 +3,8 @@ faaast-service:
     host: "wss://<path:factory-x-ci-cd/data/async-aas#broker-url>:443"
     user: "<path:factory-x-ci-cd/data/async-aas#broker-user>"
     password: "<path:factory-x-ci-cd/data/async-aas#broker-pw>"
+    eventCallbackAddress: "<path:factory-x-ci-cd/data/async-aas#faaast-url>/api/v3.0"
+
   ingress:
     annotations:
       nginx.ingress.kubernetes.io/enable-cors: "true"

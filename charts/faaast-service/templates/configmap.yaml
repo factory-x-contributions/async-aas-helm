@@ -20,7 +20,9 @@ data:
         "@class": "{{ .Values.messageBus.class }}",
         "host": "{{ .Values.messageBus.host }}",
         "user": "{{ .Values.messageBus.user }}",
-        "password": "{{ .Values.messageBus.password }}"
+        "password": "{{ .Values.messageBus.password }}",
+        "slimEvents": "{{ .Values.messageBus.slimEvents }}",
+        "eventCallbackAddress": "{{ .Values.messageBus.eventCallbackAddress }}"
       },
       "endpoints": [
         {

@@ -7,8 +7,7 @@ info:
     asset administration shell are transmitted to the MQTT broker.
 channels:
   aas/update/valuechanged:
-    address: >-
-      uri:aas:shells/{aasid}/submodels/{submodelid}/submodel-elements/{smec-idshort.property-idshort}
+    address: noauth or all or participantid
     messages:
       publish.message:
         $ref: '#/components/messages/valueChanged'
@@ -20,7 +19,7 @@ channels:
       smec-idshort.property-idshort:
         $ref: '#/components/parameters/smec-idshort.property-idshort'
   aas/update/elementcreated:
-    address: aas/update/elementcreated
+    address: noauth or all or participantid
     messages:
       publish.message:
         $ref: '#/components/messages/elementCreated'

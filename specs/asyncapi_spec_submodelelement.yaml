@@ -112,3 +112,6 @@ components:
                 - number
               examples:
                 - 42
+            dataType:
+              type: string
+              example: xs:string

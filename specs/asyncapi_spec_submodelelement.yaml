@@ -31,9 +31,9 @@ components:
         $ref: '#/components/schemas/valueChangedEvent'
   parameters:
     submodelid:
-      description: The Id of the submodel in the Asset Administration Shell with aasId.
+      description: The ID of the submodel from which the event originates.
     idshortpath:
-      description: The idShortPath of a property within a Submodel.
+      description: The idShortPath to the emitting SubmodelElement.
   schemas:
     valueChangedEvent:
       properties:
@@ -79,8 +79,8 @@ components:
           type: string
           examples:
             - '2025-09-25T13:37:12.3456789+01:00'
-        semanticId:
-          description: The semanticId of the submodel in which the event took place, if available. This property may hold the entry in the semanticId's `keys`-array at index 0
+        semanticid:
+          description: The semanticId of the submodel from which the event was emitted, if available. (This property may hold the entry in the semanticId's `keys`-array at index 0)
           type: string
           examples:
             - "0173-1#02-AAA119#002"
@@ -105,23 +105,10 @@ components:
                 - string
                 - number
               examples:
-                - OldDataValue
+                - 41
             newValue:
               type: 
                 - string
                 - number
               examples:
-                - NewDataValue
-            dataType:
-              type: string
-              example: xs:string
-            value:
-              type:
-                - string
-                - number
-              examples:
-                - Christian X
-            idShort:
-              type: string
-              examples:
-                - property-idShort
+                - 42

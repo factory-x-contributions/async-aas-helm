@@ -32,6 +32,13 @@ jobs:
           filepath: specs/asyncapi_spec_submodel.yaml
           output: submodel-repository
 
+      - name: Generating HTML for SubmodelElements document
+        uses: asyncapi/cli@v3.2.0
+        with:
+          template: '@asyncapi/html-template@2.3.14'
+          filepath: specs/asyncapi_spec_submodelelement.yaml
+          output: submodel-repository-submodelelement
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: .

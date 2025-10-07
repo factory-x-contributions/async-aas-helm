@@ -1,0 +1,624 @@
+asyncapi: 3.0.0
+info:
+  title: AAS SubmodelElement ASYNC API with CloudEvents
+  version: 0.3-SNAPSHOT
+  description: This API describes SubmodelElement-level events emitted by an AAS Repository/Service.
+channels:
+  submodelelement/update/valuechanged:
+    address: noauth or all or participantid
+    messages:
+      publish.message:
+        $ref: '#/components/messages/valueChanged'
+  submodelelement/update/elementcreated:
+    address: noauth or all or participantid
+    messages:
+      publish.message:
+        $ref: '#/components/messages/elementCreated'
+  submodelelement/update/elementread:
+    address: noauth or all or participantid
+    messages:
+      publish.message:
+        $ref: '#/components/messages/elementRead'
+  submodelelement/update/elementupdated:
+    address: noauth or all or participantid
+    messages:
+      publish.message:
+        $ref: '#/components/messages/elementUpdated'
+  submodelelement/update/elementdeleted:
+    address: noauth or all or participantid
+    messages:
+      publish.message:
+        $ref: '#/components/messages/elementDeleted'
+  submodelelement/update/operationinvoked:
+    address: noauth or all or participantid
+    messages:
+      publish.message:
+        $ref: '#/components/messages/operationInvoked'
+  submodelelement/update/operationfinished:
+    address: noauth or all or participantid
+    messages:
+      publish.message:
+        $ref: '#/components/messages/operationFinished'
+operations:
+  submodelelement/update/valuechanged.publish:
+    action: send
+    channel:
+      $ref: '#/channels/submodelelement~1update~1valuechanged'
+    messages:
+      - $ref: '#/channels/submodelelement~1update~1valuechanged/messages/publish.message'
+  submodelelement/update/elementcreated.publish:
+    action: send
+    channel:
+      $ref: '#/channels/submodelelement~1update~1elementcreated'
+    messages:
+      - $ref: '#/channels/submodelelement~1update~1elementcreated/messages/publish.message'
+  submodelelement/update/elementread.publish:
+    action: send
+    channel:
+      $ref: '#/channels/submodelelement~1update~1elementread'
+    messages:
+      - $ref: '#/channels/submodelelement~1update~1elementread/messages/publish.message'
+  submodelelement/update/elementupdated.publish:
+    action: send
+    channel:
+      $ref: '#/channels/submodelelement~1update~1elementupdated'
+    messages:
+      - $ref: '#/channels/submodelelement~1update~1elementupdated/messages/publish.message'
+  submodelelement/update/elementdeleted.publish:
+    action: send
+    channel:
+      $ref: '#/channels/submodelelement~1update~1elementdeleted'
+    messages:
+      - $ref: '#/channels/submodelelement~1update~1elementdeleted/messages/publish.message'
+  submodelelement/update/operationinvoked.publish:
+    action: send
+    channel:
+      $ref: '#/channels/submodelelement~1update~1operationinvoked'
+    messages:
+      - $ref: '#/channels/submodelelement~1update~1operationinvoked/messages/publish.message'
+  submodelelement/update/operationfinished.publish:
+    action: send
+    channel:
+      $ref: '#/channels/submodelelement~1update~1operationfinished'
+    messages:
+      - $ref: '#/channels/submodelelement~1update~1operationfinished/messages/publish.message'
+components:
+  messages:
+    valueChanged:
+      name: SubmodelElementValueChanged
+      title: SubmodelElement Value Change message
+      summary: Triggered when the value of an element is updated
+      payload:
+        $ref: '#/components/schemas/valueChangedEvent'
+    elementCreated:
+      name: SubmodelElementUpdated
+      title: SubmodelElement Create message
+      summary: Triggered when an element is created
+      payload:
+        $ref: '#/components/schemas/elementCreatedEvent'
+    elementRead:
+      name: SubmodelElementRead
+      title: SubmodelElement Read message
+      summary: Triggered when an element is read
+      payload:
+        $ref: '#/components/schemas/elementReadEvent'
+    elementUpdated:
+      name: SubmodelElementUpdated
+      title: SubmodelElement Update message
+      summary: Triggered when an element is updated
+      payload:
+        $ref: '#/components/schemas/elementUpdatedEvent'
+    elementDeleted:
+      name: SubmodelElementUpdated
+      title: SubmodelElement Delete message
+      summary: Triggered when an element is deleted
+      payload:
+        $ref: '#/components/schemas/elementDeletedEvent'
+    operationInvoked:
+      name: OperationInvoked
+      title: Operation Invoke message
+      summary: Triggered when an operation is invoked
+      payload:
+        $ref: '#/components/schemas/operationInvokedEvent'
+    operationFinished:
+      name: OperationFinished
+      title: Operation Finish message
+      summary: Triggered when an operation is finished
+      payload:
+        $ref: '#/components/schemas/operationFinishedEvent'
+  schemas:
+    valueChangedEvent:
+      properties:
+        specversion:
+          description: The version of the CloudEvents specification which the event uses.
+          type: string
+          const: '1.0'
+        id:
+          description: Identifies the event.
+          type: string
+          examples:
+            - 358c02f2-3a11-4836-971b-43a05550bf97
+        source:
+          description: The URL the emitting Referable can be obtained from.
+          type: string
+          pattern: ^https?:\/\/[^\s/$.?#].[^\s]*$
+          examples:
+            - 'https://providercorp.com/submodels/b64encoded-id/submodel-elements/idshort.path.to.emitting.dataelelement'
+        type:
+          description: >-
+            Describes the type of the event related to the source the event originated in.
+          type: string
+          examples:
+            - io.admin-shell.events.v1.PropertyValueChanged
+            - io.admin-shell.events.v1.FileValueChanged
+        datacontenttype:
+          description: Content type of the event data.
+          type: string
+          const: application/json
+        dataschema:
+          description: Identifies the schema that the event data adheres to.
+          type: string
+          format: uri
+          examples:
+            - >-
+              https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/Property
+            - >-
+              https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/File
+        time:
+          description: Timestamp of when the occurrence happened.
+          format: date-time
+          type: string
+          examples:
+            - '2025-09-25T13:37:12.3456789+01:00'
+        semanticid:
+          description: The semanticId of the submodel from which the event was emitted, if available. (This property may hold the entry in the semanticId's `keys`-array at index 0)
+          type: string
+          examples:
+            - "0173-1#02-AAA119#002"
+        data:
+          $ref: '#/components/schemas/valueChangedEventData'
+      required:
+        - specversion
+        - id
+        - source
+        - type
+        - datacontenttype
+        - dataschema
+        - time
+      optional:
+        - data
+        - semanticid
+    valueChangedEventData:
+          type: object
+          properties:
+            oldValue:
+              type: 
+                - string
+                - number
+              examples:
+                - 41
+              description: The old value of the SubmodelElement.
+            newValue:
+              type: 
+                - string
+                - number
+              examples:
+                - 42
+              description: The new value of the SubmodelElement.
+            dataType:
+              type: string
+              example: xs:int
+              description: The data type of the changed value. If the data type changed, the new data type.
+    elementCreatedEvent:
+      properties:
+        specversion:
+          description: The version of the CloudEvents specification which the event uses.
+          type: string
+          const: '1.0'
+        id:
+          description: Identifies the event.
+          type: string
+          examples:
+            - 358c02f2-3a11-4836-971b-43a05550bf97
+        source:
+          description: The URL the emitting Referable can be obtained from.
+          type: string
+          pattern: ^https?:\/\/[^\s/$.?#].[^\s]*$
+          examples:
+            - 'https://providercorp.com/submodels/b64encoded-id/submodel-elements/idshort.path.to.emitting.referable'
+        type:
+          description: >-
+            Describes the type of the event related to the source the event originated in.
+          type: string
+          examples:
+            - io.admin-shell.events.v1.PropertyCreated
+            - io.admin-shell.events.v1.SubmodelElementCollectionCreated
+        datacontenttype:
+          description: Content type of the event data.
+          type: string
+          const: application/json
+        dataschema:
+          description: Identifies the schema that the event data adheres to.
+          type: string
+          format: uri
+          examples:
+            - >-
+              https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/Property
+            - >-
+              https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/File
+        time:
+          description: Timestamp of when the occurrence happened.
+          format: date-time
+          type: string
+          examples:
+            - '2025-09-25T13:37:12.3456789+01:00'
+        semanticid:
+          description: The semanticId of the submodel from which the event was emitted, if available. (This property may hold the entry in the semanticId's `keys`-array at index 0)
+          type: string
+          examples:
+            - "0173-1#02-AAA119#002"
+        data:
+          $ref: '#/components/schemas/wholeElementEventData'
+      required:
+        - specversion
+        - id
+        - source
+        - type
+        - datacontenttype
+        - dataschema
+        - time
+      optional:
+        - data
+        - semanticid
+    elementReadEvent:
+      properties:
+        specversion:
+          description: The version of the CloudEvents specification which the event uses.
+          type: string
+          const: '1.0'
+        id:
+          description: Identifies the event.
+          type: string
+          examples:
+            - 358c02f2-3a11-4836-971b-43a05550bf97
+        source:
+          description: The URL the emitting Referable can be obtained from.
+          type: string
+          pattern: ^https?:\/\/[^\s/$.?#].[^\s]*$
+          examples:
+            - 'https://providercorp.com/submodels/b64encoded-id/submodel-elements/idshort.path.to.emitting.referable'
+        type:
+          description: >-
+            Describes the type of the event related to the source the event originated in.
+          type: string
+          examples:
+            - io.admin-shell.events.v1.PropertyRead
+            - io.admin-shell.events.v1.SubmodelElementCollectionRead
+        datacontenttype:
+          description: Content type of the event data.
+          type: string
+          const: application/json
+        dataschema:
+          description: Identifies the schema that the event data adheres to.
+          type: string
+          format: uri
+          examples:
+            - >-
+              https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/Property
+            - >-
+              https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/File
+        time:
+          description: Timestamp of when the occurrence happened.
+          format: date-time
+          type: string
+          examples:
+            - '2025-09-25T13:37:12.3456789+01:00'
+        semanticid:
+          description: The semanticId of the submodel from which the event was emitted, if available. (This property may hold the entry in the semanticId's `keys`-array at index 0)
+          type: string
+          examples:
+            - "0173-1#02-AAA119#002"
+        data:
+          $ref: '#/components/schemas/wholeElementEventData'
+      required:
+        - specversion
+        - id
+        - source
+        - type
+        - datacontenttype
+        - dataschema
+        - time
+      optional:
+        - data
+        - semanticid
+    elementUpdatedEvent:
+      properties:
+        specversion:
+          description: The version of the CloudEvents specification which the event uses.
+          type: string
+          const: '1.0'
+        id:
+          description: Identifies the event.
+          type: string
+          examples:
+            - 358c02f2-3a11-4836-971b-43a05550bf97
+        source:
+          description: The URL the emitting Referable can be obtained from.
+          type: string
+          pattern: ^https?:\/\/[^\s/$.?#].[^\s]*$
+          examples:
+            - 'https://providercorp.com/submodels/b64encoded-id/submodel-elements/idshort.path.to.emitting.referable'
+        type:
+          description: >-
+            Describes the type of the event related to the source the event
+            originated in.
+          type: string
+          examples:
+            - io.admin-shell.events.v1.PropertyUpdated
+            - io.admin-shell.events.v1.SubmodelElementCollectionUpdated
+        datacontenttype:
+          description: Content type of the event data.
+          type: string
+          const: application/json
+        dataschema:
+          description: Identifies the schema that the event data adheres to.
+          type: string
+          format: uri
+          examples:
+            - >-
+              https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/Property
+            - >-
+              https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/File
+        time:
+          description: Timestamp of when the occurrence happened.
+          format: date-time
+          type: string
+          examples:
+            - '2025-09-25T13:37:12.3456789+01:00'
+        semanticid:
+          description: The semanticId of the submodel from which the event was emitted, if available. (This property may hold the entry in the semanticId's `keys`-array at index 0)
+          type: string
+          examples:
+            - "0173-1#02-AAA119#002"
+        data:
+          $ref: '#/components/schemas/wholeElementEventData'
+      required:
+        - specversion
+        - id
+        - source
+        - type
+        - datacontenttype
+        - dataschema
+        - time
+      optional:
+        - data
+        - semanticid
+    elementDeletedEvent:
+      properties:
+        specversion:
+          description: The version of the CloudEvents specification which the event uses.
+          type: string
+          const: '1.0'
+        id:
+          description: Identifies the event.
+          type: string
+          examples:
+            - 358c02f2-3a11-4836-971b-43a05550bf97
+        source:
+          description: The URL of the referable in which the emitting referable **was contained**
+          type: string
+          pattern: ^https?:\/\/[^\s/$.?#].[^\s]*$
+          examples:
+            - 'https://providercorp.com/submodels/b64encoded-id/submodel-elements/idshort.path.to.containing.referable'
+            - 'https://providercorp.com/submodels/b64encoded-id'
+        type:
+          description: >-
+            Describes the type of the event related to the source the event originated in.
+          type: string
+          examples:
+            - io.admin-shell.events.v1.PropertyDeleted
+            - io.admin-shell.events.v1.SubmodelElementCollectionDeleted
+        datacontenttype:
+          description: Content type of the event data.
+          type: string
+          const: application/json
+        dataschema:
+          description: Identifies the schema that the event data adheres to.
+          type: string
+          format: uri
+          examples:
+            - >-
+              https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/Property
+            - >-
+              https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/File
+        time:
+          description: Timestamp of when the occurrence happened.
+          format: date-time
+          type: string
+          examples:
+            - '2025-09-25T13:37:12.3456789+01:00'
+        semanticid:
+          description: The semanticId of the submodel from which the event was emitted, if available. (This property may hold the entry in the semanticId's `keys`-array at index 0)
+          type: string
+          examples:
+            - "0173-1#02-AAA119#002"
+      required:
+        - specversion
+        - id
+        - source
+        - type
+        - datacontenttype
+        - dataschema
+        - time
+      optional:
+        - semanticid
+    wholeElementEventData:
+          type: object
+          properties:
+            element: 
+              examples:
+                - '{"idShort":"MyVariableProperty", "value": 42}'
+              description:
+                The emitting referable element in full.
+    operationInvokedEvent:
+      properties:
+        specversion:
+          description: The version of the CloudEvents specification which the event uses.
+          type: string
+          const: '1.0'
+        id:
+          description: Identifies the event.
+          type: string
+          examples:
+            - 358c02f2-3a11-4836-971b-43a05550bf97
+        source:
+          description: The URL the operation element can be obtained from.
+          type: string
+          pattern: ^https?:\/\/[^\s/$.?#].[^\s]*$
+          examples:
+            - 'https://providercorp.com/submodels/b64encoded-id/submodel-elements/idshort.path.to.operation.element'
+        type:
+          description: >-
+            Describes the type of the event related to the source the event originated in.
+          type: string
+          examples:
+            - io.admin-shell.events.v1.OperationInvoked
+        datacontenttype:
+          description: Content type of the event data.
+          type: string
+          const: application/json
+        dataschema:
+          description: Identifies the schema that the event data adheres to.
+          type: string
+          format: uri
+          examples:
+            - >-
+              https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/Operation
+        time:
+          description: Timestamp of when the occurrence happened.
+          format: date-time
+          type: string
+          examples:
+            - '2025-09-25T13:37:12.3456789+01:00'
+        semanticid:
+          description: The semanticId of the submodel from which the event was emitted, if available. (This property may hold the entry in the semanticId's `keys`-array at index 0)
+          type: string
+          examples:
+            - "0173-1#02-AAA119#002"
+        data:
+          $ref: '#/components/schemas/operationInvokedEventData'
+      required:
+        - specversion
+        - id
+        - source
+        - type
+        - datacontenttype
+        - dataschema
+        - time
+      optional:
+        - data
+        - semanticid
+    operationInvokedEventData:
+      type: object
+      properties:
+        inputArguments:
+          $ref: '#/components/schemas/inputArguments'
+        inoutputArguments:
+          $ref: '#/components/schemas/inoutputArguments'
+        outputArguments:
+          $ref: '#/components/schemas/outputArguments'
+    operationFinishedEvent:
+      properties:
+        specversion:
+          description: The version of the CloudEvents specification which the event uses.
+          type: string
+          const: '1.0'
+        id:
+          description: Identifies the event.
+          type: string
+          examples:
+            - 358c02f2-3a11-4836-971b-43a05550bf97
+        source:
+          description: The URL the operation element can be obtained from.
+          type: string
+          pattern: ^https?:\/\/[^\s/$.?#].[^\s]*$
+          examples:
+            - 'https://providercorp.com/submodels/b64encoded-id/submodel-elements/idshort.path.to.operation.element'
+        type:
+          description: >-
+            Describes the type of the event.
+          type: string
+          examples:
+            - io.admin-shell.events.v1.OperationFinished
+        datacontenttype:
+          description: Content type of the event data.
+          type: string
+          const: application/json
+        dataschema:
+          description: Identifies the schema that the event data adheres to.
+          type: string
+          format: uri
+          examples:
+            - >-
+              https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/Operation
+        time:
+          description: Timestamp of when the occurrence happened.
+          format: date-time
+          type: string
+          examples:
+            - '2025-09-25T13:37:12.3456789+01:00'
+        semanticid:
+          description: The semanticId of the submodel from which the event was emitted, if available. (This property may hold the entry in the semanticId's `keys`-array at index 0)
+          type: string
+          examples:
+            - "0173-1#02-AAA119#002"
+        data:
+          $ref: '#/components/schemas/operationFinishedEventData'
+      required:
+        - specversion
+        - id
+        - source
+        - type
+        - datacontenttype
+        - dataschema
+        - time
+      optional:
+        - data
+        - semanticid
+    operationFinishedEventData:
+      type: object
+      properties:
+        inoutputArguments:
+          $ref: '#/components/schemas/inoutputArguments'
+        outputArguments:
+          $ref: '#/components/schemas/outputArguments'
+    inputArguments:
+      items:
+        description: List of OperationVariables declared as inputArguments.
+        type: string
+      examples:
+        - '[ {"idShort":"MyFirstInputArgument", "value": 42}, {"idShort":"MySecondInputArgument", "value": "hello-world"} ]'
+        - '[{"in": 4}]'
+      description:
+        The supplied input variable(s) for an operation invocation.
+      type: array
+    inoutputArguments:
+      items:
+        description: List of OperationVariables declared as inoutputArguments.
+        type: string
+      examples:
+        - '[ {"idShort":"MyInoutputArgument", "value": 100} ]'
+        - '[{"note": "original value"}]'
+      description:
+        The supplied inoutput variable(s) for an operation invocation.
+      type: array
+    outputArguments:
+      items:
+        description: List of OperationVariables declared as outputArguments.
+        type: string
+      examples:
+        - '[ {"idShort":"MyOperationOutput", "value": 123456} ]'
+        - '[{"note": "new value"}]'
+      description:
+        The output variable(s) as the operation result.
+      type: array

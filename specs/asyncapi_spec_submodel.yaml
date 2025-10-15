@@ -92,7 +92,7 @@ components:
           type: string
           examples:
             - '2024-11-26T10:46:33.2171298+01:00'
-        semanticId:
+        semanticid:
           description: If a semanticId exists on the payload, this property may hold the entry in the `keys`-array at index 0.
           type: string
           examples:
@@ -109,7 +109,7 @@ components:
         - time
       optional:
         - data
-        - semanticId
+        - semanticid
     valueChangedEventData:
       type: object
       properties:
@@ -173,7 +173,7 @@ components:
           type: string
           examples:
             - '2024-11-26T10:44:11.9367113+01:00'
-        semanticId:
+        semanticid:
           description: If a semanticId exists on the payload, this property may hold the entry in the `keys`-array at index 0.
           type: string
           examples:
@@ -190,7 +190,7 @@ components:
         - time
       optional:
         - data
-        - semanticId
+        - semanticid
     elementCreatedEventData:
       type: object
       properties:

@@ -14,11 +14,6 @@ channels:
     messages:
       publish.message:
         $ref: '#/components/messages/elementCreated'
-  submodelelement/update/elementread:
-    address: noauth or all or participantid
-    messages:
-      publish.message:
-        $ref: '#/components/messages/elementRead'
   submodelelement/update/elementupdated:
     address: noauth or all or participantid
     messages:
@@ -52,12 +47,6 @@ operations:
       $ref: '#/channels/submodelelement~1update~1elementcreated'
     messages:
       - $ref: '#/channels/submodelelement~1update~1elementcreated/messages/publish.message'
-  submodelelement/update/elementread.publish:
-    action: send
-    channel:
-      $ref: '#/channels/submodelelement~1update~1elementread'
-    messages:
-      - $ref: '#/channels/submodelelement~1update~1elementread/messages/publish.message'
   submodelelement/update/elementupdated.publish:
     action: send
     channel:
@@ -96,12 +85,6 @@ components:
       summary: Triggered when an element is created
       payload:
         $ref: '#/components/schemas/elementCreatedEvent'
-    elementRead:
-      name: SubmodelElementRead
-      title: SubmodelElement Read message
-      summary: Triggered when an element is read
-      payload:
-        $ref: '#/components/schemas/elementReadEvent'
     elementUpdated:
       name: SubmodelElementUpdated
       title: SubmodelElement Update message
@@ -171,7 +154,7 @@ components:
           examples:
             - '2025-09-25T13:37:12.3456789+01:00'
         semanticid:
-          description: The semanticId of the submodel from which the event was emitted, if available. (This property may hold the entry in the semanticId's `keys`-array at index 0)
+          description: The semanticId of the SubmodelElement, if available. (This property may hold the entry in the semanticId's `keys`-array at index 0)
           type: string
           examples:
             - "0173-1#02-AAA119#002"
@@ -230,9 +213,8 @@ components:
           description: >-
             Describes the type of the event related to the source the event originated in.
           type: string
-          examples:
-            - io.admin-shell.events.v1.PropertyCreated
-            - io.admin-shell.events.v1.SubmodelElementCollectionCreated
+          enum:
+            - io.admin-shell.events.v1.created
         datacontenttype:
           description: Content type of the event data.
           type: string
@@ -253,68 +235,7 @@ components:
           examples:
             - '2025-09-25T13:37:12.3456789+01:00'
         semanticid:
-          description: The semanticId of the submodel from which the event was emitted, if available. (This property may hold the entry in the semanticId's `keys`-array at index 0)
-          type: string
-          examples:
-            - "0173-1#02-AAA119#002"
-        data:
-          $ref: '#/components/schemas/wholeElementEventData'
-      required:
-        - specversion
-        - id
-        - source
-        - type
-        - datacontenttype
-        - dataschema
-        - time
-      optional:
-        - data
-        - semanticid
-    elementReadEvent:
-      properties:
-        specversion:
-          description: The version of the CloudEvents specification which the event uses.
-          type: string
-          const: '1.0'
-        id:
-          description: Identifies the event.
-          type: string
-          examples:
-            - 358c02f2-3a11-4836-971b-43a05550bf97
-        source:
-          description: The URL the emitting Referable can be obtained from.
-          type: string
-          pattern: ^https?:\/\/[^\s/$.?#].[^\s]*$
-          examples:
-            - 'https://providercorp.com/submodels/b64encoded-id/submodel-elements/idshort.path.to.emitting.referable'
-        type:
-          description: >-
-            Describes the type of the event related to the source the event originated in.
-          type: string
-          examples:
-            - io.admin-shell.events.v1.PropertyRead
-            - io.admin-shell.events.v1.SubmodelElementCollectionRead
-        datacontenttype:
-          description: Content type of the event data.
-          type: string
-          const: application/json
-        dataschema:
-          description: Identifies the schema that the event data adheres to.
-          type: string
-          format: uri
-          examples:
-            - >-
-              https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/Property
-            - >-
-              https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/File
-        time:
-          description: Timestamp of when the occurrence happened.
-          format: date-time
-          type: string
-          examples:
-            - '2025-09-25T13:37:12.3456789+01:00'
-        semanticid:
-          description: The semanticId of the submodel from which the event was emitted, if available. (This property may hold the entry in the semanticId's `keys`-array at index 0)
+          description: The semanticId of the SubmodelElement, if available. (This property may hold the entry in the semanticId's `keys`-array at index 0)
           type: string
           examples:
             - "0173-1#02-AAA119#002"
@@ -353,9 +274,9 @@ components:
             Describes the type of the event related to the source the event
             originated in.
           type: string
-          examples:
-            - io.admin-shell.events.v1.PropertyUpdated
-            - io.admin-shell.events.v1.SubmodelElementCollectionUpdated
+          enum:
+            - io.admin-shell.events.v1.updated
+
         datacontenttype:
           description: Content type of the event data.
           type: string
@@ -376,7 +297,7 @@ components:
           examples:
             - '2025-09-25T13:37:12.3456789+01:00'
         semanticid:
-          description: The semanticId of the submodel from which the event was emitted, if available. (This property may hold the entry in the semanticId's `keys`-array at index 0)
+          description: The semanticId of the SubmodelElement, if available. (This property may hold the entry in the semanticId's `keys`-array at index 0)
           type: string
           examples:
             - "0173-1#02-AAA119#002"
@@ -415,9 +336,8 @@ components:
           description: >-
             Describes the type of the event related to the source the event originated in.
           type: string
-          examples:
-            - io.admin-shell.events.v1.PropertyDeleted
-            - io.admin-shell.events.v1.SubmodelElementCollectionDeleted
+          enum:
+            - io.admin-shell.events.v1.deleted
         datacontenttype:
           description: Content type of the event data.
           type: string
@@ -438,7 +358,7 @@ components:
           examples:
             - '2025-09-25T13:37:12.3456789+01:00'
         semanticid:
-          description: The semanticId of the submodel from which the event was emitted, if available. (This property may hold the entry in the semanticId's `keys`-array at index 0)
+          description: The semanticId of the SubmodelElement, if available. (This property may hold the entry in the semanticId's `keys`-array at index 0)
           type: string
           examples:
             - "0173-1#02-AAA119#002"
@@ -481,8 +401,8 @@ components:
           description: >-
             Describes the type of the event related to the source the event originated in.
           type: string
-          examples:
-            - io.admin-shell.events.v1.OperationInvoked
+          enum:
+            - io.admin-shell.events.v1.invoked
         datacontenttype:
           description: Content type of the event data.
           type: string
@@ -501,7 +421,7 @@ components:
           examples:
             - '2025-09-25T13:37:12.3456789+01:00'
         semanticid:
-          description: The semanticId of the submodel from which the event was emitted, if available. (This property may hold the entry in the semanticId's `keys`-array at index 0)
+          description: The semanticId of the SubmodelElement, if available. (This property may hold the entry in the semanticId's `keys`-array at index 0)
           type: string
           examples:
             - "0173-1#02-AAA119#002"
@@ -548,8 +468,8 @@ components:
           description: >-
             Describes the type of the event.
           type: string
-          examples:
-            - io.admin-shell.events.v1.OperationFinished
+          enum:
+            - io.admin-shell.events.v1.finished
         datacontenttype:
           description: Content type of the event data.
           type: string
@@ -568,7 +488,7 @@ components:
           examples:
             - '2025-09-25T13:37:12.3456789+01:00'
         semanticid:
-          description: The semanticId of the submodel from which the event was emitted, if available. (This property may hold the entry in the semanticId's `keys`-array at index 0)
+          description: The semanticId of the SubmodelElement, if available. (This property may hold the entry in the semanticId's `keys`-array at index 0)
           type: string
           examples:
             - "0173-1#02-AAA119#002"

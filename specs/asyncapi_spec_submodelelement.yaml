@@ -131,9 +131,8 @@ components:
           description: >-
             Describes the type of the event related to the source the event originated in.
           type: string
-          examples:
-            - io.admin-shell.events.v1.PropertyValueChanged
-            - io.admin-shell.events.v1.FileValueChanged
+          enum:
+            - io.admin-shell.events.v1.valueChanged
         datacontenttype:
           description: Content type of the event data.
           type: string

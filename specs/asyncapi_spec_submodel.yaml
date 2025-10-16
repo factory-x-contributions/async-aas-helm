@@ -63,7 +63,7 @@ components:
           examples:
             - 358c02f2-3a11-4836-971b-43a05550bf97
         source:
-          description: The URL the emitting Referable can be obtained from. The element must be of the type indicated in the `datacontenttype` property.
+          description: The URL the emitting Referable can be obtained from. The element must be of the type indicated in the `dataschema` property.
           type: string
           pattern: ^https?:\/\/[^\s/$.?#].[^\s]*$
           examples:
@@ -76,8 +76,6 @@ components:
           enum:
             - io.admin-shell.events.v1.created
             - io.admin-shell.events.v1.updated
-            - io.admin-shell.events.v1.deleted
-          examples:
             - io.admin-shell.events.v1.deleted
         datacontenttype:
           description: Content type of the event data.
@@ -147,7 +145,7 @@ components:
           examples:
             - ecbd132e-d834-4528-bb30-6790104ca474
         source:
-          description: The URL the emitting element can be obtained from. The element must be of the type indicated in the `datacontenttype` property.
+          description: The URL the emitting element can be obtained from. The element must be of the type indicated in the `dataschema` property.
           type: string
           pattern: ^https?:\/\/[^\s/$.?#].[^\s]*$
           examples:
@@ -161,8 +159,6 @@ components:
           enum:
             - io.admin-shell.events.v1.created
             - io.admin-shell.events.v1.updated
-            - io.admin-shell.events.v1.deleted
-          examples:
             - io.admin-shell.events.v1.deleted
         datacontenttype:
           description: Content type of the event data.

@@ -92,6 +92,11 @@ components:
           type: string
           examples:
             - '2024-11-26T10:46:33.2171298+01:00'
+        semanticid:
+          description: If a semanticId exists on the payload, this property may hold the entry in the `keys`-array at index 0.
+          type: string
+          examples:
+            - "0173-1#02-AAA119#002"
         data:
           $ref: '#/components/schemas/valueChangedEventData'
       required:
@@ -104,6 +109,7 @@ components:
         - time
       optional:
         - data
+        - semanticid
     valueChangedEventData:
       type: object
       properties:
@@ -167,6 +173,11 @@ components:
           type: string
           examples:
             - '2024-11-26T10:44:11.9367113+01:00'
+        semanticid:
+          description: If a semanticId exists on the payload, this property may hold the entry in the `keys`-array at index 0.
+          type: string
+          examples:
+            - "0173-1#02-AAA119#002"
         data:
           $ref: '#/components/schemas/elementCreatedEventData'
       required:
@@ -179,6 +190,7 @@ components:
         - time
       optional:
         - data
+        - semanticid
     elementCreatedEventData:
       type: object
       properties:

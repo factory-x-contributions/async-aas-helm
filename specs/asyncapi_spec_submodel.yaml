@@ -3,55 +3,133 @@ info:
   title: AAS Submodel ASYNC API with CloudEvents
   version: 0.3-SNAPSHOT
 channels:
-  submodel/update/valuechanged:
+  submodel/updated:
     address: noauth or all or participantid
     messages:
       publish.message:
-        $ref: '#/components/messages/valueChanged'
+        $ref: '#/components/messages/updated'
     parameters:
       submodelid:
         $ref: '#/components/parameters/submodelid'
-      smec-idshort.property-idshort:
-        $ref: '#/components/parameters/smec-idshort.property-idshort'
-  submodel/update/elementcreated:
+  submodel/created:
     address: noauth or all or participantid
     messages:
       publish.message:
-        $ref: '#/components/messages/elementCreated'
+        $ref: '#/components/messages/created'
+    parameters:
+      submodelid:
+        $ref: '#/components/parameters/submodelid'
+  submodel/deleted:
+    address: noauth or all or participantid
+    messages:
+      publish.message:
+        $ref: '#/components/messages/deleted'
+    parameters:
+      submodelid:
+        $ref: '#/components/parameters/submodelid'
 operations:
-  submodel/update/valuechanged.publish:
+  submodel/updated.publish:
     action: send
     channel:
-      $ref: '#/channels/submodel~1update~1valuechanged'
+      $ref: '#/channels/submodel~1updated'
     messages:
-      - $ref: '#/channels/submodel~1update~1valuechanged/messages/publish.message'
-  submodel/update/elementcreated.publish:
+      - $ref: '#/channels/submodel~1updated/messages/publish.message'
+  submodel/created.publish:
     action: send
     channel:
-      $ref: '#/channels/submodel~1update~1elementcreated'
+      $ref: '#/channels/submodel~1created'
     messages:
-      - $ref: '#/channels/submodel~1update~1elementcreated/messages/publish.message'
+      - $ref: '#/channels/submodel~1created/messages/publish.message'
+  submodel/deleted.publish:
+    action: send
+    channel:
+      $ref: '#/channels/submodel~1deleted'
+    messages:
+      - $ref: '#/channels/submodel~1deleted/messages/publish.message'
 components:
   messages:
-    valueChanged:
-      name: SubmodelValueChanged
-      title: Submodel Value Change message
-      summary: Emitted when a submodel property is changed
+    updated:
+      name: SubmodelUpdated
+      title: Submodel Update message
+      summary: Emitted when the metadata of a submodel is updated
       payload:
-        $ref: '#/components/schemas/valueChangedEvent'
-    elementCreated:
-      name: SubmodelElementCreated
-      title: Submodel Element Create message
-      summary: Emitted when a submodel element is created
+        $ref: '#/components/schemas/updatedEvent'
+    created:
+      name: SubmodelCreated
+      title: Submodel Create message
+      summary: Emitted when a submodel is created
       payload:
-        $ref: '#/components/schemas/elementCreatedEvent'
+        $ref: '#/components/schemas/createdEvent'
+    deleted:
+      name: SubmodelDeleted
+      title: Submodel Delete message
+      summary: Emitted when a submodel is deleted
+      payload:
+        $ref: '#/components/schemas/deletedEvent'
   parameters:
     submodelid:
       description: The Id of the submodel in the Asset Administration Shell with aasId.
-    smec-idshort.property-idshort:
-      description: The Id of a property in a Submodel Element Collection.
   schemas:
-    valueChangedEvent:
+    updatedEvent:
+      properties:
+        specversion:
+          description: The version of the CloudEvents specification which the event uses.
+          type: string
+          const: '1.0'
+        id:
+          description: Identifies the event.
+          type: string
+          examples:
+            - 358c02f2-3a11-4836-971b-43a05550bf97
+        source:
+          description: The URL the emitting Referable can be obtained from. The element must be of the type indicated in the `dataschema` property.
+          type: string
+          pattern: ^https?:\/\/[^\s/$.?#].[^\s]*$
+          examples:
+            - 'https://providercorp.com/submodels/abcdef'
+        type:
+          description: >-
+            Describes the type of the event related to the source the event
+            originated in.
+          type: string
+          enum:
+            - io.admin-shell.events.v1.updated
+        datacontenttype:
+          description: Content type of the event data.
+          type: string
+          const: application/json
+        dataschema:
+          description: Identifies the schema that the event data adheres to.
+          type: string
+          format: uri
+          enum:
+            - >-
+              https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/Submodel
+        time:
+          description: Timestamp of when the occurrence happened.
+          format: date-time
+          type: string
+          examples:
+            - '2024-11-26T10:46:33.2171298+01:00'
+        semanticid:
+          description: If a semanticId exists on the payload, this property may hold the entry in the `keys`-array at index 0.
+          type: string
+          examples:
+            - "0173-1#02-AAA119#002"
+        data:
+          $ref: '#/components/schemas/submodelEventData'
+      required:
+        - specversion
+        - id
+        - source
+        - type
+        - datacontenttype
+        - dataschema
+        - time
+      optional:
+        - data
+        - semanticid
+    createdEvent:
       properties:
         specversion:
           description: The version of the CloudEvents specification which the event uses.
@@ -75,8 +153,6 @@ components:
           type: string
           enum:
             - io.admin-shell.events.v1.created
-            - io.admin-shell.events.v1.updated
-            - io.admin-shell.events.v1.deleted
         datacontenttype:
           description: Content type of the event data.
           type: string
@@ -85,9 +161,9 @@ components:
           description: Identifies the schema that the event data adheres to.
           type: string
           format: uri
-          examples:
+          enum:
             - >-
-              https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/Property
+              https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/Submodel
         time:
           description: Timestamp of when the occurrence happened.
           format: date-time
@@ -100,7 +176,7 @@ components:
           examples:
             - "0173-1#02-AAA119#002"
         data:
-          $ref: '#/components/schemas/valueChangedEventData'
+          $ref: '#/components/schemas/submodelEventData'
       required:
         - specversion
         - id
@@ -112,28 +188,7 @@ components:
       optional:
         - data
         - semanticid
-    valueChangedEventData:
-      type: object
-      properties:
-        modelType:
-          type: string
-          examples:
-            - Property
-        dataType:
-          type: string
-          example: xs:string
-        value:
-          type:
-            - string
-            - number
-          examples:
-            - Christian X
-        idShort:
-          type: string
-          examples:
-            - property-idShort
-    elementCreatedEvent:
-      type: object
+    deletedEvent:
       properties:
         specversion:
           description: The version of the CloudEvents specification which the event uses.
@@ -143,22 +198,19 @@ components:
           description: Identifies the event.
           type: string
           examples:
-            - ecbd132e-d834-4528-bb30-6790104ca474
+            - 358c02f2-3a11-4836-971b-43a05550bf97
         source:
-          description: The URL the emitting element can be obtained from. The element must be of the type indicated in the `dataschema` property.
+          description: The URL the emitting Referable can be obtained from. The element must be of the type indicated in the `dataschema` property.
           type: string
           pattern: ^https?:\/\/[^\s/$.?#].[^\s]*$
           examples:
-            - >-
-              https://mycorp.com/aas-repo/submodels/bXktc3VibW9kZWwK/submodel-elements/bXktcHJvcGVydHkK
+            - 'https://providercorp.com/submodels/abcdef'
         type:
           description: >-
             Describes the type of the event related to the source the event
             originated in.
           type: string
           enum:
-            - io.admin-shell.events.v1.created
-            - io.admin-shell.events.v1.updated
             - io.admin-shell.events.v1.deleted
         datacontenttype:
           description: Content type of the event data.
@@ -168,7 +220,7 @@ components:
           description: Identifies the schema that the event data adheres to.
           type: string
           format: uri
-          examples:
+          enum:
             - >-
               https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/Submodel
         time:
@@ -176,14 +228,14 @@ components:
           format: date-time
           type: string
           examples:
-            - '2024-11-26T10:44:11.9367113+01:00'
+            - '2024-11-26T10:46:33.2171298+01:00'
         semanticid:
           description: If a semanticId exists on the payload, this property may hold the entry in the `keys`-array at index 0.
           type: string
           examples:
             - "0173-1#02-AAA119#002"
         data:
-          $ref: '#/components/schemas/elementCreatedEventData'
+          $ref: '#/components/schemas/submodelEventData'
       required:
         - specversion
         - id
@@ -195,19 +247,8 @@ components:
       optional:
         - data
         - semanticid
-    elementCreatedEventData:
+    submodelEventData:
       type: object
       properties:
-        id:
-          type: string
-          description: The Id of the created Submodel.
-          examples:
-            - https://example.com/ids/sm/7230_2111_9032_9766
-        idShort:
-          type: string
-          examples:
-            - festotest2
-        modelType:
-          type: string
-          examples:
-            - Submodel
+        submodel:
+          description: the affected submodel in full

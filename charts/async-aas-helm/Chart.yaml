@@ -1,5 +1,5 @@
 apiVersion: v2
-name: umbrella-mqtt-aas
+name: umbrella-rabbitmq-aas
 description: A Helm chart for AAS deployment with RabbitMQ messaging
 dependencies:
   - name: faaast-service

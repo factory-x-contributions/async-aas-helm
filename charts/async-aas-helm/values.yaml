@@ -186,13 +186,15 @@ aas-basyx-v2-full:
       spring.servlet.multipart.max-file-size=128MB
       spring.servlet.multipart.max-request-size=128MB
 
-      # MQTT disabled in favor of RabbitMQ
-      basyx.aasrepository.feature.mqtt.enabled = false
-      basyx.submodelrepository.feature.mqtt.enabled = false
-      
-      # RabbitMQ configuration for BaSyx
-      # Note: BaSyx may need additional configuration for RabbitMQ support
-      # This is a placeholder for future RabbitMQ integration with BaSyx
+      # MQTT configuration - now pointing to RabbitMQ MQTT broker
+      basyx.aasrepository.feature.mqtt.enabled = true
+      basyx.submodelrepository.feature.mqtt.enabled = true
+      mqtt.clientId=basyx
+      mqtt.hostname=<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-url>
+      mqtt.protocol=wss
+      mqtt.port=443
+      mqtt.username=<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-user>
+      mqtt.password=<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-pw>
 
       basyx.feature.authorization.enabled = true
       basyx.feature.authorization.type = rbac
@@ -485,7 +487,7 @@ rabbitmq:
       cert-manager.io/cluster-issuer: "letsencrypt-prod"
       nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
       nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-      nginx.ingress.kubernetes.io/websocket-services: rabbitmq
+      nginx.ingress.kubernetes.io/websocket-services: rabbitmqttbroker-websockets-service
 
     hostname: ""  # only for management interface, "disable"
 

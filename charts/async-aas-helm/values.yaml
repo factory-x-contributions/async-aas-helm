@@ -34,16 +34,9 @@ faaast-service:
     htPassword: "<path:factory-x-ci-cd/data/async-aas#faaast-basic-auth-pw-hash>"
 
 aas-basyx-v2-full:
+  # Deprecated legacy BaSyx Mosquitto configuration removed; RabbitMQ (with MQTT/WebSockets) is used instead.
   mqtt:
-    enabled: false  # Disabled MQTT in favor of RabbitMQ
-    websockets:
-      enabled: false
-    ingress:
-      enabled: false
-    apirule:
-      - enabled: false
-    auth:
-      enabled: false
+    enabled: false  # keep flag for compatibility; no additional settings required
 
   mongodb:
     enabled: false

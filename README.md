@@ -7,10 +7,9 @@ various resources.
 
 1. Runnable Helm Chart
 
-This repo is an umbrella helm chart that demonstrates interoperation (or lack thereof) between multiple 
-AAS-implementations. Currently, it hosts two helm dependency charts. One for the FAAAST and one for Eclipse Basyx. The 
-latter hosts an MQTT broker. The Basyx helm chart is largely copied from upstream - only the values are different. Once 
-these open source projects expose their own helm repositories, the entire `charts` folder will be removed.
+This repo is an umbrella helm chart that demonstrates interoperation (or lack thereof) between multiple AAS-implementations using RabbitMQ as the message broker.
+Currently, it hosts two helm dependency charts. One for the FAAAST and one for Eclipse Basyx. The system uses RabbitMQ with MQTT protocol support for messaging. The Basyx helm chart is largely copied from upstream - only the values are different.
+Once these open source projects expose their own helm repositories, the entire `charts` folder will be removed.
 
 ![aas-async-umbrella.png](./specs/artifacts/aas-async-umbrella.png)
 

@@ -1,9 +1,10 @@
 faaast-service:
   messageBus:
-    host: "wss://<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-url>:443"
+    host: "<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-url>:443"
     user: "<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-user>"
     password: "<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-pw>"
     eventCallbackAddress: "<path:factory-x-ci-cd/data/async-aas#faaast-url>/api/v3.0"
+    useWebsockets: true
 
   ingress:
     annotations:
@@ -463,7 +464,7 @@ rabbitmq:
     #log.default.level = debug
 
     auth_backends.1 = internal
-    auth_backends.2 = rabbit_auth_backend_oauth2
+    auth_backends.2 = rabbitmq_auth_backend_oauth2
 
     auth_oauth2.resource_server_id = rabbitmq  # this must correspond to the "aud" claim of the JWT
 
@@ -485,7 +486,7 @@ rabbitmq:
       cert-manager.io/cluster-issuer: "letsencrypt-prod"
       nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
       nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-      nginx.ingress.kubernetes.io/websocket-services: rabbitmqttbroker-websockets-service
+      nginx.ingress.kubernetes.io/websocket-services: rabbitmqbroker-websockets-service
 
     hostname: ""  # only for management interface, "disable"
 

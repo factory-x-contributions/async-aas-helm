@@ -1,10 +1,10 @@
 faaast-service:
   messageBus:
-    host: "wss://<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-url>:443"
+    "@class": "de.fraunhofer.iosb.ilt.faaast.service.messagebus.cloudevents.MessageBusCloudevents"
+    host: "wss://<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-url>:443/mqtt"
     user: "<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-user>"
     password: "<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-pw>"
     eventCallbackAddress: "<path:factory-x-ci-cd/data/async-aas#faaast-url>/api/v3.0"
-    useWebsockets: true
 
   ingress:
     annotations:

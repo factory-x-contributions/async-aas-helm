@@ -6,7 +6,7 @@ faaast-service:
     database: "faaast-database"
     username: "<path:factory-x-ci-cd/data/async-aas#mongodb-admin-user>"
     password: "<path:factory-x-ci-cd/data/async-aas#mongodb-admin-pw>"
-    
+
   messageBus:
     class: "de.fraunhofer.iosb.ilt.faaast.service.messagebus.cloudevents.MessageBusCloudevents"
     host: "wss://<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-url>:443/mqtt"

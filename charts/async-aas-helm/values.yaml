@@ -1,6 +1,6 @@
 faaast-service:
   messageBus:
-    host: "<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-url>:443"
+    host: "wss://<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-url>:443"
     user: "<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-user>"
     password: "<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-pw>"
     eventCallbackAddress: "<path:factory-x-ci-cd/data/async-aas#faaast-url>/api/v3.0"

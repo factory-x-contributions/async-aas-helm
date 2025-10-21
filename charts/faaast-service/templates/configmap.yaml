@@ -12,7 +12,11 @@ data:
         "initialModelFile": "{{ .Values.seeding.mountPath }}/{{ .Values.seeding.filename }}",
         {{- end }}
         "@class": "{{ .Values.persistence.class }}",
+        {{- if and .Values.persistence.username .Values.persistence.password }}
+        "connectionString": "mongodb://{{ .Values.persistence.username | urlquery }}:{{ .Values.persistence.password | urlquery }}@{{ .Values.persistence.host | default "mongodb" }}:{{ .Values.persistence.port | default "27017" }}",
+        {{- else }}
         "connectionString": "{{ .Values.persistence.connectionString }}",
+        {{- end }}
         "database": "{{ .Values.persistence.database }}",
         "override": "{{ .Values.persistence.override }}"
       },

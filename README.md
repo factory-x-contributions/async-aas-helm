@@ -22,4 +22,51 @@ The sources can be found on [Github](specs).
 
 3. MongoDB Install
 
-helm install -n basyx mongodb bitnami/mongodb --version 16.5.45 -f values.mongodb.yaml
+```bash
+helm install -n basyx mongodb bitnami/mongodb --version 18.1.1 -f values.mongodb.yaml
+```
+
+## Chart Dependencies
+
+This umbrella chart includes the following dependencies:
+
+- **FAAAST Service**: Version 0.1.4
+- **Eclipse BaSyx v2**: Version 2.0.11  
+- **MongoDB**: Version 18.1.1 (MongoDB 8.2.1, digest-pinned for stability)
+- **RabbitMQ**: Version 16.0.14
+
+## Prerequisites
+
+- Kubernetes cluster
+- Helm 3.x
+- Docker (for image pulls)
+
+## Quick Start
+
+1. **Update dependencies:**
+
+   ```bash
+   helm dependency update
+   ```
+
+2. **Install the chart:**
+
+   ```bash
+   helm install async-aas-helm ./charts/async-aas-helm -n <namespace> --create-namespace
+   ```
+
+3. **Upgrade existing installation:**
+
+   ```bash
+   helm upgrade async-aas-helm ./charts/async-aas-helm -n <namespace>
+   ```
+
+## Service Dependencies
+
+The services have the following startup order dependencies:
+
+1. MongoDB (database)
+2. RabbitMQ (message broker)  
+3. Keycloak (authentication)
+4. BaSyx services (AAS registry, discovery, environment)
+5. FAAAST service

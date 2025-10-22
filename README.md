@@ -30,7 +30,7 @@ helm install -n basyx mongodb bitnami/mongodb --version 18.1.1 -f values.mongodb
 
 This umbrella chart includes the following dependencies:
 
-- **FAAAST Service**: Version 0.1.4
+- **FAAAST Service**: Version 0.1.4 (tag:`cloudevents`, fx-fa³st fork)
 - **Eclipse BaSyx v2**: Version 2.0.11  
 - **MongoDB**: Version 18.1.1 (MongoDB 8.2.1, digest-pinned for stability)
 - **RabbitMQ**: Version 16.0.14

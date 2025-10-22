@@ -519,6 +519,10 @@ rabbitmq:
 mongodb:
   enabled: true
   architecture: standalone
+  image:
+    repository: bitnami/mongodb
+    tag: "latest"
+    pullPolicy: IfNotPresent
   auth:
     rootUser: <path:factory-x-ci-cd/data/async-aas#mongodb-admin-user>
     rootPassword: <path:factory-x-ci-cd/data/async-aas#mongodb-admin-pw>

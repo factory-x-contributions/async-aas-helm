@@ -39,8 +39,10 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5.3.0
         with:
-          python-version: 3.x
-          check-latest: true
+          # Pin to Python 3.11 due to yamale (transitive in chart-testing) using deprecated ast.Num removed in 3.12
+          # Once chart-testing updates yamale to a version compatible with Python 3.12+, this can be bumped.
+          python-version: '3.11'
+          check-latest: false
 
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.7.0

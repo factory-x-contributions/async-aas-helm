@@ -41,9 +41,12 @@ seeding:
 
 persistence:
   class: "de.fraunhofer.iosb.ilt.faaast.service.persistence.mongo.PersistenceMongo"
-  connectionString: mongodb://<path:factory-x-ci-cd/data/async-aas#mongodb-admin-user>:<path:factory-x-ci-cd/data/async-aas#mongodb-admin-pw>@mongodb:27017
+  host: mongodb
+  port: 27017
   database: faaast-database
   override: true
+  username: ""
+  password: ""
 
 messageBus:
   class: "de.fraunhofer.iosb.ilt.faaast.service.messagebus.cloudevents.MessageBusCloudevents"

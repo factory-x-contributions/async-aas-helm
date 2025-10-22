@@ -1,8 +1,16 @@
 faaast-service:
+  persistence:
+    host: "mongodb"
+    port: "27017"
+    database: "faaast-database"
+    username: "<path:factory-x-ci-cd/data/async-aas#mongodb-admin-user>"
+    password: "<path:factory-x-ci-cd/data/async-aas#mongodb-admin-pw>"
+
   messageBus:
-    host: "wss://<path:factory-x-ci-cd/data/async-aas#broker-url>:443"
-    user: "<path:factory-x-ci-cd/data/async-aas#broker-user>"
-    password: "<path:factory-x-ci-cd/data/async-aas#broker-pw>"
+    class: "de.fraunhofer.iosb.ilt.faaast.service.messagebus.cloudevents.MessageBusCloudevents"
+    host: "wss://<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-url>:443/mqtt"
+    user: "<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-user>"
+    password: "<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-pw>"
     eventCallbackAddress: "<path:factory-x-ci-cd/data/async-aas#faaast-url>/api/v3.0"
 
   ingress:
@@ -34,66 +42,9 @@ faaast-service:
     htPassword: "<path:factory-x-ci-cd/data/async-aas#faaast-basic-auth-pw-hash>"
 
 aas-basyx-v2-full:
+  # Deprecated legacy BaSyx Mosquitto configuration removed; RabbitMQ (with MQTT/WebSockets) is used instead.
   mqtt:
-    enabled: true
-    websockets:
-      enabled: true
-    ingress:
-      enabled: true
-      ingressClassName: "nginx"
-      annotations:
-        kubernetes.io/ingress.class: nginx
-        kubernetes.io/tls-acme: "true"
-        nginx.ingress.kubernetes.io/enable-cors: "true"
-        cert-manager.io/cluster-issuer: "letsencrypt-prod"
-        nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
-        nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-        nginx.ingress.kubernetes.io/websocket-services: mqttbroker-websockets-service
-      hosts:
-        - host: <path:factory-x-ci-cd/data/async-aas#broker-url>
-          type: websockets
-          paths:
-            - path: /
-              pathType: ImplementationSpecific
-      tls:
-        - secretName: chart-example-tls
-          hosts:
-            - <path:factory-x-ci-cd/data/async-aas#broker-url>
-    apirule:
-      - enabled: false
-    auth:
-      enabled: true
-      users:
-        - username: fx-factory
-          password: <path:factory-x-ci-cd/data/async-aas#broker-pw-hash>
-          acl:
-            - topic: "#"
-              access: readwrite
-        - username: fx-publisher
-          password: <path:factory-x-ci-cd/data/async-aas#broker-pw-hash>
-          acl:
-            - topic: "#"
-              access: readwrite
-        - username: fx-subscriber
-          password: <path:factory-x-ci-cd/data/async-aas#broker-pw-hash>
-          acl:
-            - topic: "#"
-              access: readwrite
-        - username: fx-factory2
-          password: <path:factory-x-ci-cd/data/async-aas#broker-pw-hash>
-          acl:
-            - topic: "#"
-              access: readwrite
-        - username: fx-publisher2
-          password: <path:factory-x-ci-cd/data/async-aas#broker-pw-hash>
-          acl:
-            - topic: "#"
-              access: readwrite
-        - username: fx-subscriber2
-          password: <path:factory-x-ci-cd/data/async-aas#broker-pw-hash>
-          acl:
-            - topic: "#"
-              access: readwrite
+    enabled: false  # keep flag for compatibility; no additional settings required
 
   mongodb:
     enabled: false
@@ -111,6 +62,9 @@ aas-basyx-v2-full:
     enabled: true
     postgresql:
       enabled: true
+      image:
+        repository: "bitnamilegacy/postgresql"
+        tag: "16.2.0-debian-12-r10"
       auth:
         username: <path:factory-x-ci-cd/data/async-aas#kc-pg-user>
         password: <path:factory-x-ci-cd/data/async-aas#kc-pg-pw>
@@ -143,8 +97,8 @@ aas-basyx-v2-full:
         name: rabbitmq-realm
     args: ["/bin/sh -c 'kc.sh import --file /opt/keycloak/data/import/BaSyx-realm.json; kc.sh import --file /opt/keycloak/data/import/rabbitmq-realm.json; kc.sh start-dev --hostname-strict=false --proxy-headers=xforwarded --http-enabled=true --features=token-exchange'"]
 
-    mqttClientId: <path:factory-x-ci-cd/data/async-aas#keycloak-mqtt-clientid>
-    mqttClientSecret: <path:factory-x-ci-cd/data/async-aas#keycloak-mqtt-clientsecret>
+    mqttClientId: <path:factory-x-ci-cd/data/async-aas#keycloak-rabbitmq-mqtt-clientid>
+    mqttClientSecret: <path:factory-x-ci-cd/data/async-aas#keycloak-rabbitmq-mqtt-clientsecret>
 
   aas-registry:
     enabled: true
@@ -236,14 +190,15 @@ aas-basyx-v2-full:
       spring.servlet.multipart.max-file-size=128MB
       spring.servlet.multipart.max-request-size=128MB
 
+      # MQTT configuration - now pointing to RabbitMQ MQTT broker
       basyx.aasrepository.feature.mqtt.enabled = true
       basyx.submodelrepository.feature.mqtt.enabled = true
       mqtt.clientId=basyx
-      mqtt.hostname=<path:factory-x-ci-cd/data/async-aas#broker-url>
+      mqtt.hostname=<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-url>
       mqtt.protocol=wss
       mqtt.port=443
-      mqtt.username=<path:factory-x-ci-cd/data/async-aas#broker-user>
-      mqtt.password=<path:factory-x-ci-cd/data/async-aas#broker-pw>
+      mqtt.username=<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-user>
+      mqtt.password=<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-pw>
 
       basyx.feature.authorization.enabled = true
       basyx.feature.authorization.type = rbac
@@ -457,13 +412,14 @@ aas-basyx-v2-full:
 
 rabbitmq:
   fullnameOverride: rabbitmq
-
   image:
-    debug: false
+    repository: bitnamilegacy/rabbitmq
+    tag: "4.1.3-debian-12-r1"
+    pullPolicy: IfNotPresent
 
   extraContainerPorts:
-  - name: websocket-mqtt
-    containerPort: 9001
+    - name: websocket-mqtt
+      containerPort: 9001
 
   # select exposed ports
   service:
@@ -476,6 +432,7 @@ rabbitmq:
         port: 9001
         targetPort: 9001
 
+
   # disable metrics gathering
   metrics:
     enabled: false
@@ -484,14 +441,14 @@ rabbitmq:
   persistence:
     enabled: false
 
-  # RabbitMQ / MQTT User
+  # RabbitMQ User (with MQTT protocol support)
   auth:
     username: "<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-user>"
     password: "<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-pw>"
     updatePassword: true
     enableLoopbackUser: false  # setting this to "true" disables login via this user from remote hosts
 
-  # Enable MQTT, Websockets, and OAuth
+  # Enable RabbitMQ with MQTT protocol, Websockets, and OAuth
   extraPlugins: "rabbitmq_mqtt rabbitmq_web_mqtt rabbitmq_auth_backend_oauth2"
 
   # configure memory usage threshold for warnings
@@ -514,7 +471,7 @@ rabbitmq:
     #log.default.level = debug
 
     auth_backends.1 = internal
-    auth_backends.2 = rabbit_auth_backend_oauth2
+    auth_backends.2 = rabbitmq_auth_backend_oauth2
 
     auth_oauth2.resource_server_id = rabbitmq  # this must correspond to the "aud" claim of the JWT
 
@@ -536,7 +493,7 @@ rabbitmq:
       cert-manager.io/cluster-issuer: "letsencrypt-prod"
       nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
       nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-      nginx.ingress.kubernetes.io/websocket-services: rabbitmqttbroker-websockets-service
+      nginx.ingress.kubernetes.io/websocket-services: rabbitmqbroker-websockets-service
 
     hostname: ""  # only for management interface, "disable"
 
@@ -561,6 +518,11 @@ rabbitmq:
 mongodb:
   enabled: true
   architecture: standalone
+  image:
+    repository: bitnami/mongodb
+    tag: "8.2.1"
+    digest: "sha256:3a822a270ebc55bc49cac61afebce3ede0c68eb9b08b1e9d4b2d57ad29f78997"
+    pullPolicy: IfNotPresent
   auth:
     rootUser: <path:factory-x-ci-cd/data/async-aas#mongodb-admin-user>
     rootPassword: <path:factory-x-ci-cd/data/async-aas#mongodb-admin-pw>

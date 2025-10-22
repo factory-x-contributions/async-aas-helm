@@ -32,10 +32,22 @@ spec:
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if .Values.seeding.enabled }}
       initContainers:
-        - image: alpine/git
-          name: git
+        - name: wait-for-mongodb
+          image: busybox:1.35
+          command:
+            - sh
+            - -c
+            - |
+              echo "Waiting for MongoDB to be ready..."
+              until nc -z {{ .Values.persistence.host | default "mongodb" }} {{ .Values.persistence.port | default "27017" }}; do
+                echo "MongoDB not ready, waiting..."
+                sleep 5
+              done
+              echo "MongoDB is ready!"
+      {{- if .Values.seeding.enabled }}
+        - name: git
+          image: alpine/git
           command:
             - git
             - clone

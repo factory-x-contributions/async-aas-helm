@@ -521,7 +521,8 @@ mongodb:
   architecture: standalone
   image:
     repository: bitnami/mongodb
-    tag: "latest"
+    tag: "8.2.1"
+    digest: "sha256:3a822a270ebc55bc49cac61afebce3ede0c68eb9b08b1e9d4b2d57ad29f78997"
     pullPolicy: IfNotPresent
   auth:
     rootUser: <path:factory-x-ci-cd/data/async-aas#mongodb-admin-user>

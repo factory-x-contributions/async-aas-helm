@@ -1,6 +1,5 @@
 faaast-service:
   persistence:
-    connectionString: "mongodb://mongodb:27017"
     host: "mongodb"
     port: "27017"
     database: "faaast-database"

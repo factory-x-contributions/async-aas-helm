@@ -8,8 +8,8 @@ metadata:
   annotations:
   {{- if and (.Values.basicAuth.enabled) (eq .Values.ingress.className "nginx") }}
     nginx.ingress.kubernetes.io/auth-type: basic
-    nginx.ingress.kubernetes.io/auth-secret: faaast-basic-auth-secret
-    nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required - FAAAST'
+    nginx.ingress.kubernetes.io/auth-secret: faaast-service-basic-auth-secret
+    nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required - FAAAST Service'
   {{- end }}
   {{- with .Values.ingress.annotations }}
     {{- toYaml . | nindent 4 }}

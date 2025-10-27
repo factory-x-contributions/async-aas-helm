@@ -3,7 +3,7 @@ name: umbrella-rabbitmq-aas
 description: A Helm chart for AAS deployment with RabbitMQ messaging
 dependencies:
   - name: faaast-service
-    version: 0.1.4
+    version: 0.1.5
     repository: "file://../faaast-service"
   - name: faaast-registry
     version: 0.1.0

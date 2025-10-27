@@ -1,0 +1,100 @@
+# values.yaml
+
+image:
+  repository: docker.io/fraunhoferiosb/faaast-registry
+  tag: 1.1
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 443
+
+fullnameOverride: faaast-registry
+
+# Only works in combination with nginx ingress class
+basicAuth:
+  enabled: true
+  user: ""
+  # hashed password for compatibility reasons
+  htPassword: ""
+
+ingress:
+  enabled: true
+  className: "nginx"
+  tls:
+    - hosts: []
+      secretName: ""
+  hosts: []
+
+config:
+  mountPath: "/app/config/application.properties"
+
+# https://faaast-registry.readthedocs.io/en/latest/gettingstarted/gettingstarted.html#command-line-interface-cli
+# Possible values: q (quiet, only ERROR), v (verbose, INFO/WARN), vv (DEBUG/INFO), vvv (TRACE/DEBUG)
+# Important: Don't prefix a dash ("-")
+logLevel: v
+
+# https://faaast-registry.readthedocs.io
+
+server:
+  port: 8090
+  ssl:
+    enabled: true
+    bundle:
+      name: "service"
+      jks:
+        service:
+          key:
+            alias: "server"
+          keystore:
+            location: "classpath:keystore.p12"
+            password: "password"
+            type: "PKCS12"
+  servlet:
+    contextPath: /api/v3.0
+  error:
+    includeMessage: "always"
+
+cors:
+  enabled: true
+  allowedOrigins: "*"
+  allowedMethods: "GET, HEAD, POST"
+  allowedHeaders: "*"
+  # list of headers that a pre-flight request can list as allowed for use during an actual request
+  # exposedHeaders: "header1"
+
+persistence:
+  sql:
+    # Otherwise, in-memory repositories will be used
+    enabled: true
+    orm: "orm.xml"
+    # the following enables logging of the SQL statements that JPA (Hibernate) executes
+    showSql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        # Pretty-print logged SQL statements (needs `showSql: true`)
+        format_sql: true
+    hibernate:
+      # configures Hibernate’s schema generation strategy
+      # validate: Verifies schema matches entities; fails on mismatch; makes no changes.
+      # For more info, check spring.jpa.hibernate.ddl-auto configuration value
+      ddlAuto: "validate"
+    openInView: true
+    # Connection to DB server
+    datasource:
+      external:
+        # Setting to false will make registry use in-memory H2 DB
+        # Only use this if you have an external SQL DB server running.
+        enabled: true
+        driver: org.postgresql.Driver
+        url: jdbc:postgresql://postgresql:5432/fa3st-registry
+        username: ""
+        password: ""
+
+
+autoscaling:
+  enabled: false
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false

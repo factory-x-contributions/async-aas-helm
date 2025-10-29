@@ -10,4 +10,5 @@ Helm chart for the **F**raunhofer **A**dvanced **A**sset **A**dministration **S*
 For more details on FA³ST Registry see the full documentation :blue_book: [here](https://faaast-registry.readthedocs.io/).
 
 Repository: https://github.com/FraunhoferIOSB/FAAAST-Registry
+
 Dockerhub: https://hub.docker.com/r/fraunhoferiosb/faaast-registry

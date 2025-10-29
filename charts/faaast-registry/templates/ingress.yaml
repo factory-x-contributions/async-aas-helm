@@ -2,14 +2,14 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "faaast-service.fullname" . }}
+  name: {{ include "faaast-registry.fullname" . }}
   labels:
-    {{- include "faaast-service.labels" . | nindent 4 }}
+    {{- include "faaast-registry.labels" . | nindent 4 }}
   annotations:
   {{- if and (.Values.basicAuth.enabled) (eq .Values.ingress.className "nginx") }}
     nginx.ingress.kubernetes.io/auth-type: basic
-    nginx.ingress.kubernetes.io/auth-secret: faaast-service-basic-auth-secret
-    nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required - FAAAST Service'
+    nginx.ingress.kubernetes.io/auth-secret: faaast-registry-basic-auth-secret
+    nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required - FAAAST Registry'
   {{- end }}
   {{- with .Values.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
@@ -40,7 +40,7 @@ spec:
             {{- end }}
             backend:
               service:
-                name: {{ include "faaast-service.fullname" $ }}
+                name: {{ include "faaast-registry.fullname" $ }}
                 port:
                   number: {{ $.Values.service.port }}
           {{- end }}

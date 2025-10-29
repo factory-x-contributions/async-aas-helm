@@ -3,8 +3,11 @@ name: umbrella-rabbitmq-aas
 description: A Helm chart for AAS deployment with RabbitMQ messaging
 dependencies:
   - name: faaast-service
-    version: 0.1.4
-    repository: "file://../../charts/faaast-service"
+    version: 0.1.5
+    repository: "file://../faaast-service"
+  - name: faaast-registry
+    version: 0.1.0
+    repository: "file://../faaast-registry"
   - name: aas-basyx-v2-full
     version: 2.0.11
     repository: "https://eclipse-basyx.github.io/charts/"
@@ -30,7 +33,7 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.2.0
+version: 0.3.0
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to

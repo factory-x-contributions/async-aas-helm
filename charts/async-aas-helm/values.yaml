@@ -1,3 +1,45 @@
+faaast-registry:
+  ingress:
+    annotations:
+      nginx.ingress.kubernetes.io/enable-cors: "true"
+      nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+      nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+      nginx.ingress.kubernetes.io/proxy-body-size: 150m
+      cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    tls:
+      - hosts:
+          - "<path:factory-x-ci-cd/data/async-aas#faaast-registry-url>"
+        secretName: "tls-secret-faaast-registry"
+    hosts:
+      - host: "<path:factory-x-ci-cd/data/async-aas#faaast-registry-url>"
+        paths:
+          - path: /
+            pathType: Prefix
+
+  basicAuth:
+    user: "<path:factory-x-ci-cd/data/async-aas#faaast-registry-basic-auth-user>"
+    htPassword: "<path:factory-x-ci-cd/data/async-aas#faaast-registry-basic-auth-pw-hash>"
+
+  # possible: q, v, vv, vvv
+  # Important: Don't prefix a dash ("-")
+  # logLevel: v
+
+  server:
+    port: 8090
+    ssl:
+      enabled: false
+    servlet:
+      contextPath: /api/v3.0
+
+  persistence:
+    sql:
+      hibernate:
+        # Recommended for first start of database: Creates schema
+        ddlAuto: update
+      datasource:
+        external:
+          enabled: false
+
 faaast-service:
   persistence:
     host: "mongodb"
@@ -22,10 +64,10 @@ faaast-service:
       cert-manager.io/cluster-issuer: "letsencrypt-prod"
     tls:
       - hosts:
-          - "<path:factory-x-ci-cd/data/async-aas#faaast-url>"
+          - "<path:factory-x-ci-cd/data/async-aas#faaast-service-url>"
         secretName: "tls-secret-faaast-service"
     hosts:
-      - host: "<path:factory-x-ci-cd/data/async-aas#faaast-url>"
+      - host: "<path:factory-x-ci-cd/data/async-aas#faaast-service-url>"
         paths:
           - path: /
             pathType: Prefix
@@ -38,8 +80,8 @@ faaast-service:
       personalAccessToken: "<path:factory-x-ci-cd/data/async-aas#initial-aas-github-token>"
 
   basicAuth:
-    user: "<path:factory-x-ci-cd/data/async-aas#faaast-basic-auth-user>"
-    htPassword: "<path:factory-x-ci-cd/data/async-aas#faaast-basic-auth-pw-hash>"
+    user: "<path:factory-x-ci-cd/data/async-aas#faaast-service-basic-auth-user>"
+    htPassword: "<path:factory-x-ci-cd/data/async-aas#faaast-service-basic-auth-pw-hash>"
 
 aas-basyx-v2-full:
   # Deprecated legacy BaSyx Mosquitto configuration removed; RabbitMQ (with MQTT/WebSockets) is used instead.
@@ -414,7 +456,7 @@ rabbitmq:
   fullnameOverride: rabbitmq
   image:
     repository: bitnamilegacy/rabbitmq
-    tag: "4.1.3-debian-12-r1"
+    # tag: "4.1.3-debian-12-r1"
     pullPolicy: IfNotPresent
 
   extraContainerPorts:

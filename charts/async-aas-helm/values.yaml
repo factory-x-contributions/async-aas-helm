@@ -28,8 +28,6 @@ faaast-registry:
     port: 8090
     ssl:
       enabled: false
-    servlet:
-      contextPath: /api/v3.0
 
   persistence:
     sql:

@@ -7,7 +7,7 @@ This specification complements the AAS REST API by introducing a publish-subscri
 
 REST-type connections follow a request-response model. The client initiates communication by sending a request to the server, which then responds by sending back the requested data. This means that the client must actively poll the server to receive information. In contrast, publish-subscribe connections are event-driven. Clients subscribe to specific topics, and the broker automatically pushes updates to them whenever relevant data changes.
 
-![MQTT Concept width=100px](artifacts/aas-sync-mqtt-concept.png)
+![MQTT Concept](./artifacts/aas-sync-mqtt-concept.png)
 
 ### Message Semantics
 

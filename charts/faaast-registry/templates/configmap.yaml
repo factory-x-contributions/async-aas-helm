@@ -33,6 +33,8 @@ data:
     spring.ssl.bundle.jks.service.keystore.password={{ .Values.server.ssl.bundle.jks.service.keystore.password }}
     spring.ssl.bundle.jks.service.keystore.type={{ .Values.server.ssl.bundle.jks.service.keystore.type }}
     ##################
+    {{- else }}
+    server.ssl.enabled=false
     {{- end }}
 
     {{- if .Values.persistence.sql.enabled }}

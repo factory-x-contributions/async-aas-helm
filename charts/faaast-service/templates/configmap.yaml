@@ -13,7 +13,7 @@ data:
         {{- end }}
         "@class": "{{ .Values.persistence.class }}",
         {{- if and .Values.persistence.username .Values.persistence.password }}
-        "connectionString": "mongodb://{{ .Values.persistence.username | urlquery }}:{{ .Values.persistence.password | urlquery }}@{{ .Values.persistence.host | default "mongodb" }}:{{ .Values.persistence.port | default "27017" }}",
+        "connectionString": "mongodb://{{ .Values.persistence.username }}:{{ .Values.persistence.password }}@{{ .Values.persistence.host | default "mongodb" }}:{{ .Values.persistence.port | default "27017" }}",
         {{- else }}
         "connectionString": "mongodb://{{ .Values.persistence.host | default "mongodb" }}:{{ .Values.persistence.port | default "27017" }}",
         {{- end }}

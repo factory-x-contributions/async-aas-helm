@@ -95,7 +95,6 @@ aas-basyx-v2-full:
       enabled: true
       image:
         repository: "bitnamilegacy/postgresql"
-        tag: "16.2.0-debian-12-r10"
       auth:
         username: <path:factory-x-ci-cd/data/async-aas#kc-pg-user>
         password: <path:factory-x-ci-cd/data/async-aas#kc-pg-pw>

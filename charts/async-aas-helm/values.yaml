@@ -436,6 +436,54 @@ aas-basyx-v2-full:
             }
           }
         ]
+
+  aas-digitaltwinregistry:
+    enabled: true
+    service:
+      port: 8081
+    ingress:
+      enabled: true
+      host: <path:factory-x-ci-cd/data/async-aas#basyx-dtr-url>
+      tls: true
+      ingressClassName: "nginx"
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        cert-manager.io/cluster-issuer: letsencrypt-prod
+        nginx.ingress.kubernetes.io/enable-cors: "true"
+        nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+        nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    # Application configuration split into profiles; these are embedded into a ConfigMap
+    application: |
+      basyx.aasdiscoveryservice.name: digital-twin-registry
+      basyx.cors.allowed-methods: GET,POST,PATCH,DELETE,PUT,OPTIONS,HEAD
+      basyx.cors.allowed-origins: *
+      basyx.aasregistry.feature.discoveryintegration.enabled: true
+      basyx.aasregistry.feature.discoveryintegration.baseUrl: http://localhost:8081
+      basyx.endpoints.web.exposure.include: health,metrics,mappings
+      server.port: 8081
+      spring.profiles.active: logEvents,MongoDB
+      spring.main.allow-bean-definition-overriding: true
+      spring.application.name: BaSyx Digital Twin Registry
+      description.profiles: https://admin-shell.io/aas/API/3/0/AssetAdministrationShellRegistryServiceSpecification/SSP-001,https://admin-shell.io/aas/API/3/0/AssetAdministrationShellRegistryServiceSpecification/SSP-002,https://admin-shell.io/aas/API/3/0/DiscoveryServiceSpecification/SSP-001
+      logging.level.root: INFO
+      logging.level.org.eclipse.digitaltwin.basyx: DEBUG
+      springdoc.api-docs.enabled: true
+      springdoc.swagger-ui.enabled: true
+      springdoc.swagger-ui.path: /swagger-ui.html
+      springdoc.swagger-ui.csrf.enabled: false
+    application-MongoDB: |
+      spring.config.activate.on-profile: MongoDB
+      spring.data.mongodb.authentication-database: factoryx-dtr-db
+      spring.data.mongodb.database: factoryx-dtr-db
+      spring.data.mongodb.host: mongodb
+      spring.data.mongodb.port: 27017
+      spring.data.mongodb.username: <path:factory-x-ci-cd/data/async-aas#mongodb-admin-user>
+      spring.data.mongodb.password: <path:factory-x-ci-cd/data/async-aas#mongodb-admin-pw>
+      basyx.backend: MongoDB
+      basyx.aasdiscoveryservice.mongodb.collectionName: factoryx-dtr-db
+      registry.type: MongoDB
+      registry.discovery.enabled: true
+
   # Needs specific ingress.
   aas-web-ui:
     enabled: false

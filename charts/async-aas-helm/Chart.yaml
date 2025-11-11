@@ -9,7 +9,7 @@ dependencies:
     version: 0.1.1
     repository: "file://../faaast-registry"
   - name: aas-basyx-v2-full
-    version: 2.0.11
+    version: 2.1.11
     repository: "https://eclipse-basyx.github.io/charts/"
   - name: mongodb
     version: 18.1.1

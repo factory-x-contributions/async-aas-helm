@@ -131,7 +131,8 @@ aas-basyx-v2-full:
     mqttClientSecret: <path:factory-x-ci-cd/data/async-aas#keycloak-rabbitmq-mqtt-clientsecret>
 
   aas-registry:
-    enabled: true
+    # Disabled in favor of digitaltwinregistry
+    enabled: false
     image:
       # If Kafka is used, then the appropriate Bootstrap connection string must be provided.
       name: eclipsebasyx/aas-registry-log-mem:2.0.0-SNAPSHOT
@@ -161,7 +162,8 @@ aas-basyx-v2-full:
     enabled: false
 
   aas-discovery:
-    enabled: true
+    # Disabled in favor of digitaltwinregistry
+    enabled: false
     image:
       name: eclipsebasyx/aas-discovery:2.0.0-SNAPSHOT
       pullPolicy: IfNotPresent

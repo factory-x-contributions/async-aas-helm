@@ -2,7 +2,7 @@
 
 image:
   repository: docker.io/fraunhoferiosb/faaast-registry
-  tag: 1.1
+  tag: 1.2.0-SNAPSHOT
   pullPolicy: IfNotPresent
 
 service:

@@ -1,4 +1,8 @@
 faaast-registry:
+  image:
+    repository: docker.io/fraunhoferiosb/faaast-registry
+    tag: 1.2.0-SNAPSHOT
+    pullPolicy: Always
   ingress:
     annotations:
       nginx.ingress.kubernetes.io/enable-cors: "true"
@@ -39,6 +43,11 @@ faaast-registry:
           enabled: false
 
 faaast-service:
+  image:
+    repository: ghcr.io/factory-x-contributions/fa3st-service
+    tag: 0.1.0-cloudevents
+    pullPolicy: IfNotPresent
+
   persistence:
     host: "mongodb"
     port: "27017"
@@ -442,6 +451,9 @@ aas-basyx-v2-full:
 
   aas-digitaltwinregistry:
     enabled: true
+    image:
+      name: eclipsebasyx/digitaltwinregistry:2.0.0-SNAPSHOT
+      pullPolicy: Always
     service:
       port: 8081
     ingress:
@@ -460,8 +472,8 @@ aas-basyx-v2-full:
       basyx.aasdiscoveryservice.name=digital-twin-registry
       basyx.cors.allowed-methods=GET,POST,PATCH,DELETE,PUT,OPTIONS,HEAD
       basyx.cors.allowed-origins=*
-      basyx.aasregistry.feature.discoveryintegration.enabled=true
-      basyx.aasregistry.feature.discoveryintegration.baseUrl=http://localhost:8081
+      basyx.feature.aasregistry.discoveryintegration.enabled=true
+      basyx.feature.aasregistry.discoveryintegration.baseUrl=http://localhost:8081
       basyx.endpoints.web.exposure.include=health,metrics,mappings
       server.port=8081
       spring.profiles.active=logEvents,MongoDB

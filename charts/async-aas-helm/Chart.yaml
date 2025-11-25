@@ -14,15 +14,15 @@ dependencies:
   - name: mongodb
     version: 0.6.1
     repository: "oci://registry-1.docker.io/cloudpirates"
-    #version: 18.1.1
-    #repository: "https://charts.bitnami.com/bitnami"
+    # version: 18.1.1
+    # repository: "https://charts.bitnami.com/bitnami"
     alias: mongodb
     condition: mongodb.enabled
   - name: rabbitmq
     version: 0.1.1
     repository: "oci://registry-1.docker.io/cloudpirates"
-    #version: 16.0.14
-    #repository: "https://charts.bitnami.com/bitnami"
+    # version: 16.0.14
+    # repository: "https://charts.bitnami.com/bitnami"
 
 # A chart can be either an 'application' or a 'library' chart.
 #
@@ -37,7 +37,7 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.5.4
+version: 0.5.5
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to

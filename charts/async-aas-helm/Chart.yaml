@@ -13,14 +13,14 @@ dependencies:
     repository: "https://eclipse-basyx.github.io/charts/"
   - name: mongodb
     version: 0.6.1
-    repository: "oci://registry-1.docker.io/cloudpirates/mongodb"
+    repository: "oci://registry-1.docker.io/cloudpirates"
     #version: 18.1.1
     #repository: "https://charts.bitnami.com/bitnami"
     alias: mongodb
     condition: mongodb.enabled
   - name: rabbitmq
     version: 0.1.1
-    repository: "oci://registry-1.docker.io/cloudpirates/rabbitmq"
+    repository: "oci://registry-1.docker.io/cloudpirates"
     #version: 16.0.14
     #repository: "https://charts.bitnami.com/bitnami"
 

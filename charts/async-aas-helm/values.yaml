@@ -1,4 +1,8 @@
 faaast-registry:
+  image:
+    repository: docker.io/fraunhoferiosb/faaast-registry
+    tag: 1.2.0-SNAPSHOT
+    pullPolicy: Always
   ingress:
     annotations:
       nginx.ingress.kubernetes.io/enable-cors: "true"
@@ -39,6 +43,11 @@ faaast-registry:
           enabled: false
 
 faaast-service:
+  image:
+    repository: ghcr.io/factory-x-contributions/fa3st-service
+    tag: 0.1.0-cloudevents
+    pullPolicy: IfNotPresent
+
   persistence:
     host: "mongodb"
     port: "27017"
@@ -48,10 +57,11 @@ faaast-service:
 
   messageBus:
     class: "de.fraunhofer.iosb.ilt.faaast.service.messagebus.cloudevents.MessageBusCloudevents"
-    host: "wss://<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-url>:443/mqtt"
+    host: "wss://<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-url>:443"
     user: "<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-user>"
     password: "<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-pw>"
     eventCallbackAddress: "<path:factory-x-ci-cd/data/async-aas#faaast-service-url>/api/v3.0"
+    topicPrefix: "mqtt/noauth"
 
   ingress:
     annotations:
@@ -95,7 +105,6 @@ aas-basyx-v2-full:
       enabled: true
       image:
         repository: "bitnamilegacy/postgresql"
-        tag: "16.2.0-debian-12-r10"
       auth:
         username: <path:factory-x-ci-cd/data/async-aas#kc-pg-user>
         password: <path:factory-x-ci-cd/data/async-aas#kc-pg-pw>
@@ -132,7 +141,8 @@ aas-basyx-v2-full:
     mqttClientSecret: <path:factory-x-ci-cd/data/async-aas#keycloak-rabbitmq-mqtt-clientsecret>
 
   aas-registry:
-    enabled: true
+    # Disabled in favor of digitaltwinregistry
+    enabled: false
     image:
       # If Kafka is used, then the appropriate Bootstrap connection string must be provided.
       name: eclipsebasyx/aas-registry-log-mem:2.0.0-SNAPSHOT
@@ -162,7 +172,8 @@ aas-basyx-v2-full:
     enabled: false
 
   aas-discovery:
-    enabled: true
+    # Disabled in favor of digitaltwinregistry
+    enabled: false
     image:
       name: eclipsebasyx/aas-discovery:2.0.0-SNAPSHOT
       pullPolicy: IfNotPresent
@@ -437,6 +448,57 @@ aas-basyx-v2-full:
             }
           }
         ]
+
+  aas-digitaltwinregistry:
+    enabled: true
+    image:
+      name: eclipsebasyx/digitaltwinregistry:2.0.0-SNAPSHOT
+      pullPolicy: Always
+    service:
+      port: 8081
+    ingress:
+      enabled: true
+      host: <path:factory-x-ci-cd/data/async-aas#basyx-dtr-url>
+      tls: true
+      ingressClassName: "nginx"
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        cert-manager.io/cluster-issuer: letsencrypt-prod
+        nginx.ingress.kubernetes.io/enable-cors: "true"
+        nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+        nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    # Application configuration split into profiles; these are embedded into a ConfigMap
+    application: |
+      basyx.aasdiscoveryservice.name=digital-twin-registry
+      basyx.cors.allowed-methods=GET,POST,PATCH,DELETE,PUT,OPTIONS,HEAD
+      basyx.cors.allowed-origins=*
+      basyx.feature.aasregistry.discoveryintegration.enabled=true
+      basyx.feature.aasregistry.discoveryintegration.baseUrl=http://localhost:8081
+      basyx.endpoints.web.exposure.include=health,metrics,mappings
+      server.port=8081
+      spring.profiles.active=logEvents,MongoDB
+      spring.main.allow-bean-definition-overriding=true
+      spring.application.name=BaSyx Digital Twin Registry
+      description.profiles=https://admin-shell.io/aas/API/3/0/AssetAdministrationShellRegistryServiceSpecification/SSP-001,https://admin-shell.io/aas/API/3/0/AssetAdministrationShellRegistryServiceSpecification/SSP-002,https://admin-shell.io/aas/API/3/0/DiscoveryServiceSpecification/SSP-001
+      logging.level.root=INFO
+      logging.level.org.eclipse.digitaltwin.basyx=DEBUG
+      springdoc.api-docs.enabled=true
+      springdoc.swagger-ui.enabled=true
+      springdoc.swagger-ui.path=/swagger-ui.html
+      springdoc.swagger-ui.csrf.enabled=false
+    application-MongoDB: |
+      spring.config.activate.on-profile=MongoDB
+      spring.data.mongodb.authentication-database=factoryx-dtr-db
+      spring.data.mongodb.database=factoryx-dtr-db
+      spring.data.mongodb.host=mongodb
+      spring.data.mongodb.port=27017
+      spring.data.mongodb.username=<path:factory-x-ci-cd/data/async-aas#mongodb-admin-user>
+      spring.data.mongodb.password=<path:factory-x-ci-cd/data/async-aas#mongodb-admin-pw>
+      basyx.backend=MongoDB
+      basyx.aasdiscoveryservice.mongodb.collectionName=factoryx-dtr-db
+      registry.type=MongoDB
+      registry.discovery.enabled=true
+
   # Needs specific ingress.
   aas-web-ui:
     enabled: false

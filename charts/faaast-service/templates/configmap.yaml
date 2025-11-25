@@ -26,7 +26,8 @@ data:
         "user": "{{ .Values.messageBus.user }}",
         "password": "{{ .Values.messageBus.password }}",
         "slimEvents": "{{ .Values.messageBus.slimEvents }}",
-        "eventCallbackAddress": "{{ .Values.messageBus.eventCallbackAddress }}"
+        "eventCallbackAddress": "{{ .Values.messageBus.eventCallbackAddress }}",
+        "topicPrefix": "{{ .Values.messageBus.topicPrefix }}"
       },
       "endpoints": [
         {

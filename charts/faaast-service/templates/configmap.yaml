@@ -30,11 +30,18 @@ data:
         "topicPrefix": "{{ .Values.messageBus.topicPrefix }}"
       },
       "endpoints": [
-        {
-          "@class": "{{ (index .Values.endpoints 0).class }}",
-          "port": {{ (index .Values.endpoints 0).port }},
-          "corsEnabled": {{ (index .Values.endpoints 0).corsEnabled }},
-          "sslEnabled": {{ (index .Values.endpoints 0).sslEnabled }}
-        }
+        {{- range $i, $endpoint := .Values.endpoints }}
+          {
+            "@class": "{{ $endpoint.class }}",
+            "port": {{ $endpoint.port }},
+            "corsEnabled": {{ $endpoint.corsEnabled }},
+            {{- if $endpoint.security.enabled }}
+            "jwkProvider": "{{ $endpoint.security.jwkProvider }}",
+            "aclFolder": "/acl/aclFolder_endpoint{{ $i }}",
+            {{- end }}
+            "sslEnabled": {{ $endpoint.sslEnabled }}
+          }
+          {{- if ne $i (sub (len $.Values.endpoints) 1) }},{{ end }}
+        {{- end }}
       ]
     }

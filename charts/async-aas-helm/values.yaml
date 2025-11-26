@@ -45,8 +45,8 @@ faaast-registry:
 faaast-service:
   image:
     repository: ghcr.io/factory-x-contributions/fa3st-service
-    tag: 0.1.0-cloudevents
-    pullPolicy: IfNotPresent
+    tag: security
+    pullPolicy: Always
 
   persistence:
     host: "mongodb"
@@ -54,6 +54,53 @@ faaast-service:
     database: "faaast-database"
     username: "<path:factory-x-ci-cd/data/async-aas#mongodb-admin-user>"
     password: "<path:factory-x-ci-cd/data/async-aas#mongodb-admin-pw>"
+
+  endpoints:
+    - class: "de.fraunhofer.iosb.ilt.faaast.service.endpoint.http.HttpEndpoint"
+      port: 8080
+      corsEnabled: true
+      sslEnabled: false
+      security:
+          enabled: true
+          jwkProvider: "https://<path:factory-x-ci-cd/data/async-aas#keycloak-url>/realms/fa3st/protocol/openid-connect/certs"
+          aclFiles:
+            ManufacturerA.json: |
+              {
+                "AllAccessPermissionRules": {
+                  "rules": [
+                    {
+                      "ACL": {
+                        "ATTRIBUTES": [
+                          {
+                            "CLAIM": "client_id"
+                          }
+                        ],
+                        "RIGHTS": [
+                          "ALL"
+                        ],
+                        "ACCESS": "ALLOW"
+                      },
+                      "OBJECTS": [
+                        {
+                          "ROUTE": "*"
+                        }
+                      ],
+                      "FORMULA": {
+                        "$eq": [
+                          {
+                            "$attribute": {
+                              "CLAIM": "client_id"
+                            }
+                          },
+                          {
+                            "$strVal": "ManufacturerA"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
 
   messageBus:
     class: "de.fraunhofer.iosb.ilt.faaast.service.messagebus.cloudevents.MessageBusCloudevents"

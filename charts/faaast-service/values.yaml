@@ -63,6 +63,10 @@ endpoints:
     port: 8080
     corsEnabled: true
     sslEnabled: false
+    security:
+      enabled: false
+      jwkProvider: ""
+      aclFiles: []
 
 autoscaling:
   enabled: false

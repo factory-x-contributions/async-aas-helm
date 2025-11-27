@@ -135,8 +135,7 @@ faaast-service:
       personalAccessToken: "<path:factory-x-ci-cd/data/async-aas#initial-aas-github-token>"
 
   basicAuth:
-    user: "<path:factory-x-ci-cd/data/async-aas#faaast-service-basic-auth-user>"
-    htPassword: "<path:factory-x-ci-cd/data/async-aas#faaast-service-basic-auth-pw-hash>"
+    enabled: false
 
 aas-basyx-v2-full:
   # Deprecated legacy BaSyx Mosquitto configuration removed; RabbitMQ (with MQTT/WebSockets) is used instead.

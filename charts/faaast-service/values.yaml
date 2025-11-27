@@ -13,7 +13,7 @@ fullnameOverride: faaast-service
 
 # Only works in combination with nginx ingress class
 basicAuth:
-  enabled: true
+  enabled: false
   user: ""
   # hashed password for compatibility reasons
   htPassword: ""

@@ -96,6 +96,12 @@ spec:
               mountPath:  {{ .Values.seeding.mountPath }}/{{ .Values.seeding.filename }}
               subPath: {{ .Values.seeding.filename }}
             {{- end }}
+            {{- range $i, $endpoint := .Values.endpoints }}
+            {{- if $endpoint.security.enabled }}
+            - name: acl-folder-endpoint-{{ $i }}
+              mountPath: "/acl/aclFolder_endpoint{{ $i }}"
+            {{- end }}
+            {{- end }}
       volumes:
         - name: config-volume
           configMap:
@@ -106,6 +112,11 @@ spec:
         {{- if .Values.seeding.enabled }}
         - name: aas-test-data-volume
           emptyDir: { }
+        {{- end }}
+        {{- range $i, $ep := .Values.endpoints }}
+        - name: acl-folder-endpoint-{{ $i }}
+          configMap:
+            name: acl-folder-endpoint-{{ $i }}
         {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

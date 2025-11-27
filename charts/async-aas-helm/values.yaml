@@ -1,3 +1,8 @@
+# Global settings
+global:
+  security:
+    allowInsecureImages: true
+
 faaast-registry:
   image:
     repository: docker.io/fraunhoferiosb/faaast-registry
@@ -109,6 +114,15 @@ aas-basyx-v2-full:
         username: <path:factory-x-ci-cd/data/async-aas#kc-pg-user>
         password: <path:factory-x-ci-cd/data/async-aas#kc-pg-pw>
         database: <path:factory-x-ci-cd/data/async-aas#kc-pg-db>
+      primary:
+        podAntiAffinityPreset: ""
+        podAffinityPreset: ""
+        nodeAffinityPreset:
+          type: ""
+    podAntiAffinityPreset: ""
+    podAffinityPreset: ""
+    nodeAffinityPreset:
+      type: ""
     ingress:
       enabled: true
       ingressClassName: "nginx"

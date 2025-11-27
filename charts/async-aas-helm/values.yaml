@@ -154,9 +154,9 @@ aas-basyx-v2-full:
     enabled: true
     postgresql:
       enabled: true
-      # image:
+      image:
         # repository: "oci://registry-1.docker.io/cloudpirates/postgres"
-        # repository: "bitnamilegacy/postgresql"
+        repository: "bitnamilegacy/postgresql"
       auth:
         username: <path:factory-x-ci-cd/data/async-aas#kc-pg-user>
         password: <path:factory-x-ci-cd/data/async-aas#kc-pg-pw>
@@ -566,12 +566,12 @@ aas-basyx-v2-full:
 
 rabbitmq:
   fullnameOverride: rabbitmq
-  # image:
+  image:
     # repository: "oci://registry-1.docker.io/cloudpirates/rabbitmq"
-    # repository: bitnamilegacy/rabbitmq
+    repository: bitnamilegacy/rabbitmq
     # tag: 0.1.1
     # tag: "4.1.3-debian-12-r1"
-    # pullPolicy: IfNotPresent
+    pullPolicy: IfNotPresent
 
   extraContainerPorts:
     - name: websocket-mqtt
@@ -674,12 +674,12 @@ rabbitmq:
 mongodb:
   enabled: true
   architecture: standalone
-  # image:
+  image:
     # repository: "oci://registry-1.docker.io/cloudpirates/mongodb"
-    # repository: bitnami/mongodb
-    # tag: "8.2.1"
-    # digest: "sha256:3a822a270ebc55bc49cac61afebce3ede0c68eb9b08b1e9d4b2d57ad29f78997"
-    # pullPolicy: IfNotPresent
+    repository: bitnamilegacy/mongodb
+    tag: "8.2.1"
+    digest: "sha256:3a822a270ebc55bc49cac61afebce3ede0c68eb9b08b1e9d4b2d57ad29f78997"
+    pullPolicy: IfNotPresent
   auth:
     rootUser: <path:factory-x-ci-cd/data/async-aas#mongodb-admin-user>
     rootPassword: <path:factory-x-ci-cd/data/async-aas#mongodb-admin-pw>

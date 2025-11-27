@@ -19,10 +19,9 @@ faaast-registry:
         paths:
           - path: /
             pathType: Prefix
-
-  basicAuth:
-    user: "<path:factory-x-ci-cd/data/async-aas#faaast-registry-basic-auth-user>"
-    htPassword: "<path:factory-x-ci-cd/data/async-aas#faaast-registry-basic-auth-pw-hash>"
+    basicAuth:
+      user: "<path:factory-x-ci-cd/data/async-aas#faaast-registry-basic-auth-user>"
+      htPassword: "<path:factory-x-ci-cd/data/async-aas#faaast-registry-basic-auth-pw-hash>"
 
   # possible: q, v, vv, vvv
   # Important: Don't prefix a dash ("-")

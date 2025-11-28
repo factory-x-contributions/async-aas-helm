@@ -61,7 +61,7 @@ messageBus:
 registry:
   # Base URL for the AAS Registry (BaSyx Registry)
   aasRegistryBaseUrl: "https://faaast-registry.factory-x.catena-x.net"
-  # Base URL for the Submodel Registry (BaSyx Registry) 
+  # Base URL for the Submodel Registry (BaSyx Registry)
   submodelRegistryBaseUrl: "https://faaast-registry.factory-x.catena-x.net"
 
 endpoints:

@@ -12,3 +12,53 @@ For more details on FA³ST Service see the full documentation :blue_book: [here]
 Repository: https://github.com/FraunhoferIOSB/FAAAST-Service
 
 Dockerhub: https://hub.docker.com/r/fraunhoferiosb/faaast-service
+
+## Features
+
+### Registry Integration
+
+This Helm chart includes integration with **BaSyx Registry** following the **Plattform Industrie 4.0** specification.
+
+The FA³ST Service automatically synchronizes Asset Administration Shells (AAS) and Submodels with a configured registry:
+
+- **Automatic Registration**: New AAS and Submodels are automatically registered when created
+- **Automatic Updates**: Changes to AAS and Submodels are automatically synchronized
+- **Automatic Cleanup**: AAS and Submodels are unregistered when deleted or on service shutdown
+- **Cloud Events**: Integration uses Cloud Events over MQTT for create and update events
+
+**The RegistryClient communicates with an AAS-Registry following Plattform Industrie 4.0 standards.**
+
+For detailed testing instructions, see [TESTING_GUIDE.md](./TESTING_GUIDE.md).
+
+## Configuration
+
+### Registry Configuration
+
+Configure the registry base URLs in `values.yaml`:
+
+```yaml
+registry:
+  # Base URL for the AAS Registry (BaSyx Registry)
+  aasRegistryBaseUrl: "https://faaast-registry.factory-x.catena-x.net"
+  # Base URL for the Submodel Registry (BaSyx Registry)
+  submodelRegistryBaseUrl: "https://faaast-registry.factory-x.catena-x.net"
+```
+
+### API Endpoints
+
+The registry integration uses the following standard APIs:
+
+- **AAS Registry**: `/api/v3.0/shell-descriptors`
+- **Submodel Registry**: `/api/v3.0/submodel-descriptors`
+
+For API documentation, see:
+- [AAS Repository API](https://factory-x-contributions.github.io/async-aas-helm/aas-repository/)
+- [Submodel Repository API](https://factory-x-contributions.github.io/async-aas-helm/submodel-repository/)
+
+## Installation
+
+```bash
+helm install faaast-service ./charts/faaast-service \
+  --set registry.aasRegistryBaseUrl="https://faaast-registry.factory-x.catena-x.net" \
+  --set registry.submodelRegistryBaseUrl="https://faaast-registry.factory-x.catena-x.net"
+```

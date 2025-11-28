@@ -58,6 +58,12 @@ messageBus:
   eventCallbackAddress: ""
   topicPrefix: ""
 
+registry:
+  # Base URL for the AAS Registry (BaSyx Registry)
+  aasRegistryBaseUrl: "https://faaast-registry.factory-x.catena-x.net"
+  # Base URL for the Submodel Registry (BaSyx Registry) 
+  submodelRegistryBaseUrl: "https://faaast-registry.factory-x.catena-x.net"
+
 endpoints:
   - class: "de.fraunhofer.iosb.ilt.faaast.service.endpoint.http.HttpEndpoint"
     port: 8080

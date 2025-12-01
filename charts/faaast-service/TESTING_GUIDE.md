@@ -1,8 +1,8 @@
-# Testing Guide for FA³ST Service with BaSyx Registry Integration
+# Testing Guide for FA³ST Service with FA³ST Registry Integration
 
 ## Overview
 
-This guide describes the integration of FA³ST Service with an AAS Registry following Platform Industrie 4.0 standards (BaSyx Registry).
+This guide describes the integration of FA³ST Service with an AAS Registry following Platform Industrie 4.0 standards (FA³ST Registry).
 
 ## Registry Integration
 
@@ -42,9 +42,9 @@ In `values.yaml` you can configure the Registry URLs:
 
 ```yaml
 registry:
-  # Base URL for the AAS Registry (BaSyx Registry) following Platform Industrie 4.0
+  # Base URL for the AAS Registry (FA³ST Registry) following Platform Industrie 4.0
   aasRegistryBaseUrl: "https://faaast-registry.factory-x.catena-x.net"
-  # Base URL for the Submodel Registry (BaSyx Registry) following Platform Industrie 4.0
+  # Base URL for the Submodel Registry (FA³ST Registry) following Platform Industrie 4.0
   submodelRegistryBaseUrl: "https://faaast-registry.factory-x.catena-x.net"
 ```
 
@@ -85,7 +85,7 @@ On shutdown of FA³ST Service, all AAS and Submodels are automatically removed f
 
 1. Access to a Kubernetes Cluster
 2. Helm 3.x installed
-3. Access to the BaSyx Registry (either public or in-cluster)
+3. Access to the FA³ST Registry (either public or in-cluster)
 
 ### Installation
 

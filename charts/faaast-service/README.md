@@ -17,7 +17,7 @@ Dockerhub: https://hub.docker.com/r/fraunhoferiosb/faaast-service
 
 ### Registry Integration
 
-This Helm chart includes integration with **BaSyx Registry** following the **Plattform Industrie 4.0** specification.
+This Helm chart includes integration with **FA³ST Registry** following the **Plattform Industrie 4.0** specification.
 
 The FA³ST Service automatically synchronizes Asset Administration Shells (AAS) and Submodels with a configured registry:
 
@@ -38,9 +38,9 @@ Configure the registry base URLs in `values.yaml`:
 
 ```yaml
 registry:
-  # Base URL for the AAS Registry (BaSyx Registry)
+  # Base URL for the AAS Registry (FA³ST Registry)
   aasRegistryBaseUrl: "https://faaast-registry.factory-x.catena-x.net"
-  # Base URL for the Submodel Registry (BaSyx Registry)
+  # Base URL for the Submodel Registry (FA³ST Registry)
   submodelRegistryBaseUrl: "https://faaast-registry.factory-x.catena-x.net"
 ```
 

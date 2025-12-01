@@ -44,6 +44,16 @@ entries:
   faaast-service:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2025-12-01T16:53:17.750384906Z"
+    description: A Helm chart for Kubernetes
+    digest: c15d4ed366656c8444a34580c440cc1a5a5392935f22b43c46f96d9b71f1348e
+    name: faaast-service
+    type: application
+    urls:
+    - https://github.com/factory-x-contributions/async-aas-helm/releases/download/faaast-service-0.2.1/faaast-service-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2025-11-27T09:40:29.784619221Z"
     description: A Helm chart for Kubernetes
     digest: 1bf17c630662a47da4e2d4a3c3451dc17fbe953620cae8004bb966a9b1a9302f
@@ -259,6 +269,34 @@ entries:
     - https://github.com/factory-x-contributions/async-aas-helm/releases/download/umbrella-mqtt-aas-0.1.0/umbrella-mqtt-aas-0.1.0.tgz
     version: 0.1.0
   umbrella-rabbitmq-aas:
+  - apiVersion: v2
+    appVersion: 1.16.1
+    created: "2025-12-01T16:53:18.059436497Z"
+    dependencies:
+    - name: faaast-service
+      repository: file://../faaast-service
+      version: 0.2.1
+    - name: faaast-registry
+      repository: file://../faaast-registry
+      version: 0.2.1
+    - name: aas-basyx-v2-full
+      repository: https://eclipse-basyx.github.io/charts/
+      version: 2.1.11
+    - alias: mongodb
+      condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami
+      version: 18.1.1
+    - name: rabbitmq
+      repository: https://charts.bitnami.com/bitnami
+      version: 16.0.14
+    description: A Helm chart for AAS deployment with RabbitMQ messaging
+    digest: 2368ec299201d90df4b9b3ac9aace398f70441d132b37e188829d813560332a2
+    name: umbrella-rabbitmq-aas
+    type: application
+    urls:
+    - https://github.com/factory-x-contributions/async-aas-helm/releases/download/umbrella-rabbitmq-aas-0.6.1/umbrella-rabbitmq-aas-0.6.1.tgz
+    version: 0.6.1
   - apiVersion: v2
     appVersion: 1.16.1
     created: "2025-11-27T09:40:30.026611855Z"
@@ -536,4 +574,4 @@ entries:
     urls:
     - https://github.com/factory-x-contributions/async-aas-helm/releases/download/umbrella-rabbitmq-aas-0.2.0/umbrella-rabbitmq-aas-0.2.0.tgz
     version: 0.2.0
-generated: "2025-11-27T09:40:30.026677378Z"
+generated: "2025-12-01T16:53:18.059519853Z"

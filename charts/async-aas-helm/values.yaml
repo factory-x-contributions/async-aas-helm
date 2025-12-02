@@ -586,6 +586,23 @@ rabbitmq:
     readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
 
+  initContainers:
+    - name: fix-permissions
+      image: busybox:latest
+      command:
+        - sh
+        - -c
+        - |
+          mkdir -p /var/lib/rabbitmq
+          chmod 755 /var/lib/rabbitmq
+          chown -R 1001:1001 /var/lib/rabbitmq
+      volumeMounts:
+        - name: data
+          mountPath: /var/lib/rabbitmq
+      securityContext:
+        runAsUser: 0
+        runAsNonRoot: false
+
   extraContainerPorts:
     - name: websocket-mqtt
       containerPort: 9001

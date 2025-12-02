@@ -574,13 +574,19 @@ rabbitmq:
     # pullPolicy: IfNotPresent
 
   podSecurityContext:
-    enabled: true
-    fsGroup: 1001
+    enabled: false  # Disable pod security context to run as root
 
   containerSecurityContext:
+    enabled: false  # Disable container security context to run as root
+    
+  # Try to enable volume permissions init container
+  volumePermissions:
     enabled: true
-    runAsUser: 1001
-
+    image:
+      registry: docker.io
+      repository: bitnami/os-shell
+      tag: 12
+    
   extraContainerPorts:
     - name: websocket-mqtt
       containerPort: 9001

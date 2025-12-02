@@ -575,18 +575,11 @@ rabbitmq:
 
   podSecurityContext:
     enabled: true
-    fsGroup: 0
-    fsGroupChangePolicy: "OnRootMismatch"
+    fsGroup: 1001
 
   containerSecurityContext:
     enabled: true
-    runAsUser: 0
-    runAsGroup: 0
-    runAsNonRoot: false
-
-  extraEnvVars:
-    - name: RABBITMQ_ERLANG_COOKIE
-      value: "<path:factory-x-ci-cd/data/async-aas#rabbitmq-erlang-cookie>"
+    runAsUser: 1001
 
   extraContainerPorts:
     - name: websocket-mqtt
@@ -616,6 +609,7 @@ rabbitmq:
   auth:
     username: "<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-user>"
     password: "<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-pw>"
+    erlangCookie: "<path:factory-x-ci-cd/data/async-aas#rabbitmq-erlang-cookie>"
     updatePassword: true
     enableLoopbackUser: false  # setting this to "true" disables login via this user from remote hosts
 

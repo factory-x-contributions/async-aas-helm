@@ -594,28 +594,28 @@ rabbitmq:
           echo "=== INIT CONTAINER DEBUG START ==="
           echo "Current user in init container: $(whoami)"
           echo "User ID: $(id)"
-          
+
           if [ ! -f /var/lib/rabbitmq/.erlang.cookie ]; then
             echo "Creating erlang cookie..."
             echo $RABBITMQ_ERLANG_COOKIE > /var/lib/rabbitmq/.erlang.cookie
           else
             echo "Erlang cookie already exists"
           fi
-          
+
           chmod 600 /var/lib/rabbitmq/.erlang.cookie
-          
+
           echo "=== After chmod, before any chown ==="
           ls -la /var/lib/rabbitmq/.erlang.cookie
-          
+
           echo "=== Attempting chown to 999:999 ==="
           chown 999:999 /var/lib/rabbitmq/.erlang.cookie || echo "chown failed!"
-          
+
           echo "=== Final state of cookie file ==="
           ls -la /var/lib/rabbitmq/.erlang.cookie
-          
+
           echo "=== Contents of /var/lib/rabbitmq/ ==="
           ls -la /var/lib/rabbitmq/
-          
+
           echo "=== INIT CONTAINER DEBUG END ==="
       env:
         - name: RABBITMQ_ERLANG_COOKIE

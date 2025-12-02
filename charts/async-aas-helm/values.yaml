@@ -583,7 +583,7 @@ rabbitmq:
     runAsGroup: 999
     readOnlyRootFilesystem: false  # Allow writing to cookie file
 
-  # Override init container to add debugging
+  # Override init container to set proper cookie permissions
   initContainers:
     - name: rabbitmq-init
       image: busybox
@@ -591,32 +591,14 @@ rabbitmq:
         - sh
         - -c
         - |
-          echo "=== INIT CONTAINER DEBUG START ==="
-          echo "Current user in init container: $(whoami)"
-          echo "User ID: $(id)"
-
+          echo "Copy erlang cookie"
           if [ ! -f /var/lib/rabbitmq/.erlang.cookie ]; then
             echo "Creating erlang cookie..."
-            echo $RABBITMQ_ERLANG_COOKIE > /var/lib/rabbitmq/.erlang.cookie
-          else
-            echo "Erlang cookie already exists"
+            echo "${RABBITMQ_ERLANG_COOKIE}" > /var/lib/rabbitmq/.erlang.cookie
           fi
-
+          chown 999:999 /var/lib/rabbitmq/.erlang.cookie
           chmod 600 /var/lib/rabbitmq/.erlang.cookie
-
-          echo "=== After chmod, before any chown ==="
           ls -la /var/lib/rabbitmq/.erlang.cookie
-
-          echo "=== Attempting chown to 999:999 ==="
-          chown 999:999 /var/lib/rabbitmq/.erlang.cookie || echo "chown failed!"
-
-          echo "=== Final state of cookie file ==="
-          ls -la /var/lib/rabbitmq/.erlang.cookie
-
-          echo "=== Contents of /var/lib/rabbitmq/ ==="
-          ls -la /var/lib/rabbitmq/
-
-          echo "=== INIT CONTAINER DEBUG END ==="
       env:
         - name: RABBITMQ_ERLANG_COOKIE
           valueFrom:
@@ -627,7 +609,7 @@ rabbitmq:
         - name: data
           mountPath: /var/lib/rabbitmq
       securityContext:
-        runAsUser: 0  # Run as root to do chown
+        runAsUser: 0  # Run as root to set ownership
 
   extraContainerPorts:
     - name: websocket-mqtt

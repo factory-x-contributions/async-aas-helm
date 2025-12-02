@@ -7,6 +7,14 @@ metadata:
 data:
   config.json: |
     {
+      "core": {
+        {{- if .Values.registry.aasRegistryBaseUrl }}
+        "aasRegistries": ["{{ .Values.registry.aasRegistryBaseUrl }}"],
+        {{- end }}
+        {{- if .Values.registry.submodelRegistryBaseUrl }}
+        "submodelRegistries": ["{{ .Values.registry.submodelRegistryBaseUrl }}"]
+        {{- end }}
+      },
       "persistence": {
         {{- if .Values.seeding.enabled }}
         "initialModelFile": "{{ .Values.seeding.mountPath }}/{{ .Values.seeding.filename }}",

@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "faaast-registry.labels" . | nindent 4 }}
   annotations:
-  {{- if and (.Values.basicAuth.enabled) (eq .Values.ingress.className "nginx") }}
+  {{- if and (.Values.ingress.basicAuth.enabled) (eq .Values.ingress.className "nginx") }}
     nginx.ingress.kubernetes.io/auth-type: basic
     nginx.ingress.kubernetes.io/auth-secret: faaast-registry-basic-auth-secret
     nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required - FAAAST Registry'

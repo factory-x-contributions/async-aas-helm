@@ -19,10 +19,9 @@ faaast-registry:
         paths:
           - path: /
             pathType: Prefix
-
-  basicAuth:
-    user: "<path:factory-x-ci-cd/data/async-aas#faaast-registry-basic-auth-user>"
-    htPassword: "<path:factory-x-ci-cd/data/async-aas#faaast-registry-basic-auth-pw-hash>"
+    basicAuth:
+      user: "<path:factory-x-ci-cd/data/async-aas#faaast-registry-basic-auth-user>"
+      htPassword: "<path:factory-x-ci-cd/data/async-aas#faaast-registry-basic-auth-pw-hash>"
 
   # possible: q, v, vv, vvv
   # Important: Don't prefix a dash ("-")
@@ -133,9 +132,6 @@ faaast-service:
     github:
       repository: "<path:factory-x-ci-cd/data/async-aas#initial-aas-file-location>"
       personalAccessToken: "<path:factory-x-ci-cd/data/async-aas#initial-aas-github-token>"
-
-  basicAuth:
-    enabled: false
 
 aas-basyx-v2-full:
   # Deprecated legacy BaSyx Mosquitto configuration removed; RabbitMQ (with MQTT/WebSockets) is used instead.

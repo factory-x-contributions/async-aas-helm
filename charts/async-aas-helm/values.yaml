@@ -582,7 +582,31 @@ rabbitmq:
     runAsUser: 999  # Match the default user in the chart
     runAsGroup: 999
     readOnlyRootFilesystem: false  # Allow writing to cookie file
-    
+
+  # Debug: Lifecycle hook to check erlang cookie state on startup
+  lifecycleHooks:
+    postStart:
+      exec:
+        command:
+          - /bin/bash
+          - -c
+          - |
+            echo "=== DEBUG: Container started, checking erlang cookie ==="
+            echo "Current user: $(whoami)"
+            echo "User ID: $(id)"
+            echo "=== Contents of /var/lib/rabbitmq directory ==="
+            ls -la /var/lib/rabbitmq/ || echo "Directory not accessible"
+            echo "=== Erlang cookie file details ==="
+            if [ -f /var/lib/rabbitmq/.erlang.cookie ]; then
+              ls -la /var/lib/rabbitmq/.erlang.cookie
+              echo "=== First 20 chars of cookie content ==="
+              head -c 20 /var/lib/rabbitmq/.erlang.cookie 2>&1 || echo "Cannot read cookie file"
+              echo ""
+            else
+              echo "Cookie file does not exist!"
+            fi
+            echo "=== DEBUG: End of startup checks ==="
+
   extraContainerPorts:
     - name: websocket-mqtt
       containerPort: 9001

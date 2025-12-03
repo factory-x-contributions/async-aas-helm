@@ -11,12 +11,6 @@ service:
 
 fullnameOverride: faaast-registry
 
-# Only works in combination with nginx ingress class
-basicAuth:
-  enabled: true
-  user: ""
-  # hashed password for compatibility reasons
-  htPassword: ""
 
 ingress:
   enabled: true
@@ -25,6 +19,12 @@ ingress:
     - hosts: []
       secretName: ""
   hosts: []
+  # Only works in combination with nginx ingress class
+  basicAuth:
+    enabled: true
+    user: ""
+    # hashed password for compatibility reasons
+    htPassword: ""
 
 config:
   mountPath: "/app/config/application.properties"

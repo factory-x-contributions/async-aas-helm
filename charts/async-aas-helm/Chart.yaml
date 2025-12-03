@@ -17,8 +17,8 @@ dependencies:
     alias: mongodb
     condition: mongodb.enabled
   - name: rabbitmq
-    version: 16.0.14
-    repository: "https://charts.bitnami.com/bitnami"
+    version: 0.7.10
+    repository: "oci://registry-1.docker.io/cloudpirates"
 
 # A chart can be either an 'application' or a 'library' chart.
 #

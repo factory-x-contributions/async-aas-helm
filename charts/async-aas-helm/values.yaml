@@ -708,6 +708,10 @@ rabbitmq:
 mongodb:
   enabled: true
   architecture: standalone
+  image:
+    repository: bitnamilegacy/mongodb
+    tag: 8.0.13-debian-12-r0
+    pullPolicy: IfNotPresent
   # image:
     # repository: "oci://registry-1.docker.io/cloudpirates/mongodb"
     # repository: bitnamilegacy/mongodb

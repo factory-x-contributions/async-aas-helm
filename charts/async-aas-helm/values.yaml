@@ -150,8 +150,8 @@ aas-basyx-v2-full:
     enabled: true
     postgresql:
       enabled: true
-      image:
-        repository: "bitnamilegacy/postgresql"
+      # image:
+        # repository: "bitnamilegacy/postgresql"
       auth:
         username: <path:factory-x-ci-cd/data/async-aas#kc-pg-user>
         password: <path:factory-x-ci-cd/data/async-aas#kc-pg-pw>

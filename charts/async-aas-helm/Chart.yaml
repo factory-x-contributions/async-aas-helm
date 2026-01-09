@@ -6,7 +6,7 @@ dependencies:
     version: 0.2.3
     repository: "file://../faaast-service"
   - name: faaast-registry
-    version: 0.2.2
+    version: 0.2.3
     repository: "file://../faaast-registry"
   - name: aas-basyx-v2-full
     version: 2.1.11

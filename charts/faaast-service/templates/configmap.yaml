@@ -9,7 +9,7 @@ data:
     {
       "core": {
         {{- if .Values.registry.aasRegistryBaseUrl }}
-        "aasRegistries": ["{{ .Values.registry.aasRegistryBaseUrl }}"],
+        "aasRegistries": ["{{ .Values.registry.aasRegistryBaseUrl }}"]{{- if .Values.registry.submodelRegistryBaseUrl }},{{ end }}
         {{- end }}
         {{- if .Values.registry.submodelRegistryBaseUrl }}
         "submodelRegistries": ["{{ .Values.registry.submodelRegistryBaseUrl }}"]

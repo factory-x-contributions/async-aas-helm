@@ -47,6 +47,10 @@ faaast-service:
     tag: security
     pullPolicy: Always
 
+  registry:
+    aasRegistryBaseUrl: "http://faaast-registry:443"
+    submodelRegistryBaseUrl: "http://faaast-registry:443"
+
   persistence:
     host: "mongodb"
     port: "27017"

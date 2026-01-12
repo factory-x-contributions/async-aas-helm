@@ -1,0 +1,49 @@
+{
+  "realm": "basyx",
+  "enabled": true,
+  "registrationAllowed": false,
+  "rememberMe": true,
+  "resetPasswordAllowed": true,
+  "emailTheme": "keycloak",
+  "loginTheme": "keycloak",
+  "roles": {
+    "realm": [
+      { "name": "user", "description": "default user" },
+      { "name": "admin", "description": "realm administrator" }
+    ]
+  },
+  "users": [
+    {
+      "username": "the.admin",
+      "enabled": true,
+      "email": "admin@example.com",
+      "firstName": "The",
+      "lastName": "Admin",
+      "emailVerified": true,
+      "requiredActions": [],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "<path:factory-x-ci-cd/data/async-aas#basyx-user-password>",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["admin"]
+    }
+  ],
+  "clients": [
+    {
+      "clientId": "<path:factory-x-ci-cd/data/async-aas#basyx-clientid>",
+      "secret": "<path:factory-x-ci-cd/data/async-aas#basyx-clientsecret>", 
+      "name": "basyx-client",
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "directAccessGrantsEnabled": true,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": true,
+      "serviceAccountsEnabled": false,
+      "redirectUris": ["/*"],
+      "webOrigins": ["+"]
+    }
+  ]
+}

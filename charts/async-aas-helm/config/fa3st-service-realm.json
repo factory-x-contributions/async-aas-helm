@@ -1,0 +1,51 @@
+{
+    "realm": "fa3st",
+    "enabled": true,
+    "clients": [
+        {
+            "clientId": "RWX_ALL_ID_PLACEHOLDER",
+            "enabled": true,
+            "secret": "RWX_ALL_SECRET_PLACEHOLDER",
+            "publicClient": false,
+            "serviceAccountsEnabled": true,
+            "standardFlowEnabled": false,
+            "directAccessGrantsEnabled": false,
+            "redirectUris": [
+                "*"
+            ],
+            "webOrigins": [
+                "*"
+            ]
+        },
+        {
+            "clientId": "RWX_NAMEPLATE_ID_PLACEHOLDER",
+            "enabled": true,
+            "secret": "RWX_NAMEPLATE_SECRET_PLACEHOLDER",
+            "publicClient": false,
+            "serviceAccountsEnabled": true,
+            "standardFlowEnabled": false,
+            "directAccessGrantsEnabled": false,
+            "redirectUris": [
+                "*"
+            ],
+            "webOrigins": [
+                "*"
+            ]
+        },
+        {
+            "clientId": "R_ALL_ID_PLACEHOLDER",
+            "enabled": true,
+            "secret": "R_ALL_SECRET_PLACEHOLDER",
+            "publicClient": false,
+            "serviceAccountsEnabled": true,
+            "standardFlowEnabled": false,
+            "directAccessGrantsEnabled": true,
+            "redirectUris": [
+                "*"
+            ],
+            "webOrigins": [
+                "*"
+            ]
+        }
+    ]
+}

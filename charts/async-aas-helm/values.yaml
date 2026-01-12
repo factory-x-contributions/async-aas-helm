@@ -69,31 +69,43 @@ faaast-service:
                 "rules": [
                   {
                     "ACL": {
-                      "ATTRIBUTES": [
-                        {
-                          "CLAIM": "client_id"
-                        }
-                      ],
-                      "RIGHTS": [
-                        "ALL"
-                      ],
+                      "ATTRIBUTES": [{"CLAIM": "client_id"}],
+                      "RIGHTS": ["ALL"],
                       "ACCESS": "ALLOW"
                     },
-                    "OBJECTS": [
-                      {
-                        "ROUTE": "*"
-                      }
-                    ],
+                    "OBJECTS": [{"ROUTE": "*"}],
                     "FORMULA": {
                       "$eq": [
-                        {
-                          "$attribute": {
-                            "CLAIM": "client_id"
-                          }
-                        },
-                        {
-                          "$strVal": "ManufacturerA"
-                        }
+                        {"$attribute": {"CLAIM": "client_id"}},
+                        {"$strVal": "rwx_all"}
+                      ]
+                    }
+                  },
+                  {
+                    "ACL": {
+                      "ATTRIBUTES": [{"CLAIM": "client_id"}],
+                      "RIGHTS": ["READ"],
+                      "ACCESS": "ALLOW"
+                    },
+                    "OBJECTS": [{"ROUTE": "*"}],
+                    "FORMULA": {
+                      "$eq": [
+                        {"$attribute": {"CLAIM": "client_id"}},
+                        {"$strVal": "r_all"}
+                      ]
+                    }
+                  },
+                  {
+                    "ACL": {
+                      "ATTRIBUTES": [{"CLAIM": "client_id"}],
+                      "RIGHTS": ["ALL"],
+                      "ACCESS": "ALLOW"
+                    },
+                    "OBJECTS": [{"IDENTIFIABLE": "(Submodel)Nameplate"}],
+                    "FORMULA": {
+                      "$eq": [
+                        {"$attribute": {"CLAIM": "client_id"}},
+                        {"$strVal": "rwx_Nameplate"}
                       ]
                     }
                   }
@@ -170,6 +182,9 @@ aas-basyx-v2-full:
       - name: rabbitmq-realm
         configMap:
           name: rabbitmq-realm
+      - name: fa3st-service-realm
+        configMap:
+          name: fa3st-service-realm
     extraVolumeMounts:
       - mountPath: /opt/keycloak/data/import/BaSyx-realm.json
         subPath: BaSyx-realm.json
@@ -177,10 +192,23 @@ aas-basyx-v2-full:
       - mountPath: /opt/keycloak/data/import/rabbitmq-realm.json
         subPath: rabbitmq-realm.json
         name: rabbitmq-realm
-    args: ["/bin/sh -c 'kc.sh import --file /opt/keycloak/data/import/BaSyx-realm.json; kc.sh import --file /opt/keycloak/data/import/rabbitmq-realm.json; kc.sh start-dev --hostname-strict=false --proxy-headers=xforwarded --http-enabled=true --features=token-exchange'"]
+      - mountPath: /opt/keycloak/data/import/fa3st-service-realm.json
+        subPath: fa3st-service-realm.json
+        name: fa3st-service-realm
+    args: ["/bin/sh -c 'kc.sh import --file /opt/keycloak/data/import/BaSyx-realm.json; kc.sh import --file /opt/keycloak/data/import/rabbitmq-realm.json; kc.sh import --file /opt/keycloak/data/import/fa3st-service-realm.json; kc.sh start-dev --hostname-strict=false --proxy-headers=xforwarded --http-enabled=true --features=token-exchange'"]
 
     mqttClientId: <path:factory-x-ci-cd/data/async-aas#keycloak-rabbitmq-mqtt-clientid>
     mqttClientSecret: <path:factory-x-ci-cd/data/async-aas#keycloak-rabbitmq-mqtt-clientsecret>
+    
+    # Note: clients must also be added in config/fa3st-service-realm.json and templates/fa3st-service-realm.yaml
+    fa3stRwxAllId: <path:factory-x-ci-cd/data/async-aas#fa3st-rwx-all-clientid>
+    fa3stRwxAllSecret: <path:factory-x-ci-cd/data/async-aas#fa3st-rwx-all-clientsecret>
+    
+    fa3stRwxNameplateId: <path:factory-x-ci-cd/data/async-aas#fa3st-rwx-nameplate-clientid>
+    fa3stRwxNameplateSecret: <path:factory-x-ci-cd/data/async-aas#fa3st-rwx-nameplate-clientsecret>
+    
+    fa3stRAllId: <path:factory-x-ci-cd/data/async-aas#fa3st-r-all-clientid>
+    fa3stRAllSecret: <path:factory-x-ci-cd/data/async-aas#fa3st-r-all-clientsecret>
 
   aas-registry:
     # Disabled in favor of digitaltwinregistry

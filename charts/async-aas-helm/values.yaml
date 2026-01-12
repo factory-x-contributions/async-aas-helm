@@ -69,31 +69,43 @@ faaast-service:
                 "rules": [
                   {
                     "ACL": {
-                      "ATTRIBUTES": [
-                        {
-                          "CLAIM": "client_id"
-                        }
-                      ],
-                      "RIGHTS": [
-                        "ALL"
-                      ],
+                      "ATTRIBUTES": [{"CLAIM": "client_id"}],
+                      "RIGHTS": ["ALL"],
                       "ACCESS": "ALLOW"
                     },
-                    "OBJECTS": [
-                      {
-                        "ROUTE": "*"
-                      }
-                    ],
+                    "OBJECTS": [{"ROUTE": "*"}],
                     "FORMULA": {
                       "$eq": [
-                        {
-                          "$attribute": {
-                            "CLAIM": "client_id"
-                          }
-                        },
-                        {
-                          "$strVal": "ManufacturerA"
-                        }
+                        {"$attribute": {"CLAIM": "client_id"}},
+                        {"$strVal": "<path:factory-x-ci-cd/data/async-aas#fa3st-rwx-all-clientid>"}
+                      ]
+                    }
+                  },
+                  {
+                    "ACL": {
+                      "ATTRIBUTES": [{"CLAIM": "client_id"}],
+                      "RIGHTS": ["READ"],
+                      "ACCESS": "ALLOW"
+                    },
+                    "OBJECTS": [{"ROUTE": "*"}],
+                    "FORMULA": {
+                      "$eq": [
+                        {"$attribute": {"CLAIM": "client_id"}},
+                        {"$strVal": "<path:factory-x-ci-cd/data/async-aas#fa3st-r-all-clientid>"}
+                      ]
+                    }
+                  },
+                  {
+                    "ACL": {
+                      "ATTRIBUTES": [{"CLAIM": "client_id"}],
+                      "RIGHTS": ["ALL"],
+                      "ACCESS": "ALLOW"
+                    },
+                    "OBJECTS": [{"IDENTIFIABLE": "(Submodel)https://example.com/ids/sm/1150_3131_5052_5787"}],
+                    "FORMULA": {
+                      "$eq": [
+                        {"$attribute": {"CLAIM": "client_id"}},
+                        {"$strVal": "<path:factory-x-ci-cd/data/async-aas#fa3st-rwx-nameplate-clientid>"}
                       ]
                     }
                   }
@@ -164,23 +176,26 @@ aas-basyx-v2-full:
       adminUser: <path:factory-x-ci-cd/data/async-aas#keycloak-user>
       adminPassword: <path:factory-x-ci-cd/data/async-aas#keycloak-pw>
     extraVolumes:
-      - name: basyx-keycloak-realm
+      - name: basyx-realm
         configMap:
-          name: basyx-keycloak-realm
+          name: basyx-realm
       - name: rabbitmq-realm
         configMap:
           name: rabbitmq-realm
+      - name: fa3st-service-realm
+        configMap:
+          name: fa3st-service-realm
     extraVolumeMounts:
       - mountPath: /opt/keycloak/data/import/BaSyx-realm.json
         subPath: BaSyx-realm.json
-        name: basyx-keycloak-realm
+        name: basyx-realm
       - mountPath: /opt/keycloak/data/import/rabbitmq-realm.json
         subPath: rabbitmq-realm.json
         name: rabbitmq-realm
-    args: ["/bin/sh -c 'kc.sh import --file /opt/keycloak/data/import/BaSyx-realm.json; kc.sh import --file /opt/keycloak/data/import/rabbitmq-realm.json; kc.sh start-dev --hostname-strict=false --proxy-headers=xforwarded --http-enabled=true --features=token-exchange'"]
-
-    mqttClientId: <path:factory-x-ci-cd/data/async-aas#keycloak-rabbitmq-mqtt-clientid>
-    mqttClientSecret: <path:factory-x-ci-cd/data/async-aas#keycloak-rabbitmq-mqtt-clientsecret>
+      - mountPath: /opt/keycloak/data/import/fa3st-service-realm.json
+        subPath: fa3st-service-realm.json
+        name: fa3st-service-realm
+    args: ["/bin/sh -c 'kc.sh import --file /opt/keycloak/data/import/BaSyx-realm.json; kc.sh import --file /opt/keycloak/data/import/rabbitmq-realm.json; kc.sh import --file /opt/keycloak/data/import/fa3st-service-realm.json; kc.sh start-dev --hostname-strict=false --proxy-headers=xforwarded --http-enabled=true --features=token-exchange'"]
 
   aas-registry:
     # Disabled in favor of digitaltwinregistry

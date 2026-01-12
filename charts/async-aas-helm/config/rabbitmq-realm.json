@@ -3,11 +3,11 @@
     "enabled": true,
     "clients": [
         {
-            "clientId": "CLIENTID-PLACEHOLDER",
+            "clientId": "<path:factory-x-ci-cd/data/async-aas#keycloak-rabbitmq-mqtt-clientid>",
             "enabled": true,
             "protocol": "openid-connect",
             "clientAuthenticatorType": "client-secret",
-            "secret": "CLIENTSECRET-PLACEHOLDER",
+            "secret": "<path:factory-x-ci-cd/data/async-aas#keycloak-rabbitmq-mqtt-clientsecret>",
             "serviceAccountsEnabled": true,
             "standardFlowEnabled": false,
             "directAccessGrantsEnabled": false,

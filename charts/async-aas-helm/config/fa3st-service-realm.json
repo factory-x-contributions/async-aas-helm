@@ -1,0 +1,51 @@
+{
+    "realm": "fa3st",
+    "enabled": true,
+    "clients": [
+        {
+            "clientId": "<path:factory-x-ci-cd/data/async-aas#fa3st-rwx-all-clientid>",
+            "enabled": true,
+            "secret": "<path:factory-x-ci-cd/data/async-aas#fa3st-rwx-all-clientsecret>",
+            "publicClient": false,
+            "serviceAccountsEnabled": true,
+            "standardFlowEnabled": false,
+            "directAccessGrantsEnabled": false,
+            "redirectUris": [
+                "*"
+            ],
+            "webOrigins": [
+                "*"
+            ]
+        },
+        {
+            "clientId": "<path:factory-x-ci-cd/data/async-aas#fa3st-rwx-nameplate-clientid>",
+            "enabled": true,
+            "secret": "<path:factory-x-ci-cd/data/async-aas#fa3st-rwx-nameplate-clientsecret>",
+            "publicClient": false,
+            "serviceAccountsEnabled": true,
+            "standardFlowEnabled": false,
+            "directAccessGrantsEnabled": false,
+            "redirectUris": [
+                "*"
+            ],
+            "webOrigins": [
+                "*"
+            ]
+        },
+        {
+            "clientId": "<path:factory-x-ci-cd/data/async-aas#fa3st-r-all-clientid>",
+            "enabled": true,
+            "secret": "<path:factory-x-ci-cd/data/async-aas#fa3st-r-all-clientsecret>",
+            "publicClient": false,
+            "serviceAccountsEnabled": true,
+            "standardFlowEnabled": false,
+            "directAccessGrantsEnabled": true,
+            "redirectUris": [
+                "*"
+            ],
+            "webOrigins": [
+                "*"
+            ]
+        }
+    ]
+}

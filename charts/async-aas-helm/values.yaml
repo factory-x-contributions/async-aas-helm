@@ -77,7 +77,7 @@ faaast-service:
                     "FORMULA": {
                       "$eq": [
                         {"$attribute": {"CLAIM": "client_id"}},
-                        {"$strVal": "rwx_all"}
+                        {"$strVal": "<path:factory-x-ci-cd/data/async-aas#fa3st-rwx-all-clientid>"}
                       ]
                     }
                   },
@@ -91,7 +91,7 @@ faaast-service:
                     "FORMULA": {
                       "$eq": [
                         {"$attribute": {"CLAIM": "client_id"}},
-                        {"$strVal": "r_all"}
+                        {"$strVal": "<path:factory-x-ci-cd/data/async-aas#fa3st-r-all-clientid>"}
                       ]
                     }
                   },
@@ -101,11 +101,11 @@ faaast-service:
                       "RIGHTS": ["ALL"],
                       "ACCESS": "ALLOW"
                     },
-                    "OBJECTS": [{"IDENTIFIABLE": "(Submodel)Nameplate"}],
+                    "OBJECTS": [{"IDENTIFIABLE": "(Submodel)https://example.com/ids/sm/1150_3131_5052_5787"}],
                     "FORMULA": {
                       "$eq": [
                         {"$attribute": {"CLAIM": "client_id"}},
-                        {"$strVal": "rwx_Nameplate"}
+                        {"$strVal": "<path:factory-x-ci-cd/data/async-aas#fa3st-rwx-nameplate-clientid>"}
                       ]
                     }
                   }

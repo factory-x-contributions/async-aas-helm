@@ -23,9 +23,8 @@ spec:
     {{- range .Values.ingress.tls }}
     - hosts:
         - {{  . | quote }}
-        {{- end }}
-      secretName: {{ .secretName }}
     {{- end }}
+      secretName: {{ .secretName }}
   {{- end }}
   rules:
     - host: {{ .host | quote }}
@@ -42,5 +41,4 @@ spec:
                 port:
                   number: {{ $.Values.service.port }}
           {{- end }}
-    {{- end }}
 {{- end }}

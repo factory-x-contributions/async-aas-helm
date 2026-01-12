@@ -3,9 +3,9 @@
     "enabled": true,
     "clients": [
         {
-            "clientId": "RWX_ALL_ID_PLACEHOLDER",
+            "clientId": "<path:factory-x-ci-cd/data/async-aas#fa3st-rwx-all-clientid>",
             "enabled": true,
-            "secret": "RWX_ALL_SECRET_PLACEHOLDER",
+            "secret": "<path:factory-x-ci-cd/data/async-aas#fa3st-rwx-all-clientsecret>",
             "publicClient": false,
             "serviceAccountsEnabled": true,
             "standardFlowEnabled": false,
@@ -18,9 +18,9 @@
             ]
         },
         {
-            "clientId": "RWX_NAMEPLATE_ID_PLACEHOLDER",
+            "clientId": "<path:factory-x-ci-cd/data/async-aas#fa3st-rwx-nameplate-clientid>",
             "enabled": true,
-            "secret": "RWX_NAMEPLATE_SECRET_PLACEHOLDER",
+            "secret": "<path:factory-x-ci-cd/data/async-aas#fa3st-rwx-nameplate-clientsecret>",
             "publicClient": false,
             "serviceAccountsEnabled": true,
             "standardFlowEnabled": false,
@@ -33,9 +33,9 @@
             ]
         },
         {
-            "clientId": "R_ALL_ID_PLACEHOLDER",
+            "clientId": "<path:factory-x-ci-cd/data/async-aas#fa3st-r-all-clientid>",
             "enabled": true,
-            "secret": "R_ALL_SECRET_PLACEHOLDER",
+            "secret": "<path:factory-x-ci-cd/data/async-aas#fa3st-r-all-clientsecret>",
             "publicClient": false,
             "serviceAccountsEnabled": true,
             "standardFlowEnabled": false,

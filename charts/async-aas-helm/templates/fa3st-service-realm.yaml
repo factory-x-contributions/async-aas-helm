@@ -9,17 +9,4 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
 data:
   fa3st-service-realm.json: |-
-{{- $file := .Files.Get "config/fa3st-service-realm.json" }}
-
-{{- $rwxAllId := index (index (index .Values "aas-basyx-v2-full") "keycloak") "fa3stRwxAllId" }}
-{{- $rwxAllSecret := index (index (index .Values "aas-basyx-v2-full") "keycloak") "fa3stRwxAllSecret" }}
-{{- $replaced := ($file | replace "RWX_ALL_ID_PLACEHOLDER" $rwxAllId | replace "RWX_ALL_SECRET_PLACEHOLDER" $rwxAllSecret) }}
-
-{{- $rwxNameplateId := index (index (index .Values "aas-basyx-v2-full") "keycloak") "fa3stRwxNameplateId" }}
-{{- $rwxNameplateSecret := index (index (index .Values "aas-basyx-v2-full") "keycloak") "fa3stRwxNameplateSecret" }}
-{{- $replaced := ($replaced | replace "RWX_NAMEPLATE_ID_PLACEHOLDER" $rwxNameplateId | replace "RWX_NAMEPLATE_SECRET_PLACEHOLDER" $rwxNameplateSecret) }}
-
-{{- $rAllId := index (index (index .Values "aas-basyx-v2-full") "keycloak") "fa3stRAllId" }}
-{{- $rAllSecret := index (index (index .Values "aas-basyx-v2-full") "keycloak") "fa3stRAllSecret" }}
-{{- $replaced := ($replaced | replace "R_ALL_ID_PLACEHOLDER" $rAllId | replace "R_ALL_SECRET_PLACEHOLDER" $rAllSecret) }}
-{{ $replaced | nindent 4 }}
+{{- $file := .Files.Get "config/fa3st-service-realm.json" | nindent 4 }}

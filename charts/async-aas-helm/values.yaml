@@ -197,23 +197,6 @@ aas-basyx-v2-full:
         name: fa3st-service-realm
     args: ["/bin/sh -c 'kc.sh import --file /opt/keycloak/data/import/BaSyx-realm.json; kc.sh import --file /opt/keycloak/data/import/rabbitmq-realm.json; kc.sh import --file /opt/keycloak/data/import/fa3st-service-realm.json; kc.sh start-dev --hostname-strict=false --proxy-headers=xforwarded --http-enabled=true --features=token-exchange'"]
 
-    mqttClientId: <path:factory-x-ci-cd/data/async-aas#keycloak-rabbitmq-mqtt-clientid>
-    mqttClientSecret: <path:factory-x-ci-cd/data/async-aas#keycloak-rabbitmq-mqtt-clientsecret>
-
-    # Note: clients must also be added in config/fa3st-service-realm.json and templates/fa3st-service-realm.yaml
-    fa3stRwxAllId: <path:factory-x-ci-cd/data/async-aas#fa3st-rwx-all-clientid>
-    fa3stRwxAllSecret: <path:factory-x-ci-cd/data/async-aas#fa3st-rwx-all-clientsecret>
-
-    fa3stRwxNameplateId: <path:factory-x-ci-cd/data/async-aas#fa3st-rwx-nameplate-clientid>
-    fa3stRwxNameplateSecret: <path:factory-x-ci-cd/data/async-aas#fa3st-rwx-nameplate-clientsecret>
-
-    fa3stRAllId: <path:factory-x-ci-cd/data/async-aas#fa3st-r-all-clientid>
-    fa3stRAllSecret: <path:factory-x-ci-cd/data/async-aas#fa3st-r-all-clientsecret>
-
-    basyxUserPassword: <path:factory-x-ci-cd/data/async-aas#basyx-user-password>
-    basyxClientId: <path:factory-x-ci-cd/data/async-aas#basyx-clientid>
-    basyxClientSecret: <path:factory-x-ci-cd/data/async-aas#basyx-clientsecret>
-
   aas-registry:
     # Disabled in favor of digitaltwinregistry
     enabled: false

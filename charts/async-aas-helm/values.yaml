@@ -199,14 +199,14 @@ aas-basyx-v2-full:
 
     mqttClientId: <path:factory-x-ci-cd/data/async-aas#keycloak-rabbitmq-mqtt-clientid>
     mqttClientSecret: <path:factory-x-ci-cd/data/async-aas#keycloak-rabbitmq-mqtt-clientsecret>
-    
+
     # Note: clients must also be added in config/fa3st-service-realm.json and templates/fa3st-service-realm.yaml
     fa3stRwxAllId: <path:factory-x-ci-cd/data/async-aas#fa3st-rwx-all-clientid>
     fa3stRwxAllSecret: <path:factory-x-ci-cd/data/async-aas#fa3st-rwx-all-clientsecret>
-    
+
     fa3stRwxNameplateId: <path:factory-x-ci-cd/data/async-aas#fa3st-rwx-nameplate-clientid>
     fa3stRwxNameplateSecret: <path:factory-x-ci-cd/data/async-aas#fa3st-rwx-nameplate-clientsecret>
-    
+
     fa3stRAllId: <path:factory-x-ci-cd/data/async-aas#fa3st-r-all-clientid>
     fa3stRAllSecret: <path:factory-x-ci-cd/data/async-aas#fa3st-r-all-clientsecret>
 

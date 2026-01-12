@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: basyx-realm
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+data:
+  BaSyx-realm.json: |-
+{{- $file := .Files.Get "config/BaSyx-realm.json" }}
+{{- $userPassword := index (index (index .Values "aas-basyx-v2-full") "keycloak") "basyxUserPassword" }}
+{{- $replaced := ($file | replace "BASYX_USER_PASSWORD_PLACEHOLDER" $userPassword) }}
+{{- $clientId := index (index (index .Values "aas-basyx-v2-full") "keycloak") "basyxClientId" }}
+{{- $clientSecret := index (index (index .Values "aas-basyx-v2-full") "keycloak") "basyxClientSecret" }}
+{{- $replaced := ($replaced | replace "CLIENTID_PLACEHOLDER" $clientId | replace "CLIENTSECRET_PLACEHOLDER" $clientSecret) }}
+{{ $replaced | nindent 4 }}

@@ -176,9 +176,9 @@ aas-basyx-v2-full:
       adminUser: <path:factory-x-ci-cd/data/async-aas#keycloak-user>
       adminPassword: <path:factory-x-ci-cd/data/async-aas#keycloak-pw>
     extraVolumes:
-      - name: basyx-keycloak-realm
+      - name: basyx-realm
         configMap:
-          name: basyx-keycloak-realm
+          name: basyx-realm
       - name: rabbitmq-realm
         configMap:
           name: rabbitmq-realm
@@ -188,7 +188,7 @@ aas-basyx-v2-full:
     extraVolumeMounts:
       - mountPath: /opt/keycloak/data/import/BaSyx-realm.json
         subPath: BaSyx-realm.json
-        name: basyx-keycloak-realm
+        name: basyx-realm
       - mountPath: /opt/keycloak/data/import/rabbitmq-realm.json
         subPath: rabbitmq-realm.json
         name: rabbitmq-realm
@@ -209,6 +209,10 @@ aas-basyx-v2-full:
 
     fa3stRAllId: <path:factory-x-ci-cd/data/async-aas#fa3st-r-all-clientid>
     fa3stRAllSecret: <path:factory-x-ci-cd/data/async-aas#fa3st-r-all-clientsecret>
+
+    basyxUserPassword: <path:factory-x-ci-cd/data/async-aas#basyx-user-password>
+    basyxClientId: <path:factory-x-ci-cd/data/async-aas#basyx-clientid>
+    basyxClientSecret: <path:factory-x-ci-cd/data/async-aas#basyx-clientsecret>
 
   aas-registry:
     # Disabled in favor of digitaltwinregistry

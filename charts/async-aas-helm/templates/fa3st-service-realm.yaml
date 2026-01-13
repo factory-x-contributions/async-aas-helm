@@ -9,4 +9,4 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
 data:
   fa3st-service-realm.json: |-
-{{- $file := .Files.Get "config/fa3st-service-realm.json" | nindent 4 }}
+{{- (.Files.Get "config/fa3st-service-realm.json") | nindent 4 }}

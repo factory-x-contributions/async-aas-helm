@@ -8,5 +8,5 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
 data:
-  fa3st.json: |-
-{{- (.Files.Get "config/fa3st.json") | nindent 4 }}
+  fa3st-realm.json: |-
+{{- (.Files.Get "config/fa3st-realm.json") | nindent 4 }}

@@ -186,14 +186,14 @@ aas-basyx-v2-full:
         configMap:
           name: fa3st-realm
     extraVolumeMounts:
-      - mountPath: /opt/bitnami/keycloak/data/import/basyx.json
-        subPath: basyx.json
+      - mountPath: /opt/bitnami/keycloak/data/import/basyx-realm.json
+        subPath: basyx-realm.json
         name: basyx-realm
-      - mountPath: /opt/bitnami/keycloak/data/import/rabbitmq.json
-        subPath: rabbitmq.json
+      - mountPath: /opt/bitnami/keycloak/data/import/rabbitmq-realm.json
+        subPath: rabbitmq-realm.json
         name: rabbitmq-realm
-      - mountPath: /opt/bitnami/keycloak/data/import/fa3st.json
-        subPath: fa3st.json
+      - mountPath: /opt/bitnami/keycloak/data/import/fa3st-realm.json
+        subPath: fa3st-realm.json
         name: fa3st-realm
     args: ["/bin/sh -c 'kc.sh start-dev --import-realm --hostname-strict=false --proxy-headers=xforwarded --http-enabled=true --features=token-exchange'"]
 

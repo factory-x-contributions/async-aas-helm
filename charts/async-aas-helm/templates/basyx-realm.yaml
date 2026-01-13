@@ -8,5 +8,5 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
 data:
-  BaSyx-realm.json: |-
-{{- (.Files.Get "config/BaSyx-realm.json") | nindent 4 }}
+  basyx.json: |-
+{{- (.Files.Get "config/basyx.json") | nindent 4 }}

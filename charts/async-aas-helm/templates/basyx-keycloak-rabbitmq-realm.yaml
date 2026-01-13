@@ -9,4 +9,4 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
 data:
   rabbitmq-realm.json: |-
-{{- $file := .Files.Get "config/rabbitmq-realm.json" | nindent 4 }}
+{{- (.Files.Get "config/rabbitmq-realm.json") | nindent 4 }}

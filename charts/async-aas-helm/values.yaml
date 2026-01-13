@@ -195,7 +195,7 @@ aas-basyx-v2-full:
       - mountPath: /opt/keycloak/data/import/fa3st-service-realm.json
         subPath: fa3st-service-realm.json
         name: fa3st-service-realm
-    args: ["/bin/sh -c 'kc.sh import --file /opt/keycloak/data/import/BaSyx-realm.json; kc.sh import --file /opt/keycloak/data/import/rabbitmq-realm.json; kc.sh import --file /opt/keycloak/data/import/fa3st-service-realm.json; kc.sh start-dev --hostname-strict=false --proxy-headers=xforwarded --http-enabled=true --features=token-exchange'"]
+    args: ["/bin/sh -c 'kc.sh start-dev --import-realm --hostname-strict=false --proxy-headers=xforwarded --http-enabled=true --features=token-exchange'"]
 
   aas-registry:
     # Disabled in favor of digitaltwinregistry

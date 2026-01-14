@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: fa3st-service-realm
+  name: rabbitmq-realm
   labels:
     app.kubernetes.io/name: {{ .Chart.Name }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
 data:
-  fa3st-service-realm.json: |-
-{{- $file := .Files.Get "config/fa3st-service-realm.json" | nindent 4 }}
+  rabbitmq-realm.json: |-
+{{- (.Files.Get "config/rabbitmq-realm.json") | nindent 4 }}

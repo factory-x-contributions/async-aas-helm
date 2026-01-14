@@ -187,20 +187,20 @@ aas-basyx-v2-full:
       - name: rabbitmq-realm
         configMap:
           name: rabbitmq-realm
-      - name: fa3st-service-realm
+      - name: fa3st-realm
         configMap:
-          name: fa3st-service-realm
+          name: fa3st-realm
     extraVolumeMounts:
-      - mountPath: /opt/keycloak/data/import/BaSyx-realm.json
-        subPath: BaSyx-realm.json
+      - mountPath: /opt/bitnami/keycloak/data/import/basyx-realm.json
+        subPath: basyx-realm.json
         name: basyx-realm
-      - mountPath: /opt/keycloak/data/import/rabbitmq-realm.json
+      - mountPath: /opt/bitnami/keycloak/data/import/rabbitmq-realm.json
         subPath: rabbitmq-realm.json
         name: rabbitmq-realm
-      - mountPath: /opt/keycloak/data/import/fa3st-service-realm.json
-        subPath: fa3st-service-realm.json
-        name: fa3st-service-realm
-    args: ["/bin/sh -c 'kc.sh import --file /opt/keycloak/data/import/BaSyx-realm.json; kc.sh import --file /opt/keycloak/data/import/rabbitmq-realm.json; kc.sh import --file /opt/keycloak/data/import/fa3st-service-realm.json; kc.sh start-dev --hostname-strict=false --proxy-headers=xforwarded --http-enabled=true --features=token-exchange'"]
+      - mountPath: /opt/bitnami/keycloak/data/import/fa3st-realm.json
+        subPath: fa3st-realm.json
+        name: fa3st-realm
+    args: ["/bin/sh -c 'kc.sh start-dev --import-realm --hostname-strict=false --proxy-headers=xforwarded --http-enabled=true --features=token-exchange'"]
 
   aas-registry:
     # Disabled in favor of digitaltwinregistry
@@ -257,7 +257,7 @@ aas-basyx-v2-full:
       basyx.feature.authorization.type=rbac
       basyx.feature.authorization.jwtBearerTokenProvider=keycloak
       basyx.feature.authorization.rbac.file=file:/application/rbac-rules.json
-      spring.security.oauth2.resourceserver.jwt.issuer-uri=https://<path:factory-x-ci-cd/data/async-aas#keycloak-url>/realms/BaSyx
+      spring.security.oauth2.resourceserver.jwt.issuer-uri=https://<path:factory-x-ci-cd/data/async-aas#keycloak-url>/realms/basyx
     ingress:
       enabled: true
       host: "<path:factory-x-ci-cd/data/async-aas#basyx-disco-url>"
@@ -635,7 +635,7 @@ rabbitmq:
     auth_oauth2.preferred_username_claims.2 = clientId
     auth_oauth2.preferred_username_claims.3 = azp
 
-    auth_oauth2.issuer = https://<path:factory-x-ci-cd/data/async-aas#keycloak-url>/realms/rabbitmq-realm
+    auth_oauth2.issuer = https://<path:factory-x-ci-cd/data/async-aas#keycloak-url>/realms/rabbitmq
     auth_oauth2.additional_scopes_key = extra_scope
 
   ingress:

@@ -252,7 +252,7 @@ aas-basyx-v2-full:
       basyx.feature.authorization.type=rbac
       basyx.feature.authorization.jwtBearerTokenProvider=keycloak
       basyx.feature.authorization.rbac.file=file:/application/rbac-rules.json
-      spring.security.oauth2.resourceserver.jwt.issuer-uri=https://<path:factory-x-ci-cd/data/async-aas#keycloak-url>/realms/BaSyx
+      spring.security.oauth2.resourceserver.jwt.issuer-uri=https://<path:factory-x-ci-cd/data/async-aas#keycloak-url>/realms/basyx
     ingress:
       enabled: true
       host: "<path:factory-x-ci-cd/data/async-aas#basyx-disco-url>"
@@ -628,7 +628,7 @@ rabbitmq:
     auth_oauth2.preferred_username_claims.2 = clientId
     auth_oauth2.preferred_username_claims.3 = azp
 
-    auth_oauth2.issuer = https://<path:factory-x-ci-cd/data/async-aas#keycloak-url>/realms/rabbitmq-realm
+    auth_oauth2.issuer = https://<path:factory-x-ci-cd/data/async-aas#keycloak-url>/realms/rabbitmq
     auth_oauth2.additional_scopes_key = extra_scope
 
   ingress:

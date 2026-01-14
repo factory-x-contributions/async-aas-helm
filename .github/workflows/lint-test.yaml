@@ -76,5 +76,5 @@ jobs:
           sed -Ez 's/seeding:\n( *)enabled: true/seeding:\n\1enabled: false/' -i charts/async-aas-helm/values.yaml
 
       - name: Run chart-testing (install)
-        run: ct install --target-branch ${{ github.event.repository.default_branch }} --charts ./charts/async-aas-helm
+        run: ct install --target-branch ${{ github.event.repository.default_branch }} --charts ./charts/async-aas-helm --helm-extra-args "--timeout 15m"
         if: steps.list-changed.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'

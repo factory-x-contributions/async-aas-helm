@@ -43,9 +43,9 @@ In `values.yaml` you can configure the Registry URLs:
 ```yaml
 registry:
   # Base URL for the AAS Registry (FA³ST Registry) following Platform Industrie 4.0
-  aasRegistryBaseUrl: "https://faaast-registry.factory-x.catena-x.net"
+  aasRegistryBaseUrl: "https://faaast-registry"
   # Base URL for the Submodel Registry (FA³ST Registry) following Platform Industrie 4.0
-  submodelRegistryBaseUrl: "https://faaast-registry.factory-x.catena-x.net"
+  submodelRegistryBaseUrl: "https://faaast-registry"
 ```
 
 ### Internal Service Communication
@@ -54,8 +54,8 @@ If you deploy the Registry within the same Kubernetes cluster, you can use inter
 
 ```yaml
 registry:
-  aasRegistryBaseUrl: "http://faaast-registry:8080"
-  submodelRegistryBaseUrl: "http://faaast-registry:8080"
+  aasRegistryBaseUrl: "https://faaast-registry"
+  submodelRegistryBaseUrl: "https://faaast-registry"
 ```
 
 ## How It Works
@@ -92,8 +92,8 @@ On shutdown of FA³ST Service, all AAS and Submodels are automatically removed f
 ```bash
 # Install the chart
 helm install faaast-service ./charts/faaast-service \
-  --set registry.aasRegistryBaseUrl="https://faaast-registry.factory-x.catena-x.net" \
-  --set registry.submodelRegistryBaseUrl="https://faaast-registry.factory-x.catena-x.net"
+  --set registry.aasRegistryBaseUrl="https://faaast-registry" \
+  --set registry.submodelRegistryBaseUrl="https://faaast-registry"
 ```
 
 ### Verification
@@ -108,9 +108,9 @@ You should see log entries like:
 
 ```
 INFO  - Registering all AssetAdministrationShells to the following registries:
-INFO  -      https://faaast-registry.factory-x.catena-x.net
+INFO  -      https://faaast-registry
 INFO  - Registering all submodels to the following registries:
-INFO  -      https://faaast-registry.factory-x.catena-x.net
+INFO  -      https://faaast-registry
 ```
 
 #### 2. Check the Registry
@@ -118,13 +118,13 @@ INFO  -      https://faaast-registry.factory-x.catena-x.net
 Query all registered AAS:
 
 ```bash
-curl -X GET "https://faaast-registry.factory-x.catena-x.net/api/v3.0/shell-descriptors"
+curl -X GET "https://faaast-registry/api/v3.0/shell-descriptors"
 ```
 
 Query all registered Submodels:
 
 ```bash
-curl -X GET "https://faaast-registry.factory-x.catena-x.net/api/v3.0/submodel-descriptors"
+curl -X GET "https://faaast-registry/api/v3.0/submodel-descriptors"
 ```
 
 #### 3. Test Automatic Registration
@@ -148,7 +148,7 @@ curl -X POST "http://faaast-service:8080/api/v3.0/shells" \
 Then verify that the AAS automatically appears in the Registry:
 
 ```bash
-curl -X GET "https://faaast-registry.factory-x.catena-x.net/api/v3.0/shell-descriptors" | jq '.result[] | select(.id == "https://example.com/ids/aas/test123")'
+curl -X GET "https://faaast-registry/api/v3.0/shell-descriptors" | jq '.result[] | select(.id == "https://example.com/ids/aas/test123")'
 ```
 
 ## Cloud Events Specification

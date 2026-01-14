@@ -39,9 +39,9 @@ Configure the registry base URLs in `values.yaml`:
 ```yaml
 registry:
   # Base URL for the AAS Registry (FA³ST Registry)
-  aasRegistryBaseUrl: "https://faaast-registry.factory-x.catena-x.net"
+  aasRegistryBaseUrl: "https://faaast-registry"
   # Base URL for the Submodel Registry (FA³ST Registry)
-  submodelRegistryBaseUrl: "https://faaast-registry.factory-x.catena-x.net"
+  submodelRegistryBaseUrl: "https://faaast-registry"
 ```
 
 ### API Endpoints
@@ -58,6 +58,11 @@ For API documentation, see:
 ## Installation
 
 ```bash
+helm install faaast-service ./charts/faaast-service \
+  --set registry.aasRegistryBaseUrl="https://faaast-registry" \
+  --set registry.submodelRegistryBaseUrl="https://faaast-registry"
+
+# If you need to call the Registry via ingress instead, override to your ingress URL:
 helm install faaast-service ./charts/faaast-service \
   --set registry.aasRegistryBaseUrl="https://faaast-registry.factory-x.catena-x.net" \
   --set registry.submodelRegistryBaseUrl="https://faaast-registry.factory-x.catena-x.net"

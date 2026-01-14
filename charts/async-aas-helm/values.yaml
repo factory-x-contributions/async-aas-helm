@@ -4,6 +4,7 @@ faaast-registry:
     tag: 1.2.0-SNAPSHOT
     pullPolicy: Always
   ingress:
+    enabled: true
     annotations:
       nginx.ingress.kubernetes.io/enable-cors: "true"
       nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
@@ -46,6 +47,10 @@ faaast-service:
     repository: ghcr.io/factory-x-contributions/fa3st-service
     tag: security
     pullPolicy: Always
+
+  registry:
+    aasRegistryBaseUrl: "http://faaast-registry:443"
+    submodelRegistryBaseUrl: "http://faaast-registry:443"
 
   persistence:
     host: "mongodb"

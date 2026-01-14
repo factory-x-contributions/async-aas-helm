@@ -53,9 +53,9 @@ messageBus:
 
 registry:
   # Base URL for the AAS Registry (FA³ST Registry)
-  aasRegistryBaseUrl: "https://faaast-registry.factory-x.catena-x.net"
+  aasRegistryBaseUrl: "https://faaast-registry"
   # Base URL for the Submodel Registry (FA³ST Registry)
-  submodelRegistryBaseUrl: "https://faaast-registry.factory-x.catena-x.net"
+  submodelRegistryBaseUrl: "https://faaast-registry"
 
 endpoints:
   - class: "de.fraunhofer.iosb.ilt.faaast.service.endpoint.http.HttpEndpoint"

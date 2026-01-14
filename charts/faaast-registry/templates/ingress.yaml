@@ -22,11 +22,14 @@ spec:
   tls:
     {{- range .Values.ingress.tls }}
     - hosts:
-        - {{  . | quote }}
+        {{- range .hosts }}
+        - {{ . | quote }}
+        {{- end }}
+      secretName: {{ .secretName | quote }}
     {{- end }}
-      secretName: {{ .secretName }}
   {{- end }}
   rules:
+    {{- range .Values.ingress.hosts }}
     - host: {{ .host | quote }}
       http:
         paths:
@@ -41,4 +44,5 @@ spec:
                 port:
                   number: {{ $.Values.service.port }}
           {{- end }}
+    {{- end }}
 {{- end }}

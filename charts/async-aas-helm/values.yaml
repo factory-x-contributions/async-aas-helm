@@ -656,6 +656,8 @@ mongodb:
   enabled: true
   architecture: standalone
   image:
+    repository: bitnamilegacy/mongodb
+    tag: "8.0.13"
     pullPolicy: IfNotPresent
   auth:
     rootUser: <path:factory-x-ci-cd/data/async-aas#mongodb-admin-user>

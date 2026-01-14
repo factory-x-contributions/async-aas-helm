@@ -1,5 +1,5 @@
 {
-    "realm": "rabbitmq-realm",
+    "realm": "rabbitmq",
     "enabled": true,
     "clients": [
         {

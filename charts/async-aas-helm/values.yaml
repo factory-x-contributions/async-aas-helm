@@ -550,7 +550,7 @@ aas-basyx-v2-full:
       springdoc.swagger-ui.csrf.enabled=false
     application-MongoDB: |
       spring.config.activate.on-profile=MongoDB
-      spring.data.mongodb.authentication-database=factoryx-dtr-db
+      spring.data.mongodb.authentication-database=<path:factory-x-ci-cd/data/async-aas#mongodb-auth-source>
       spring.data.mongodb.database=factoryx-dtr-db
       spring.data.mongodb.host=mongodb
       spring.data.mongodb.port=27017

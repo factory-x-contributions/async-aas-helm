@@ -205,30 +205,6 @@ aas-basyx-v2-full:
   aas-registry:
     # Disabled in favor of digitaltwinregistry
     enabled: false
-    image:
-      # If Kafka is used, then the appropriate Bootstrap connection string must be provided.
-      name: eclipsebasyx/aas-registry-log-mem:2.0.0-SNAPSHOT
-      pullPolicy: IfNotPresent
-    service:
-      port: 8080
-    # Keep it null if not deploying a Kafka instance.
-    kafka:
-      connectionString: null
-    ingress:
-      enabled: true
-      host: "<path:factory-x-ci-cd/data/async-aas#basyx-reg-url>"
-      tls: true
-      ingressClassName: "nginx"
-      annotations:
-        kubernetes.io/ingress.class: nginx
-        cert-manager.io/cluster-issuer: letsencrypt-prod
-        nginx.ingress.kubernetes.io/enable-cors: "true"
-        nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
-        nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-    config: |-
-      basyx.cors.allowed-origins=*
-      basyx.cors.allowed-methods=GET,POST,PATCH,DELETE,PUT,OPTIONS,HEAD
-
 
   sm-registry:
     enabled: false
@@ -236,39 +212,6 @@ aas-basyx-v2-full:
   aas-discovery:
     # Disabled in favor of digitaltwinregistry
     enabled: false
-    image:
-      name: eclipsebasyx/aas-discovery:2.0.0-SNAPSHOT
-      pullPolicy: IfNotPresent
-    service:
-      port: 8081
-    config: |-
-      server.port=8081
-      spring.application.name=AAS Discovery Service
-      logging.level.root=TRACE
-
-      basyx.aasdiscoveryservice.name=aas-discovery-service
-
-      basyx.backend=InMemory
-
-      basyx.cors.allowed-origins=*
-      basyx.cors.allowed-methods=GET,POST,PATCH,DELETE,PUT,OPTIONS,HEAD
-
-      basyx.feature.authorization.enabled=true
-      basyx.feature.authorization.type=rbac
-      basyx.feature.authorization.jwtBearerTokenProvider=keycloak
-      basyx.feature.authorization.rbac.file=file:/application/rbac-rules.json
-      spring.security.oauth2.resourceserver.jwt.issuer-uri=https://<path:factory-x-ci-cd/data/async-aas#keycloak-url>/realms/basyx
-    ingress:
-      enabled: true
-      host: "<path:factory-x-ci-cd/data/async-aas#basyx-disco-url>"
-      tls: true
-      ingressClassName: "nginx"
-      annotations:
-        kubernetes.io/ingress.class: nginx
-        cert-manager.io/cluster-issuer: letsencrypt-prod
-        nginx.ingress.kubernetes.io/enable-cors: "true"
-        nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
-        nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
 
   # Also needs an ingress.
   aas-environment:

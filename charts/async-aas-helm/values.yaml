@@ -513,22 +513,6 @@ rabbitmq:
   image:
     pullPolicy: IfNotPresent
 
-  extraContainerPorts:
-    - name: websocket-mqtt
-      containerPort: 9001
-
-  # select exposed ports
-  service:
-    portEnabled: false  # AMQP
-    distPortEnabled: false  # Erlang distribution server
-    managerPortEnabled: false  # RabbitMQ Manager
-    epmdPortEnabled: false  # RabbitMQ EPMD Discovery service
-    extraPorts:
-      - name: websocket-mqtt
-        port: 9001
-        targetPort: 9001
-
-
   # disable metrics gathering
   metrics:
     enabled: false
@@ -541,11 +525,15 @@ rabbitmq:
   auth:
     username: "<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-user>"
     password: "<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-pw>"
-    updatePassword: true
-    enableLoopbackUser: false  # setting this to "true" disables login via this user from remote hosts
+    # Optional: for HA setups
+    #erlangCookie: "<path:factory-x-ci-cd/data/async-aas#rabbitmq-erlang-cookie>" # random string: openssl rand -base64 32 -> chart updates will fail in ha cluster setups without this or existingErlangCookieKey
 
   # Enable RabbitMQ with MQTT protocol, Websockets, and OAuth
-  extraPlugins: "rabbitmq_mqtt rabbitmq_web_mqtt rabbitmq_auth_backend_oauth2"
+  additionalPlugins:
+    - rabbitmq_mqtt
+    - rabbitmq_web_mqtt
+    - rabbitmq_auth_backend_oauth2
+    - rabbitmq_management
 
   # configure memory usage threshold for warnings
   # memoryHighWatermark:
@@ -554,58 +542,39 @@ rabbitmq:
   #   value: 0.8
 
   # Additional RabbitMQ configuration
-  extraConfiguration: |-
-    listeners.tcp = none  # disable AMQP
+  config:
+    extraConfiguration: |-
+      listeners.tcp = none  # disable AMQP
+      
+      web_mqtt.tcp.port = 9001
+      web_mqtt.ws_path = /mqtt  # this MUST be set for Basyx (paho default, non-configurable in basyx)
+      
+      mqtt.vhost = /
+      mqtt.exchange = amq.topic
+      mqtt.allow_anonymous = false
 
-    web_mqtt.tcp.port = 9001
-    web_mqtt.ws_path = /mqtt  # this MUST be set for Basyx (paho default, non-configurable in basyx)
+      #log.default.level = debug
 
-    mqtt.vhost = /
-    mqtt.exchange = amq.topic
-    mqtt.allow_anonymous = false
+      auth_backends.1 = internal
+      auth_backends.2 = rabbitmq_auth_backend_oauth2
+      
+      auth_oauth2.resource_server_id = rabbitmq  # this must correspond to the "aud" claim of the JWT
 
-    #log.default.level = debug
+      # rabbit looks for the client's username in these claims
+      auth_oauth2.preferred_username_claims.1 = user_name
+      auth_oauth2.preferred_username_claims.2 = clientId
+      auth_oauth2.preferred_username_claims.3 = azp
+      
+      auth_oauth2.issuer = https://<path:factory-x-ci-cd/data/async-aas#keycloak-url>/realms/rabbitmq
+      auth_oauth2.additional_scopes_key = extra_scope
 
-    auth_backends.1 = internal
-    auth_backends.2 = rabbitmq_auth_backend_oauth2
-
-    auth_oauth2.resource_server_id = rabbitmq  # this must correspond to the "aud" claim of the JWT
-
-    # rabbit looks for the client's username in these claims
-    auth_oauth2.preferred_username_claims.1 = user_name
-    auth_oauth2.preferred_username_claims.2 = clientId
-    auth_oauth2.preferred_username_claims.3 = azp
-
-    auth_oauth2.issuer = https://<path:factory-x-ci-cd/data/async-aas#keycloak-url>/realms/rabbitmq
-    auth_oauth2.additional_scopes_key = extra_scope
-
+  # We use our own ingress for MQTT WSS
   ingress:
-    enabled: true
-    ingressClassName: "nginx"
-    annotations:
-      kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: "true"
-      nginx.ingress.kubernetes.io/enable-cors: "true"
-      cert-manager.io/cluster-issuer: "letsencrypt-prod"
-      nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
-      nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-      nginx.ingress.kubernetes.io/websocket-services: rabbitmqbroker-websockets-service
-
-    hostname: ""  # only for management interface, "disable"
-
-    extraRules:
-      - host: <path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-url>
-        http:
-          paths:
-            - path: /
-              pathType: ImplementationSpecific
-              backend:
-                service:
-                  name: rabbitmq
-                  port:
-                    number: 9001
-
-    # need to use extraTls because the regular "tls" block is only for management interface
+    enabled: false # Disable default ingress (because the regular "tls" block is only for management interface)
+    # need to use our own configuration 
+    certManager:
+      enabled: true
+      clusterIssuer: "letsencrypt-prod"
     extraTls:
       - hosts:
         - <path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-url>

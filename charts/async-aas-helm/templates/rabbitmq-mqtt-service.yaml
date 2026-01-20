@@ -1,0 +1,19 @@
+{{- if .Values.rabbitmq.ingress.certManager.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-rabbitmq-mqtt
+  labels:
+    app.kubernetes.io/name: rabbitmq-mqtt
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 443
+      targetPort: 9001
+      protocol: TCP
+      name: websocket-mqtt
+  selector:
+    app.kubernetes.io/name: rabbitmq
+    app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

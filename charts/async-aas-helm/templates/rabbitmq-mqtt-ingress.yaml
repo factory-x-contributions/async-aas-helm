@@ -1,0 +1,35 @@
+{{- if .Values.rabbitmq.ingress.certManager.enabled }}
+{{- $host := index (index .Values.rabbitmq.ingress.extraTls 0).hosts 0 }}
+{{- $secretName := (index .Values.rabbitmq.ingress.extraTls 0).secretName }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-rabbitmq-mqtt
+  labels:
+    app.kubernetes.io/name: rabbitmq-mqtt
+    app.kubernetes.io/instance: {{ .Release.Name }}
+  annotations:
+    cert-manager.io/cluster-issuer: {{ .Values.rabbitmq.ingress.certManager.clusterIssuer | default "letsencrypt-prod" }}
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/websocket-services: {{ .Release.Name }}-rabbitmq-mqtt
+    kubernetes.io/tls-acme: "true"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - {{ $host }}
+      secretName: {{ $secretName }}
+  rules:
+    - host: {{ $host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Release.Name }}-rabbitmq-mqtt
+                port:
+                  number: 443
+{{- end }}

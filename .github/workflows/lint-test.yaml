@@ -70,6 +70,8 @@ jobs:
 
       - name: Remove deployment failure triggers
         run: |
+          # Fix MongoDB auth database to use 'admin' instead of placeholder key name
+          sed -i 's|<path:factory-x-ci-cd/data/async-aas#mongodb-auth-source>|admin|g' charts/async-aas-helm/values.yaml
           # Remove <path:... directives
           sed -Ei 's/<path:factory-x-ci-cd\/data\/async-aas\#([a-zA-Z0-9-]+)>/\1/g' charts/async-aas-helm/values.yaml
           # Disable git init phase, we don't need initial model for testing the FA³ST deployment

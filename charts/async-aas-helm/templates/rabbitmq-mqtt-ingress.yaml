@@ -25,7 +25,7 @@ spec:
     - host: {{ $host }}
       http:
         paths:
-          - path: /
+          - path: /mqtt
             pathType: Prefix
             backend:
               service:

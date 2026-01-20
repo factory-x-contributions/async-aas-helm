@@ -34,16 +34,18 @@
   "clients": [
     {
       "clientId": "<path:factory-x-ci-cd/data/async-aas#basyx-clientid>",
-      "secret": "<path:factory-x-ci-cd/data/async-aas#basyx-clientsecret>", 
-      "name": "basyx-client",
-      "protocol": "openid-connect",
-      "publicClient": true,
-      "directAccessGrantsEnabled": true,
-      "standardFlowEnabled": true,
-      "implicitFlowEnabled": true,
-      "serviceAccountsEnabled": false,
-      "redirectUris": ["/*"],
-      "webOrigins": ["+"]
+      "enabled": true,
+      "secret": "<path:factory-x-ci-cd/data/async-aas#basyx-clientsecret>",
+      "publicClient": false,
+      "serviceAccountsEnabled": true,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "redirectUris": [
+        "*"
+      ],
+      "webOrigins": [
+        "*"
+      ]
     }
   ]
 }

@@ -309,7 +309,7 @@ aas-basyx-v2-full:
       basyx.feature.authorization.jwtBearerTokenProvider = keycloak
       basyx.feature.authorization.rbac.file = file:/application/rbac-rules.json
 
-      spring.security.oauth2.resourceserver.jwt.issuer-uri = https://<path:factory-x-ci-cd/data/async-aas#keycloak-url>/realms/BaSyx
+      spring.security.oauth2.resourceserver.jwt.issuer-uri = https://<path:factory-x-ci-cd/data/async-aas#keycloak-url>/realms/basyx
 
       spring.data.mongodb.uri=mongodb://mongodb
       spring.data.mongodb.port=27017

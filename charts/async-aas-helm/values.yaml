@@ -526,7 +526,7 @@ rabbitmq:
     username: "<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-user>"
     password: "<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-pw>"
     # Optional: for HA setups
-    #erlangCookie: "<path:factory-x-ci-cd/data/async-aas#rabbitmq-erlang-cookie>" # random string: openssl rand -base64 32 -> chart updates will fail in ha cluster setups without this or existingErlangCookieKey
+    # erlangCookie: "<path:factory-x-ci-cd/data/async-aas#rabbitmq-erlang-cookie>" # random string: openssl rand -base64 32 -> chart updates will fail in ha cluster setups without this or existingErlangCookieKey
 
   # Enable RabbitMQ with MQTT protocol, Websockets, and OAuth
   additionalPlugins:
@@ -545,10 +545,10 @@ rabbitmq:
   config:
     extraConfiguration: |-
       listeners.tcp = none  # disable AMQP
-      
+
       web_mqtt.tcp.port = 9001
       web_mqtt.ws_path = /mqtt  # this MUST be set for Basyx (paho default, non-configurable in basyx)
-      
+
       mqtt.vhost = /
       mqtt.exchange = amq.topic
       mqtt.allow_anonymous = false
@@ -557,21 +557,21 @@ rabbitmq:
 
       auth_backends.1 = internal
       auth_backends.2 = rabbitmq_auth_backend_oauth2
-      
+
       auth_oauth2.resource_server_id = rabbitmq  # this must correspond to the "aud" claim of the JWT
 
       # rabbit looks for the client's username in these claims
       auth_oauth2.preferred_username_claims.1 = user_name
       auth_oauth2.preferred_username_claims.2 = clientId
       auth_oauth2.preferred_username_claims.3 = azp
-      
+
       auth_oauth2.issuer = https://<path:factory-x-ci-cd/data/async-aas#keycloak-url>/realms/rabbitmq
       auth_oauth2.additional_scopes_key = extra_scope
 
   # We use our own ingress for MQTT WSS
   ingress:
-    enabled: false # Disable default ingress (because the regular "tls" block is only for management interface)
-    # need to use our own configuration 
+    enabled: false  # Disable default ingress (because the regular "tls" block is only for management interface)
+    # need to use our own configuration
     certManager:
       enabled: true
       clusterIssuer: "letsencrypt-prod"

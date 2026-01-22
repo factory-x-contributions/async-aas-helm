@@ -1,3 +1,7 @@
+global:
+  security:
+    allowInsecureImages: true
+
 faaast-registry:
   image:
     repository: docker.io/fraunhoferiosb/faaast-registry

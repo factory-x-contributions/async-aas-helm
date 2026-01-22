@@ -582,17 +582,14 @@ rabbitmq:
 
 mongodb:
   enabled: true
-  architecture: standalone
-  image:
-    repository: bitnamilegacy/mongodb
-    tag: "8.0.13"
-    pullPolicy: IfNotPresent
   auth:
     rootUser: <path:factory-x-ci-cd/data/async-aas#mongodb-admin-user>
     rootPassword: <path:factory-x-ci-cd/data/async-aas#mongodb-admin-pw>
   replicaSetName: <path:factory-x-ci-cd/data/async-aas#mongodb-aas-dashboard>
-
+  existingSecret: mongodb-auth
   persistence:
+    enabled: true
     size: 10Gi
   service:
-    nameOverride: mongodb
+    name: mongodb
+    port: 27017

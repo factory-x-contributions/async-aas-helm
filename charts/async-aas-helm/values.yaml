@@ -586,6 +586,9 @@ rabbitmq:
 
 mongodb:
   enabled: true
+  args:
+    - "--bind_ip_all"
+    - "--auth"
   auth:
     rootUser: <path:factory-x-ci-cd/data/async-aas#mongodb-admin-user>
     rootPassword: <path:factory-x-ci-cd/data/async-aas#mongodb-admin-pw>

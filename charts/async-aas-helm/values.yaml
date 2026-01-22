@@ -586,7 +586,7 @@ rabbitmq:
 
 mongodb:
   enabled: true
-  config:
+  extraConfig: |
     net:
       bindIp: 0.0.0.0
       port: 27017

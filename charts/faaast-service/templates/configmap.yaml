@@ -48,6 +48,18 @@ data:
             "aclFolder": "/acl/aclFolder_endpoint{{ $i }}",
             {{- end }}
             "sslEnabled": {{ $endpoint.sslEnabled }}
+            {{- if $endpoint.hostname }}
+            , "hostname": "{{ $endpoint.hostname }}"
+            {{- end }} 
+            {{- if $endpoint.subprotocol }}
+            , "subprotocol": "{{ $endpoint.subprotocol }}"
+            {{- end }}
+            {{- if $endpoint.subprotocolBody }}
+            , "subprotocolBody": "{{ $endpoint.subprotocolBody }}"
+            {{- end }}
+            {{- if $endpoint.subprotocolBodyEncoding }}
+            , "subprotocolBodyEncoding": "{{ $endpoint.subprotocolBodyEncoding }}"
+            {{- end }}  
           }
           {{- if ne $i (sub (len $.Values.endpoints) 1) }},{{ end }}
         {{- end }}

@@ -62,6 +62,10 @@ faaast-service:
   endpoints:
     - class: "de.fraunhofer.iosb.ilt.faaast.service.endpoint.http.HttpEndpoint"
       port: 8080
+      hostname: <path:factory-x-ci-cd/data/async-aas#fx-edc4-dataplane-url>
+      subprotocol: DSP
+      subprotocolBody: id=<path:factory-x-ci-cd/data/async-aas#edc-asset-id>;dspEndpoint=<path:factory-x-ci-cd/data/async-aas#fx-edc4-controlplane-dsp-endpoint>
+      subprotocolBodyEncoding: plain
       corsEnabled: true
       sslEnabled: false
       security:

@@ -66,6 +66,10 @@ endpoints:
       enabled: false
       jwkProvider: ""
       aclFiles: []
+      hostname:
+      subprotocol:
+      subprotocolBody:
+      subprotocolBodyEncoding:
 
 autoscaling:
   enabled: false

@@ -64,7 +64,7 @@ faaast-service:
       port: 8080
       hostname: <path:factory-x-ci-cd/data/async-aas#fx-edc4-dataplane-url>
       subprotocol: DSP
-      subprotocolBody: assetId=<path:factory-x-ci-cd/data/async-aas#edc-asset-id>;dsp_endpoint=<path:factory-x-ci-cd/data/async-aas#fx-edc4-controlplane-dsp-endpoint>
+      subprotocolBody: id=<path:factory-x-ci-cd/data/async-aas#edc-asset-id>;dspEndpoint=<path:factory-x-ci-cd/data/async-aas#fx-edc4-controlplane-dsp-endpoint>
       subprotocolBodyEncoding: plain
       corsEnabled: true
       sslEnabled: false

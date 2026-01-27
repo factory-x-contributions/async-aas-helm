@@ -337,7 +337,6 @@ components:
         - source
         - type
         - datacontenttype
-        - dataschema
         - time
       optional:
         - semanticid

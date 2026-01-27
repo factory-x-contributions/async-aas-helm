@@ -158,7 +158,7 @@ components:
           examples:
             - "0173-1#02-AAA119#002"
         data:
-          $ref: '#/components/schemas/valueChangedEventData'
+          $ref: https://raw.githubusercontent.com/admin-shell-io/aas-specs-metamodel/refs/heads/master/schemas/json/aas.json#/definitions/SubmodelElement
       required:
         - specversion
         - id
@@ -170,27 +170,6 @@ components:
       optional:
         - data
         - semanticid
-    valueChangedEventData:
-          type: object
-          properties:
-            oldValue:
-              type: 
-                - string
-                - number
-              examples:
-                - 41
-              description: The old value of the SubmodelElement.
-            newValue:
-              type: 
-                - string
-                - number
-              examples:
-                - 42
-              description: The new value of the SubmodelElement.
-            dataType:
-              type: string
-              example: xs:int
-              description: The data type of the changed value. If the data type changed, the new data type.
     elementCreatedEvent:
       properties:
         specversion:
@@ -239,7 +218,7 @@ components:
           examples:
             - "0173-1#02-AAA119#002"
         data:
-          $ref: '#/components/schemas/wholeElementEventData'
+          $ref: https://raw.githubusercontent.com/admin-shell-io/aas-specs-metamodel/refs/heads/master/schemas/json/aas.json#/definitions/SubmodelElement
       required:
         - specversion
         - id
@@ -301,7 +280,7 @@ components:
           examples:
             - "0173-1#02-AAA119#002"
         data:
-          $ref: '#/components/schemas/wholeElementEventData'
+          $ref: https://raw.githubusercontent.com/admin-shell-io/aas-specs-metamodel/refs/heads/master/schemas/json/aas.json#/definitions/SubmodelElement
       required:
         - specversion
         - id
@@ -341,15 +320,6 @@ components:
           description: Content type of the event data.
           type: string
           const: application/json
-        dataschema:
-          description: Identifies the schema that the event data adheres to.
-          type: string
-          format: uri
-          examples:
-            - >-
-              https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/Property
-            - >-
-              https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/File
         time:
           description: Timestamp of when the occurrence happened.
           format: date-time
@@ -371,14 +341,6 @@ components:
         - time
       optional:
         - semanticid
-    wholeElementEventData:
-          type: object
-          properties:
-            element: 
-              examples:
-                - '{"idShort":"MyVariableProperty", "value": 42}'
-              description:
-                The emitting referable element in full.
     operationInvokedEvent:
       properties:
         specversion:
@@ -425,7 +387,7 @@ components:
           examples:
             - "0173-1#02-AAA119#002"
         data:
-          $ref: '#/components/schemas/operationInvokedEventData'
+          $ref: https://raw.githubusercontent.com/admin-shell-io/aas-specs-metamodel/refs/heads/master/schemas/json/aas.json#/definitions/Operation
       required:
         - specversion
         - id
@@ -437,15 +399,6 @@ components:
       optional:
         - data
         - semanticid
-    operationInvokedEventData:
-      type: object
-      properties:
-        inputArguments:
-          $ref: '#/components/schemas/inputArguments'
-        inoutputArguments:
-          $ref: '#/components/schemas/inoutputArguments'
-        outputArguments:
-          $ref: '#/components/schemas/outputArguments'
     operationFinishedEvent:
       properties:
         specversion:
@@ -479,7 +432,7 @@ components:
           format: uri
           examples:
             - >-
-              https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/Operation
+              https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/OperationVariable
         time:
           description: Timestamp of when the occurrence happened.
           format: date-time
@@ -511,16 +464,6 @@ components:
           $ref: '#/components/schemas/inoutputArguments'
         outputArguments:
           $ref: '#/components/schemas/outputArguments'
-    inputArguments:
-      items:
-        description: List of OperationVariables declared as inputArguments.
-        type: string
-      examples:
-        - '[ {"idShort":"MyFirstInputArgument", "value": 42}, {"idShort":"MySecondInputArgument", "value": "hello-world"} ]'
-        - '[{"in": 4}]'
-      description:
-        The supplied input variable(s) for an operation invocation.
-      type: array
     inoutputArguments:
       items:
         description: List of OperationVariables declared as inoutputArguments.
@@ -535,9 +478,11 @@ components:
       items:
         description: List of OperationVariables declared as outputArguments.
         type: string
+        $ref: https://raw.githubusercontent.com/admin-shell-io/aas-specs-metamodel/refs/heads/master/schemas/json/aas.json#/definitions/OperationVariable
       examples:
         - '[ {"idShort":"MyOperationOutput", "value": 123456} ]'
         - '[{"note": "new value"}]'
+        - $ref: https://raw.githubusercontent.com/admin-shell-io/aas-specs-metamodel/refs/heads/master/schemas/json/examples/generated/OperationVariable/maximal.json#/submodels/0/submodelElements/0
       description:
         The output variable(s) as the operation result.
       type: array

@@ -3,14 +3,14 @@ info:
   title: AAS ASYNC API with CloudEvents
   version: 0.3-SNAPSHOT
   description: >-
-    The specification defines how ElementCreated and ValueChanged events of an
-    asset administration shell are transmitted to the message broker (RabbitMQ with MQTT protocol support).
+    The specification defines how ElementCreated and ElementUpdated events of an
+    Asset Administration Shell (AAS) are transmitted to the message broker (RabbitMQ with MQTT protocol support).
 channels:
-  aas/update/valuechanged:
+  aas/update/elementupdated:
     address: noauth or all or participantid
     messages:
       publish.message:
-        $ref: '#/components/messages/valueChanged'
+        $ref: '#/components/messages/elementUpdated'
     parameters:
       aasid:
         $ref: '#/components/parameters/aasid'
@@ -24,12 +24,12 @@ channels:
       publish.message:
         $ref: '#/components/messages/elementCreated'
 operations:
-  aas/update/valuechanged.publish:
+  aas/update/elementupdated.publish:
     action: send
     channel:
-      $ref: '#/channels/aas~1update~1valuechanged'
+      $ref: '#/channels/aas~1update~1elementupdated'
     messages:
-      - $ref: '#/channels/aas~1update~1valuechanged/messages/publish.message'
+      - $ref: '#/channels/aas~1update~1elementupdated/messages/publish.message'
   aas/update/elementcreated.publish:
     action: send
     channel:
@@ -38,16 +38,16 @@ operations:
       - $ref: '#/channels/aas~1update~1elementcreated/messages/publish.message'
 components:
   messages:
-    valueChanged:
+    elementUpdated:
       name: AASvalueChanged
-      title: AAS Value Change message
-      summary: Emitted when a AAS property is changed
+      title: AAS Element Update message
+      summary: Emitted when an AAS element is updated
       payload:
-        $ref: '#/components/schemas/valueChangedEvent'
+        $ref: '#/components/schemas/elementUpdatedEvent'
     elementCreated:
       name: AASelementCreated
       title: AAS Element Create message
-      summary: Emitted when a AAS element is created
+      summary: Emitted when an AAS element is created
       payload:
         $ref: '#/components/schemas/elementCreatedEvent'
   parameters:
@@ -58,7 +58,7 @@ components:
     smec-idshort.property-idshort:
       description: The Id of a property in a Submodel Element Collection.
   schemas:
-    valueChangedEvent:
+    elementUpdatedEvent:
       properties:
         specversion:
           description: The version of the CloudEvents specification which the event uses.
@@ -96,20 +96,15 @@ components:
           format: uri
           examples:
             - >-
-              https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/Property
+              https://raw.githubusercontent.com/admin-shell-io/aas-specs-metamodel/refs/heads/master/schemas/json/aas.json#/definitions/AssetAdministrationShell
         time:
           description: Timestamp of when the occurrence happened.
           format: date-time
           type: string
           examples:
             - '2024-11-26T10:46:33.2171298+01:00'
-        semanticid:
-          description: If a semanticId exists on the payload, this property may hold the entry in the `keys`-array at index 0.
-          type: string
-          examples:
-            - "0173-1#02-AAA119#002"
         data:
-          $ref: '#/components/schemas/valueChangedEventData'
+          $ref: https://raw.githubusercontent.com/admin-shell-io/aas-specs-metamodel/refs/heads/master/schemas/json/aas.json#/definitions/AssetAdministrationShell
       required:
         - specversion
         - id
@@ -120,27 +115,6 @@ components:
         - time
       optional:
         - data
-        - semanticid
-    valueChangedEventData:
-      type: object
-      properties:
-        modelType:
-          type: string
-          examples:
-            - Property
-        dataType:
-          type: string
-          example: xs:string
-        value:
-          type:
-            - string
-            - number
-          examples:
-            - Christian X
-        idShort:
-          type: string
-          examples:
-            - property-idShort
     elementCreatedEvent:
       type: object
       properties:
@@ -159,7 +133,7 @@ components:
           pattern: ^https?:\/\/[^\s/$.?#].[^\s]*$
           examples:
             - >-
-              https://mycorp.com/aas-repo/shells/bXktYWFzCg==/submodels/bXktc3VibW9kZWwK/submodel-elements/bXktcHJvcGVydHkK
+              https://mycorp.com/aas-repo/shells/bXktYWFzCg==
         type:
           description: >-
             Describes the type of the event related to the source the event
@@ -188,13 +162,8 @@ components:
           type: string
           examples:
             - '2024-11-26T10:44:11.9367113+01:00'
-        semanticid:
-          description: If a semanticId exists on the payload, this property may hold the entry in the `keys`-array at index 0.
-          type: string
-          examples:
-            - "0173-1#02-AAA119#002"
         data:
-          $ref: '#/components/schemas/elementCreatedEventData'
+          $ref: https://raw.githubusercontent.com/admin-shell-io/aas-specs-metamodel/refs/heads/master/schemas/json/aas.json#/definitions/AssetAdministrationShell
       required:
         - specversion
         - id
@@ -205,79 +174,3 @@ components:
         - time
       optional:
         - data
-        - semanticid
-    elementCreatedEventData:
-      type: object
-      properties:
-        modelType:
-          type: string
-          examples:
-            - AssetAdministrationShell
-        assetInformation:
-          type: object
-          properties:
-            assetKind:
-              type: string
-              examples:
-                - Instance
-            defaultThumbnail:
-              type: object
-              properties:
-                contentType:
-                  type: string
-                  examples:
-                    - image/jpeg
-                path:
-                  type: string
-                  examples:
-                    - /aasx/files/w86TSNER_400x400.jpg
-        submodels:
-          type: array
-          items:
-            - type: object
-              properties:
-                keys:
-                  type: array
-                  items:
-                    - type: object
-                      properties:
-                        type:
-                          type: string
-                          examples:
-                            - Submodel
-                        value:
-                          type: string
-                          examples:
-                            - https://example.com/ids/sm/5120_2111_9032_9005
-                type:
-                  type: string
-                  examples:
-                    - ExternalReference
-            - type: object
-              properties:
-                keys:
-                  type: array
-                  items:
-                    - type: object
-                      properties:
-                        type:
-                          type: string
-                          examples:
-                            - Submodel
-                        value:
-                          type: string
-                          examples:
-                            - https://example.com/ids/sm/7230_2111_9032_0866
-                type:
-                  type: string
-                  examples:
-                    - ExternalReference
-        id:
-          type: string
-          description: The Id of the created Submodel.
-          examples:
-            - https://example.com/ids/sm/7230_2111_9032_9766
-        idShort:
-          type: string
-          examples:
-            - festotest2

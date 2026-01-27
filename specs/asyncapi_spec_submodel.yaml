@@ -117,7 +117,7 @@ components:
           examples:
             - "0173-1#02-AAA119#002"
         data:
-          $ref: '#/components/schemas/submodelEventData'
+          $ref: https://raw.githubusercontent.com/admin-shell-io/aas-specs-metamodel/refs/heads/master/schemas/json/aas.json#/definitions/Submodel
       required:
         - specversion
         - id
@@ -176,7 +176,7 @@ components:
           examples:
             - "0173-1#02-AAA119#002"
         data:
-          $ref: '#/components/schemas/submodelEventData'
+          $ref: https://raw.githubusercontent.com/admin-shell-io/aas-specs-metamodel/refs/heads/master/schemas/json/aas.json#/definitions/Submodel
       required:
         - specversion
         - id
@@ -216,13 +216,6 @@ components:
           description: Content type of the event data.
           type: string
           const: application/json
-        dataschema:
-          description: Identifies the schema that the event data adheres to.
-          type: string
-          format: uri
-          enum:
-            - >-
-              https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/Submodel
         time:
           description: Timestamp of when the occurrence happened.
           format: date-time
@@ -234,21 +227,12 @@ components:
           type: string
           examples:
             - "0173-1#02-AAA119#002"
-        data:
-          $ref: '#/components/schemas/submodelEventData'
       required:
         - specversion
         - id
         - source
         - type
         - datacontenttype
-        - dataschema
         - time
       optional:
-        - data
         - semanticid
-    submodelEventData:
-      type: object
-      properties:
-        submodel:
-          description: the affected submodel in full

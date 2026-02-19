@@ -57,6 +57,12 @@ registry:
   # Base URL for the Submodel Registry (FA³ST Registry)
   submodelRegistryBaseUrl: "https://faaast-registry"
 
+registrySynchronization:
+  auth:
+    header:
+      name: ""
+      value: ""
+
 endpoints:
   - class: "de.fraunhofer.iosb.ilt.faaast.service.endpoint.http.HttpEndpoint"
     port: 8080

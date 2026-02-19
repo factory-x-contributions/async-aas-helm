@@ -52,6 +52,13 @@ faaast-service:
     aasRegistryBaseUrl: "http://faaast-registry:443"
     submodelRegistryBaseUrl: "http://faaast-registry:443"
 
+  # Optional: add auth header for registry synchronization requests (e.g. Basic auth for ingress-protected registry)
+  registrySynchronization:
+    auth:
+      header:
+        name: ""
+        value: ""
+
   persistence:
     host: "mongodb"
     port: "27017"

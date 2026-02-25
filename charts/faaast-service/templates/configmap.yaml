@@ -9,10 +9,7 @@ data:
     {
       "core": {
         {{- if .Values.registry.aasRegistryBaseUrl }}
-        "aasRegistries": ["{{ .Values.registry.aasRegistryBaseUrl }}"]{{- if .Values.registry.submodelRegistryBaseUrl }},{{ end }}
-        {{- end }}
-        {{- if .Values.registry.submodelRegistryBaseUrl }}
-        "submodelRegistries": ["{{ .Values.registry.submodelRegistryBaseUrl }}"]{{- if and .Values.registrySynchronization.auth.header.name .Values.registrySynchronization.auth.header.value }},{{ end }}
+        "aasRegistries": ["{{ .Values.registry.aasRegistryBaseUrl }}"]{{- if or .Values.registry.submodelRegistryBaseUrl (and .Values.registrySynchronization.auth.header.name .Values.registrySynchronization.auth.header.value) }},{{ end }}
         {{- end }}
         {{- if and .Values.registrySynchronization.auth.header.name .Values.registrySynchronization.auth.header.value }}
         "registrySynchronization": {
@@ -22,7 +19,10 @@ data:
               "value": "{{ .Values.registrySynchronization.auth.header.value }}"
             }
           }
-        }
+        }{{- if .Values.registry.submodelRegistryBaseUrl }},{{ end }}
+        {{- end }}
+        {{- if .Values.registry.submodelRegistryBaseUrl }}
+        "submodelRegistries": ["{{ .Values.registry.submodelRegistryBaseUrl }}"]
         {{- end }}
       },
       "persistence": {

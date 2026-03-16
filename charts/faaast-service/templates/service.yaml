@@ -9,9 +9,9 @@ spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: 8080
+      targetPort: {{ (index .Values.endpoints 0).port }}
       protocol: TCP
-      name: https
+      name: {{ .Values.service.name }}
   selector:
     app.kubernetes.io/name: {{ include (printf "%s.name" .Chart.Name) . }}
     app.kubernetes.io/instance: {{ .Release.Name }}

@@ -3,6 +3,16 @@ entries:
   faaast-registry:
   - apiVersion: v2
     appVersion: 1.1.0
+    created: "2026-03-19T07:48:02.030627182Z"
+    description: A Helm chart for Kubernetes
+    digest: e35eeaa6a2c120438003216c1ce1b479bde266b2047ceb62db7615d20f1f8494
+    name: faaast-registry
+    type: application
+    urls:
+    - https://github.com/factory-x-contributions/async-aas-helm/releases/download/faaast-registry-0.2.4/faaast-registry-0.2.4.tgz
+    version: 0.2.4
+  - apiVersion: v2
+    appVersion: 1.1.0
     created: "2026-01-14T10:37:09.133691858Z"
     description: A Helm chart for Kubernetes
     digest: f56bf07ae22203d8a68d765fdf8daab95c8a494ecbe533545a6db2a24446ad51
@@ -62,6 +72,16 @@ entries:
     - https://github.com/factory-x-contributions/async-aas-helm/releases/download/faaast-registry-0.1.0/faaast-registry-0.1.0.tgz
     version: 0.1.0
   faaast-service:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2026-03-19T07:48:02.248998375Z"
+    description: A Helm chart for Kubernetes
+    digest: 5bd4e3aa59e61b5192415e8773a3a782b7be738ae9b77d8bdad8fdef8ad1f7b1
+    name: faaast-service
+    type: application
+    urls:
+    - https://github.com/factory-x-contributions/async-aas-helm/releases/download/faaast-service-0.2.6/faaast-service-0.2.6.tgz
+    version: 0.2.6
   - apiVersion: v2
     appVersion: 1.16.0
     created: "2026-02-26T07:57:45.998223282Z"
@@ -329,6 +349,34 @@ entries:
     - https://github.com/factory-x-contributions/async-aas-helm/releases/download/umbrella-mqtt-aas-0.1.0/umbrella-mqtt-aas-0.1.0.tgz
     version: 0.1.0
   umbrella-rabbitmq-aas:
+  - apiVersion: v2
+    appVersion: 1.16.1
+    created: "2026-03-19T07:48:02.678657393Z"
+    dependencies:
+    - name: faaast-service
+      repository: file://../faaast-service
+      version: 0.2.6
+    - name: faaast-registry
+      repository: file://../faaast-registry
+      version: 0.2.4
+    - name: aas-basyx-v2-full
+      repository: https://eclipse-basyx.github.io/charts/
+      version: 2.1.12
+    - alias: mongodb
+      condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami
+      version: 18.1.1
+    - name: rabbitmq
+      repository: oci://registry-1.docker.io/cloudpirates
+      version: 0.7.10
+    description: A Helm chart for AAS deployment with RabbitMQ messaging
+    digest: 08adac71bc846c0ff5a1b1cf3c4af2b9694fdbe906696955e8c310cbbaacf3a7
+    name: umbrella-rabbitmq-aas
+    type: application
+    urls:
+    - https://github.com/factory-x-contributions/async-aas-helm/releases/download/umbrella-rabbitmq-aas-0.6.14/umbrella-rabbitmq-aas-0.6.14.tgz
+    version: 0.6.14
   - apiVersion: v2
     appVersion: 1.16.1
     created: "2026-02-26T07:57:46.270988069Z"
@@ -970,4 +1018,4 @@ entries:
     urls:
     - https://github.com/factory-x-contributions/async-aas-helm/releases/download/umbrella-rabbitmq-aas-0.2.0/umbrella-rabbitmq-aas-0.2.0.tgz
     version: 0.2.0
-generated: "2026-02-26T07:57:46.271251165Z"
+generated: "2026-03-19T07:48:02.678946401Z"

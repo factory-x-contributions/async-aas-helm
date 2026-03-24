@@ -1,6 +1,6 @@
-## Specification for Messaging with the Asset Administration Shell
+# Specification for Messaging with the Asset Administration Shell
 
-# Introduction
+## Introduction
 The aim of this specification is to define a messaging mechanism through which changes to asset administration shells (AASs), submodels and submodel-elements in an AAS repository can be communicated to interested data consumers in near real time.
 
 This specification complements the AAS REST API by introducing a publish-subscribe (pub-sub) mechanism. While the REST API is designed to fulfil the purpose of providing standardized, structured access to data, the pub-sub mechanism complements this by enabling real-time notifications to data consumers. Specifically, it ensures that consumers are immediately informed of any changes to the data in the AAS repository, thereby enhancing responsiveness and eliminating the need for frequent polling/scraping of the repository to discover data updates.

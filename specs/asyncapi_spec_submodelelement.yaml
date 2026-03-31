@@ -160,7 +160,7 @@ components:
           payload:
             specversion: '1.0'
             id: 9a1b2c3d-4e5f-6789-abcd-ef0123456789
-            source: 'https://providercorp.com/submodels/aHR0cHM6Ly9leGFtcGxlLmNvbS9zdWJtb2RlbHMvb3BlcmF0aW9uYWwtZGF0YQ=='
+            source: 'https://providercorp.com/submodels/aHR0cHM6Ly9leGFtcGxlLmNvbS9zdWJtb2RlbHMvb3BlcmF0aW9uYWwtZGF0YQ==/submodel-elements/ManufacturerName'
             type: io.admin-shell.events.v1.deleted
             datacontenttype: application/json
             time: '2025-09-25T13:37:12.3456789+01:00'
@@ -586,7 +586,6 @@ components:
         $ref: https://raw.githubusercontent.com/admin-shell-io/aas-specs-metamodel/refs/heads/master/schemas/json/aas.json#/definitions/OperationVariable
       examples:
         - '[ {"idShort":"MyInoutputArgument", "value": 100} ]'
-        - '[{"note": "original value"}]'
       description:
         The supplied inoutput variable(s) for an operation invocation.
       type: array
@@ -596,7 +595,6 @@ components:
         $ref: https://raw.githubusercontent.com/admin-shell-io/aas-specs-metamodel/refs/heads/master/schemas/json/aas.json#/definitions/OperationVariable
       examples:
         - '[ {"idShort":"MyOperationOutput", "value": 123456} ]'
-        - '[{"note": "new value"}]'
         - $ref: https://raw.githubusercontent.com/admin-shell-io/aas-specs-metamodel/refs/heads/master/schemas/json/examples/generated/OperationVariable/maximal.json#/submodels/0/submodelElements/0
       description:
         The output variable(s) as the operation result.

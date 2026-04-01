@@ -79,36 +79,153 @@ components:
       summary: Triggered when the value of an element is updated
       payload:
         $ref: '#/components/schemas/valueChangedEvent'
+      examples:
+        - name: Property value changed
+          payload:
+            specversion: '1.0'
+            id: 358c02f2-3a11-4836-971b-43a05550bf97
+            source: 'https://providercorp.com/submodels/aHR0cHM6Ly9leGFtcGxlLmNvbS9zdWJtb2RlbHMvb3BlcmF0aW9uYWwtZGF0YQ==/submodel-elements/Sensors.TemperatureSensor01.CurrentTemperature'
+            type: io.admin-shell.events.v1.valueChanged
+            datacontenttype: application/json
+            dataschema: 'https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/Property'
+            time: '2025-09-25T13:37:12.3456789+01:00'
+            semanticid: '0173-1#02-AAA119#002'
+            data:
+              idShort: CurrentTemperature
+              modelType: Property
+              valueType: xs:float
+              value: '72.4'
+              semanticId:
+                type: ExternalReference
+                keys:
+                  - type: GlobalReference
+                    value: '0173-1#02-AAA119#002'
     elementCreated:
-      name: SubmodelElementUpdated
+      name: SubmodelElementCreated
       title: SubmodelElement Create message
       summary: Triggered when an element is created
       payload:
         $ref: '#/components/schemas/elementCreatedEvent'
+      examples:
+        - name: SubmodelElement created
+          payload:
+            specversion: '1.0'
+            id: ecbd132e-d834-4528-bb30-6790104ca474
+            source: 'https://providercorp.com/submodels/aHR0cHM6Ly9leGFtcGxlLmNvbS9zdWJtb2RlbHMvb3BlcmF0aW9uYWwtZGF0YQ==/submodel-elements/Sensors'
+            type: io.admin-shell.events.v1.created
+            datacontenttype: application/json
+            dataschema: 'https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/Property'
+            time: '2025-09-25T13:37:12.3456789+01:00'
+            semanticid: '0173-1#02-AAA119#002'
+            data:
+              idShort: PressureSensor02
+              modelType: Property
+              valueType: xs:float
+              value: '1.013'
+              semanticId:
+                type: ExternalReference
+                keys:
+                  - type: GlobalReference
+                    value: '0173-1#02-AAZ337#001'
     elementUpdated:
       name: SubmodelElementUpdated
       title: SubmodelElement Update message
       summary: Triggered when an element is updated
       payload:
         $ref: '#/components/schemas/elementUpdatedEvent'
+      examples:
+        - name: SubmodelElement updated
+          payload:
+            specversion: '1.0'
+            id: 7f3c1a2b-9e44-4c31-bc01-2890abc45678
+            source: 'https://providercorp.com/submodels/aHR0cHM6Ly9leGFtcGxlLmNvbS9zdWJtb2RlbHMvbmFtZXBsYXRl/submodel-elements/ManufacturerName'
+            type: io.admin-shell.events.v1.updated
+            datacontenttype: application/json
+            dataschema: 'https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/Property'
+            time: '2025-09-25T13:37:12.3456789+01:00'
+            semanticid: '0173-1#02-AAO677#001'
+            data:
+              idShort: ManufacturerName
+              modelType: Property
+              valueType: xs:string
+              value: Example Corp GmbH (updated)
     elementDeleted:
-      name: SubmodelElementUpdated
+      name: SubmodelElementDeleted
       title: SubmodelElement Delete message
       summary: Triggered when an element is deleted
       payload:
         $ref: '#/components/schemas/elementDeletedEvent'
+      examples:
+        - name: SubmodelElement deleted
+          payload:
+            specversion: '1.0'
+            id: 9a1b2c3d-4e5f-6789-abcd-ef0123456789
+            source: 'https://providercorp.com/submodels/aHR0cHM6Ly9leGFtcGxlLmNvbS9zdWJtb2RlbHMvb3BlcmF0aW9uYWwtZGF0YQ==/submodel-elements/ManufacturerName'
+            type: io.admin-shell.events.v1.deleted
+            datacontenttype: application/json
+            time: '2025-09-25T13:37:12.3456789+01:00'
+            semanticid: '0173-1#02-AAA119#002'
     operationInvoked:
       name: OperationInvoked
       title: Operation Invoke message
       summary: Triggered when an operation is invoked
       payload:
         $ref: '#/components/schemas/operationInvokedEvent'
+      examples:
+        - name: Operation invoked
+          payload:
+            specversion: '1.0'
+            id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+            source: 'https://providercorp.com/submodels/aHR0cHM6Ly9leGFtcGxlLmNvbS9zdWJtb2RlbHMvY29udHJvbA==/submodel-elements/StartMotor'
+            type: io.admin-shell.events.v1.invoked
+            datacontenttype: application/json
+            dataschema: 'https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/Operation'
+            time: '2025-09-25T13:37:12.3456789+01:00'
+            semanticid: '0173-1#02-ABI006#001'
+            data:
+              idShort: StartMotor
+              modelType: Operation
+              inputVariables:
+                - value:
+                    idShort: TargetSpeed
+                    modelType: Property
+                    valueType: xs:int
+                    value: '3000'
+              outputVariables:
+                - value:
+                    idShort: OperationHandle
+                    modelType: Property
+                    valueType: xs:string
     operationFinished:
       name: OperationFinished
       title: Operation Finish message
       summary: Triggered when an operation is finished
       payload:
         $ref: '#/components/schemas/operationFinishedEvent'
+      examples:
+        - name: Operation finished successfully
+          payload:
+            specversion: '1.0'
+            id: b2c3d4e5-f6a7-8901-bcde-f12345678901
+            source: 'https://providercorp.com/submodels/aHR0cHM6Ly9leGFtcGxlLmNvbS9zdWJtb2RlbHMvY29udHJvbA==/submodel-elements/StartMotor'
+            type: io.admin-shell.events.v1.finished
+            datacontenttype: application/json
+            dataschema: 'https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/OperationVariable'
+            time: '2025-09-25T13:37:15.7654321+01:00'
+            semanticid: '0173-1#02-ABI006#001'
+            data:
+              inoutputArguments:
+                - value:
+                    idShort: TargetSpeed
+                    modelType: Property
+                    valueType: xs:int
+                    value: '3000'
+              outputArguments:
+                - value:
+                    idShort: ActualSpeed
+                    modelType: Property
+                    valueType: xs:int
+                    value: '2998'
   schemas:
     valueChangedEvent:
       properties:
@@ -466,21 +583,18 @@ components:
     inoutputArguments:
       items:
         description: List of OperationVariables declared as inoutputArguments.
-        type: string
+        $ref: https://raw.githubusercontent.com/admin-shell-io/aas-specs-metamodel/refs/heads/master/schemas/json/aas.json#/definitions/OperationVariable
       examples:
         - '[ {"idShort":"MyInoutputArgument", "value": 100} ]'
-        - '[{"note": "original value"}]'
       description:
         The supplied inoutput variable(s) for an operation invocation.
       type: array
     outputArguments:
       items:
         description: List of OperationVariables declared as outputArguments.
-        type: string
         $ref: https://raw.githubusercontent.com/admin-shell-io/aas-specs-metamodel/refs/heads/master/schemas/json/aas.json#/definitions/OperationVariable
       examples:
         - '[ {"idShort":"MyOperationOutput", "value": 123456} ]'
-        - '[{"note": "new value"}]'
         - $ref: https://raw.githubusercontent.com/admin-shell-io/aas-specs-metamodel/refs/heads/master/schemas/json/examples/generated/OperationVariable/maximal.json#/submodels/0/submodelElements/0
       description:
         The output variable(s) as the operation result.

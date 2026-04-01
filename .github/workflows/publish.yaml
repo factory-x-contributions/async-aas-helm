@@ -18,6 +18,12 @@ jobs:
       - name: Move frontpage
         run: mv .github/resources/index.html .
 
+      - name: Inject README into frontpage
+        run: |
+          README_HTML=$(npx --yes marked specs/README.md | sed 's|./artifacts/|./specs/artifacts/|g')
+          README_HTML="${README_HTML//$'\n'/\\n}"
+          sed -i "s|<!-- README_CONTENT -->|$README_HTML|" index.html
+
       - name: Generating HTML for AAS document
         uses: asyncapi/cli@v3.2.0
         with:

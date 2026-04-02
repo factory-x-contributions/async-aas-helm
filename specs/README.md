@@ -11,7 +11,7 @@ consumers. Specifically, it ensures that data consumers are immediately informed
 repository, thereby enhancing responsiveness and eliminating the need for frequent polling/scraping of the repository
 to discover data updates.
 
-![MQTT Concept](./artifacts/aas-sync-mqtt-concept.png)
+![MQTT Concept](./artifacts/aas-sync-mqtt-concept.svg)
 
 ## Message Semantics
 

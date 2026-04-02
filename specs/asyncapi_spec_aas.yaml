@@ -47,19 +47,75 @@ components:
   messages:
     updated:
       name: AssetAdministrationShellUpdated
-      title: AAS Update message
+      title: AAS Element Update message
       summary: Emitted when an AAS element is updated
       payload:
         $ref: '#/components/schemas/updatedEvent'
+      examples:
+        - name: AAS element updated
+          payload:
+            specversion: '1.0'
+            id: 358c02f2-3a11-4836-971b-43a05550bf97
+            source: 'https://providercorp.com/shells/aHR0cHM6Ly9leGFtcGxlLmNvbS9hYXMv'
+            type: io.admin-shell.events.v1.updated
+            datacontenttype: application/json
+            dataschema: 'https://raw.githubusercontent.com/admin-shell-io/aas-specs-metamodel/refs/heads/master/schemas/json/aas.json#/definitions/AssetAdministrationShell'
+            time: '2024-11-26T10:46:33.2171298+01:00'
+            data:
+              id: 'https://example.com/aas/robot-arm-001'
+              modelType: AssetAdministrationShell
+              idShort: RobotArm001
+              description:
+                - language: en
+                  text: Asset Administration Shell for industrial robot arm
+              assetInformation:
+                assetKind: Instance
+                globalAssetId: 'urn:example:robot-arm:serial:12345'
+              submodels:
+                - type: ModelReference
+                  keys:
+                    - type: Submodel
+                      value: 'https://example.com/submodels/nameplate-001'
     created:
       name: AssetAdministrationShellCreated
-      title: AAS Create message
+      title: AAS Element Create message
       summary: Emitted when an AAS element is created
       payload:
         $ref: '#/components/schemas/createdEvent'
+      examples:
+        - name: AAS element created
+          payload:
+            specversion: '1.0'
+            id: ecbd132e-d834-4528-bb30-6790104ca474
+            source: 'https://mycorp.com/aas-repo/shells/aHR0cHM6Ly9leGFtcGxlLmNvbS9hYXMv'
+            type: io.admin-shell.events.v1.created
+            datacontenttype: application/json
+            dataschema: 'https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/AssetAdministrationShell'
+            time: '2024-11-26T10:44:11.9367113+01:00'
+            data:
+              id: 'https://example.com/aas/pump-unit-007'
+              modelType: AssetAdministrationShell
+              idShort: PumpUnit007
+              description:
+                - language: en
+                  text: Asset Administration Shell for pump unit 007
+                - language: de
+                  text: Verwaltungsschale für Pumpeinheit 007
+              assetInformation:
+                assetKind: Instance
+                globalAssetId: 'urn:example:pump:serial:PMP-007'
+                specificAssetIds:
+                  - name: serialNumber
+                    value: PMP-007
+              submodels:
+                - type: ModelReference
+                  keys:
+                    - type: Submodel
+                      value: 'https://example.com/submodels/technical-data-007'
+
     deleted:
       name: AssetAdministrationShellDeleted
-      title: AAS Delete message
+      title: AAS Element Delete message
       summary: Emitted when an AAS element is deleted
       payload:
         $ref: '#/components/schemas/deletedEvent'

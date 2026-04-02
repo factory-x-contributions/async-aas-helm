@@ -3,117 +3,71 @@ info:
   title: AAS ASYNC API with CloudEvents
   version: 0.3-SNAPSHOT
   description: >-
-    The specification defines how ElementCreated and ElementUpdated events of an
-    Asset Administration Shell (AAS) are transmitted to the message broker (RabbitMQ with MQTT protocol support).
+    The specification defines how ElementCreated, ElementUpdated and ElementDeleted events of an
+    Asset Administration Shell (AAS) are transmitted to the message broker.
 channels:
-  aas/update/elementupdated:
+  aas/updated:
     address: noauth or all or participantid
     messages:
       publish.message:
-        $ref: '#/components/messages/elementUpdated'
+        $ref: '#/components/messages/updated'
     parameters:
       aasid:
         $ref: '#/components/parameters/aasid'
-      submodelid:
-        $ref: '#/components/parameters/submodelid'
-      smec-idshort.property-idshort:
-        $ref: '#/components/parameters/smec-idshort.property-idshort'
-  aas/update/elementcreated:
+  aas/created:
     address: noauth or all or participantid
     messages:
       publish.message:
-        $ref: '#/components/messages/elementCreated'
+        $ref: '#/components/messages/created'
+  aas/deleted:
+    address: noauth or all or participantid
+    messages:
+      publish.message:
+        $ref: '#/components/messages/deleted'
 operations:
-  aas/update/elementupdated.publish:
+  aas/updated.publish:
     action: send
     channel:
-      $ref: '#/channels/aas~1update~1elementupdated'
+      $ref: '#/channels/aas~1updated'
     messages:
-      - $ref: '#/channels/aas~1update~1elementupdated/messages/publish.message'
-  aas/update/elementcreated.publish:
+      - $ref: '#/channels/aas~1updated/messages/publish.message'
+  aas/created.publish:
     action: send
     channel:
-      $ref: '#/channels/aas~1update~1elementcreated'
+      $ref: '#/channels/aas~1created'
     messages:
-      - $ref: '#/channels/aas~1update~1elementcreated/messages/publish.message'
+      - $ref: '#/channels/aas~1created/messages/publish.message'
+  aas/deleted.publish:
+    action: send
+    channel:
+      $ref: '#/channels/aas~1deleted'
+    messages:
+      - $ref: '#/channels/aas~1deleted/messages/publish.message'
 components:
   messages:
-    elementUpdated:
-      name: AASvalueChanged
-      title: AAS Element Update message
+    updated:
+      name: AssetAdministrationShellUpdated
+      title: AAS Update message
       summary: Emitted when an AAS element is updated
       payload:
-        $ref: '#/components/schemas/elementUpdatedEvent'
-      examples:
-        - name: AAS element updated
-          payload:
-            specversion: '1.0'
-            id: 358c02f2-3a11-4836-971b-43a05550bf97
-            source: 'https://providercorp.com/shells/aHR0cHM6Ly9leGFtcGxlLmNvbS9hYXMv'
-            type: io.admin-shell.events.v1.updated
-            datacontenttype: application/json
-            dataschema: 'https://raw.githubusercontent.com/admin-shell-io/aas-specs-metamodel/refs/heads/master/schemas/json/aas.json#/definitions/AssetAdministrationShell'
-            time: '2024-11-26T10:46:33.2171298+01:00'
-            data:
-              id: 'https://example.com/aas/robot-arm-001'
-              modelType: AssetAdministrationShell
-              idShort: RobotArm001
-              description:
-                - language: en
-                  text: Asset Administration Shell for industrial robot arm
-              assetInformation:
-                assetKind: Instance
-                globalAssetId: 'urn:example:robot-arm:serial:12345'
-              submodels:
-                - type: ModelReference
-                  keys:
-                    - type: Submodel
-                      value: 'https://example.com/submodels/nameplate-001'
-    elementCreated:
-      name: AASelementCreated
-      title: AAS Element Create message
+        $ref: '#/components/schemas/updatedEvent'
+    created:
+      name: AssetAdministrationShellCreated
+      title: AAS Create message
       summary: Emitted when an AAS element is created
       payload:
-        $ref: '#/components/schemas/elementCreatedEvent'
-      examples:
-        - name: AAS element created
-          payload:
-            specversion: '1.0'
-            id: ecbd132e-d834-4528-bb30-6790104ca474
-            source: 'https://mycorp.com/aas-repo/shells/aHR0cHM6Ly9leGFtcGxlLmNvbS9hYXMv'
-            type: io.admin-shell.events.v1.created
-            datacontenttype: application/json
-            dataschema: 'https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/AssetAdministrationShell'
-            time: '2024-11-26T10:44:11.9367113+01:00'
-            data:
-              id: 'https://example.com/aas/pump-unit-007'
-              modelType: AssetAdministrationShell
-              idShort: PumpUnit007
-              description:
-                - language: en
-                  text: Asset Administration Shell for pump unit 007
-                - language: de
-                  text: Verwaltungsschale für Pumpeinheit 007
-              assetInformation:
-                assetKind: Instance
-                globalAssetId: 'urn:example:pump:serial:PMP-007'
-                specificAssetIds:
-                  - name: serialNumber
-                    value: PMP-007
-              submodels:
-                - type: ModelReference
-                  keys:
-                    - type: Submodel
-                      value: 'https://example.com/submodels/technical-data-007'
+        $ref: '#/components/schemas/createdEvent'
+    deleted:
+      name: AssetAdministrationShellDeleted
+      title: AAS Delete message
+      summary: Emitted when an AAS element is deleted
+      payload:
+        $ref: '#/components/schemas/deletedEvent'
   parameters:
     aasid:
       description: The Id of the asset administration shell.
-    submodelid:
-      description: The Id of the submodel in the Asset Administration Shell with aasId.
-    smec-idshort.property-idshort:
-      description: The Id of a property in a Submodel Element Collection.
   schemas:
-    elementUpdatedEvent:
+    base:
       properties:
         specversion:
           description: The version of the CloudEvents specification which the event uses.
@@ -125,22 +79,11 @@ components:
           examples:
             - 358c02f2-3a11-4836-971b-43a05550bf97
         source:
-          description: The URL the emitting element can be obtained from. The element must be of the type indicated in the `dataschema` property.
+          description: The URL the emitting AssetAdministrationShell can be obtained from. The element must be of the type indicated in the `dataschema` property.
           type: string
           pattern: ^https?:\/\/[^\s/$.?#].[^\s]*$
           examples:
-            - 'https://providercorp.com/shells/abcd'
-        type:
-          description: >-
-            Describes the type of the event related to the source the event
-            originated in.
-          type: string
-          enum:
-            - io.admin-shell.events.v1.created
-            - io.admin-shell.events.v1.updated
-            - io.admin-shell.events.v1.deleted
-          examples:
-            - io.admin-shell.events.v1.deleted
+            - 'https://providercorp.com/shells/abcdef'
         datacontenttype:
           description: Content type of the event data.
           type: string
@@ -149,17 +92,42 @@ components:
           description: Identifies the schema that the event data adheres to.
           type: string
           format: uri
-          examples:
+          enum:
             - >-
-              https://raw.githubusercontent.com/admin-shell-io/aas-specs-metamodel/refs/heads/master/schemas/json/aas.json#/definitions/AssetAdministrationShell
+              https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/shell
         time:
           description: Timestamp of when the occurrence happened.
           format: date-time
           type: string
           examples:
             - '2024-11-26T10:46:33.2171298+01:00'
+        semanticid:
+          description: If the Shell pointed to in `source` inherits from `HasSemantics` and has `semanticId` set, this property MAY hold the value of the `value` property of the `Key` object at index 0 of the `keys`-array.
+          type: string
+          examples:
+            - "0173-1#02-AAA119#002"
         data:
           $ref: https://raw.githubusercontent.com/admin-shell-io/aas-specs-metamodel/refs/heads/master/schemas/json/aas.json#/definitions/AssetAdministrationShell
+
+    updatedEvent:
+      properties:
+        specversion:
+          $ref: '#/components/schemas/base/properties/specversion'
+        id:
+          $ref: '#/components/schemas/base/properties/id'
+        source:
+          $ref: '#/components/schemas/base/properties/source'
+        type:
+          description: Describes the type of the event related to the source the event originated in.
+          const: io.admin-shell.events.v1.updated
+        datacontenttype:
+          $ref: '#/components/schemas/base/properties/datacontenttype'
+        dataschema:
+          $ref: '#/components/schemas/base/properties/dataschema'
+        time:
+          $ref: '#/components/schemas/base/properties/time'
+        data:
+          $ref: '#/components/schemas/base/properties/data'
       required:
         - specversion
         - id
@@ -170,55 +138,26 @@ components:
         - time
       optional:
         - data
-    elementCreatedEvent:
+    createdEvent:
       type: object
       properties:
         specversion:
-          description: The version of the CloudEvents specification which the event uses.
-          type: string
-          const: '1.0'
+          $ref: '#/components/schemas/base/properties/specversion'
         id:
-          description: Identifies the event.
-          type: string
-          examples:
-            - ecbd132e-d834-4528-bb30-6790104ca474
+          $ref: '#/components/schemas/base/properties/id'
         source:
-          description: The URL the emitting element can be obtained from. The element must be of the type indicated in the `dataschema` property.
-          type: string
-          pattern: ^https?:\/\/[^\s/$.?#].[^\s]*$
-          examples:
-            - >-
-              https://mycorp.com/aas-repo/shells/bXktYWFzCg==
+          $ref: '#/components/schemas/base/properties/source'
         type:
-          description: >-
-            Describes the type of the event related to the source the event
-            originated in.
-          type: string
-          enum:
-            - io.admin-shell.events.v1.created
-            - io.admin-shell.events.v1.updated
-            - io.admin-shell.events.v1.deleted
-          examples:
-            - io.admin-shell.events.v1.created
+          description: Describes the type of the event related to the source the event originated in.
+          const: io.admin-shell.events.v1.created
         datacontenttype:
-          description: Content type of the event data.
-          type: string
-          const: application/json
+          $ref: '#/components/schemas/base/properties/datacontenttype'
         dataschema:
-          description: Identifies the schema that the event data adheres to.
-          type: string
-          format: uri
-          examples:
-            - >-
-              https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/AssetAdministrationShell
+          $ref: '#/components/schemas/base/properties/dataschema'
         time:
-          description: Timestamp of when the occurrence happened.
-          format: date-time
-          type: string
-          examples:
-            - '2024-11-26T10:44:11.9367113+01:00'
+          $ref: '#/components/schemas/base/properties/time'
         data:
-          $ref: https://raw.githubusercontent.com/admin-shell-io/aas-specs-metamodel/refs/heads/master/schemas/json/aas.json#/definitions/AssetAdministrationShell
+          $ref: '#/components/schemas/base/properties/data'
       required:
         - specversion
         - id
@@ -229,3 +168,27 @@ components:
         - time
       optional:
         - data
+    deletedEvent:
+      type: object
+      properties:
+        specversion:
+          $ref: '#/components/schemas/base/properties/specversion'
+        id:
+          $ref: '#/components/schemas/base/properties/id'
+        source:
+          description: The URL pointing to where the emitting AssetAdministrationShell **was located**.
+          type: string
+          pattern: ^https?:\/\/[^\s/$.?#].[^\s]*$
+          examples:
+            - 'https://providercorp.com/shells/abcdef'
+        type:
+          description: Describes the type of the event related to the source the event originated in.
+          const: io.admin-shell.events.v1.deleted
+        time:
+          $ref: '#/components/schemas/base/properties/time'
+      required:
+        - specversion
+        - id
+        - source
+        - type
+        - time

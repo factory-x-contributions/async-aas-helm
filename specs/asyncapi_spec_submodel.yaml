@@ -54,18 +54,89 @@ components:
       summary: Emitted when the metadata of a submodel is updated
       payload:
         $ref: '#/components/schemas/updatedEvent'
+      examples:
+        - name: Submodel updated
+          payload:
+            specversion: '1.0'
+            id: 358c02f2-3a11-4836-971b-43a05550bf97
+            source: 'https://providercorp.com/submodels/aHR0cHM6Ly9leGFtcGxlLmNvbS9zdWJtb2RlbHMvbmFtZXBsYXRlLTAwMQ=='
+            type: io.admin-shell.events.v1.updated
+            datacontenttype: application/json
+            dataschema: 'https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/Submodel'
+            time: '2024-11-26T10:46:33.2171298+01:00'
+            semanticid: '0173-1#02-AAA119#002'
+            data:
+              id: 'https://example.com/submodels/nameplate-001'
+              modelType: Submodel
+              idShort: Nameplate
+              kind: Instance
+              semanticId:
+                type: ExternalReference
+                keys:
+                  - type: GlobalReference
+                    value: '0173-1#01-AAA111#002'
+              submodelElements:
+                - idShort: ManufacturerName
+                  modelType: Property
+                  valueType: xs:string
+                  value: Example Corp GmbH
+                - idShort: SerialNumber
+                  modelType: Property
+                  valueType: xs:string
+                  value: SN-20241126-001
     created:
       name: SubmodelCreated
       title: Submodel Create message
       summary: Emitted when a submodel is created
       payload:
         $ref: '#/components/schemas/createdEvent'
+      examples:
+        - name: Submodel created
+          payload:
+            specversion: '1.0'
+            id: ecbd132e-d834-4528-bb30-6790104ca474
+            source: 'https://providercorp.com/submodels/aHR0cHM6Ly9leGFtcGxlLmNvbS9zdWJtb2RlbHMvdGVjaC1kYXRhLTAwMQ=='
+            type: io.admin-shell.events.v1.created
+            datacontenttype: application/json
+            dataschema: 'https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/Submodel'
+            time: '2024-11-26T10:44:11.9367113+01:00'
+            semanticid: '0173-1#02-AAA120#003'
+            data:
+              id: 'https://example.com/submodels/tech-data-001'
+              modelType: Submodel
+              idShort: TechnicalData
+              kind: Instance
+              semanticId:
+                type: ExternalReference
+                keys:
+                  - type: GlobalReference
+                    value: '0173-1#01-AFZ615#016'
+              submodelElements:
+                - idShort: MaxRotationSpeed
+                  modelType: Property
+                  valueType: xs:int
+                  value: '5000'
+                  semanticId:
+                    type: ExternalReference
+                    keys:
+                      - type: GlobalReference
+                        value: '0173-1#02-ABH978#001'
     deleted:
       name: SubmodelDeleted
       title: Submodel Delete message
       summary: Emitted when a submodel is deleted
       payload:
         $ref: '#/components/schemas/deletedEvent'
+      examples:
+        - name: Submodel deleted
+          payload:
+            specversion: '1.0'
+            id: 7f3c1a2b-9e44-4c31-bc01-2890abc45678
+            source: 'https://providercorp.com/submodels/aHR0cHM6Ly9leGFtcGxlLmNvbS9zdWJtb2RlbHMvb2Jzb2xldGUtMDIz'
+            type: io.admin-shell.events.v1.deleted
+            datacontenttype: application/json
+            time: '2024-11-26T11:02:50.1234567+01:00'
+            semanticid: '0173-1#02-AAA119#002'
   parameters:
     submodelid:
       description: The Id of the submodel in the Asset Administration Shell with aasId.

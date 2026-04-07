@@ -45,7 +45,7 @@ faaast-registry:
 faaast-service:
   image:
     repository: ghcr.io/factory-x-contributions/fa3st-service
-    tag: security
+    tag: 0.2.0
     pullPolicy: Always
 
   registry:

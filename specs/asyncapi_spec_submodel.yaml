@@ -141,7 +141,7 @@ components:
     submodelid:
       description: The Id of the submodel in the Asset Administration Shell with aasId.
   schemas:
-    updatedEvent:
+    base:
       properties:
         specversion:
           description: The version of the CloudEvents specification which the event uses.
@@ -158,13 +158,6 @@ components:
           pattern: ^https?:\/\/[^\s/$.?#].[^\s]*$
           examples:
             - 'https://providercorp.com/submodels/abcdef'
-        type:
-          description: >-
-            Describes the type of the event related to the source the event
-            originated in.
-          type: string
-          enum:
-            - io.admin-shell.events.v1.updated
         datacontenttype:
           description: Content type of the event data.
           type: string
@@ -183,12 +176,34 @@ components:
           examples:
             - '2024-11-26T10:46:33.2171298+01:00'
         semanticid:
-          description: If a semanticId exists on the payload, this property may hold the entry in the `keys`-array at index 0.
+          description: If the Submodel pointed to in `source` inherits from `HasSemantics` and has `semanticId` set, this property MAY hold the value of the `value` property of the `Key` object at index 0 of the `keys`-array.
           type: string
           examples:
             - "0173-1#02-AAA119#002"
         data:
           $ref: https://raw.githubusercontent.com/admin-shell-io/aas-specs-metamodel/refs/heads/master/schemas/json/aas.json#/definitions/Submodel
+
+    updatedEvent:
+      properties:
+        specversion:
+          $ref: '#/components/schemas/base/properties/specversion'
+        id:
+          $ref: '#/components/schemas/base/properties/id'
+        source:
+          $ref: '#/components/schemas/base/properties/source'
+        type:
+          description: Describes the type of the event related to the source the event originated in.
+          const: io.admin-shell.events.v1.updated
+        datacontenttype:
+          $ref: '#/components/schemas/base/properties/datacontenttype'
+        dataschema:
+          $ref: '#/components/schemas/base/properties/dataschema'
+        time:
+          $ref: '#/components/schemas/base/properties/time'
+        semanticid:
+          $ref: '#/components/schemas/base/properties/semanticid'
+        data:
+          $ref: '#/components/schemas/base/properties/data'
       required:
         - specversion
         - id
@@ -203,51 +218,24 @@ components:
     createdEvent:
       properties:
         specversion:
-          description: The version of the CloudEvents specification which the event uses.
-          type: string
-          const: '1.0'
+          $ref: '#/components/schemas/base/properties/specversion'
         id:
-          description: Identifies the event.
-          type: string
-          examples:
-            - 358c02f2-3a11-4836-971b-43a05550bf97
+          $ref: '#/components/schemas/base/properties/id'
         source:
-          description: The URL the emitting Referable can be obtained from. The element must be of the type indicated in the `dataschema` property.
-          type: string
-          pattern: ^https?:\/\/[^\s/$.?#].[^\s]*$
-          examples:
-            - 'https://providercorp.com/submodels/abcdef'
+          $ref: '#/components/schemas/base/properties/source'
         type:
-          description: >-
-            Describes the type of the event related to the source the event
-            originated in.
-          type: string
-          enum:
-            - io.admin-shell.events.v1.created
+          description: Describes the type of the event related to the source the event originated in.
+          const: io.admin-shell.events.v1.created
         datacontenttype:
-          description: Content type of the event data.
-          type: string
-          const: application/json
+          $ref: '#/components/schemas/base/properties/datacontenttype'
         dataschema:
-          description: Identifies the schema that the event data adheres to.
-          type: string
-          format: uri
-          enum:
-            - >-
-              https://api.swaggerhub.com/domains/Plattform_i40/Part1-MetaModel-Schemas/V3.1.0#/components/schemas/Submodel
+          $ref: '#/components/schemas/base/properties/dataschema'
         time:
-          description: Timestamp of when the occurrence happened.
-          format: date-time
-          type: string
-          examples:
-            - '2024-11-26T10:46:33.2171298+01:00'
+          $ref: '#/components/schemas/base/properties/time'
         semanticid:
-          description: If a semanticId exists on the payload, this property may hold the entry in the `keys`-array at index 0.
-          type: string
-          examples:
-            - "0173-1#02-AAA119#002"
+          $ref: '#/components/schemas/base/properties/semanticid'
         data:
-          $ref: https://raw.githubusercontent.com/admin-shell-io/aas-specs-metamodel/refs/heads/master/schemas/json/aas.json#/definitions/Submodel
+          $ref: '#/components/schemas/base/properties/data'
       required:
         - specversion
         - id
@@ -262,39 +250,24 @@ components:
     deletedEvent:
       properties:
         specversion:
-          description: The version of the CloudEvents specification which the event uses.
-          type: string
-          const: '1.0'
+          $ref: '#/components/schemas/base/properties/specversion'
         id:
-          description: Identifies the event.
-          type: string
-          examples:
-            - 358c02f2-3a11-4836-971b-43a05550bf97
+          $ref: '#/components/schemas/base/properties/id'
         source:
-          description: The URL the emitting Referable can be obtained from. The element must be of the type indicated in the `dataschema` property.
+          description: The URL pointing to where the emitting Submodel **was contained**.
           type: string
           pattern: ^https?:\/\/[^\s/$.?#].[^\s]*$
           examples:
             - 'https://providercorp.com/submodels/abcdef'
         type:
-          description: >-
-            Describes the type of the event related to the source the event
-            originated in.
-          type: string
-          enum:
-            - io.admin-shell.events.v1.deleted
-        datacontenttype:
-          description: Content type of the event data.
-          type: string
-          const: application/json
+          description: Describes the type of the event related to the source the event originated in.
+          const: io.admin-shell.events.v1.deleted
+        dataschema:
+          $ref: '#/components/schemas/base/properties/dataschema'
         time:
-          description: Timestamp of when the occurrence happened.
-          format: date-time
-          type: string
-          examples:
-            - '2024-11-26T10:46:33.2171298+01:00'
+          $ref: '#/components/schemas/base/properties/time'
         semanticid:
-          description: If a semanticId exists on the payload, this property may hold the entry in the `keys`-array at index 0.
+          description: If the Submodel pointed to in `source` has `semanticId` set, this property MAY hold the value of the `value` property of the `Key` object at index 0 of the `keys`-array.
           type: string
           examples:
             - "0173-1#02-AAA119#002"
@@ -303,7 +276,6 @@ components:
         - id
         - source
         - type
-        - datacontenttype
         - time
       optional:
         - semanticid

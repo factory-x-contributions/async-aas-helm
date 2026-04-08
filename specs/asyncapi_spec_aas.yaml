@@ -157,11 +157,6 @@ components:
           type: string
           examples:
             - '2024-11-26T10:46:33.2171298+01:00'
-        semanticid:
-          description: If the Shell pointed to in `source` inherits from `HasSemantics` and has `semanticId` set, this property MAY hold the value of the `value` property of the `Key` object at index 0 of the `keys`-array.
-          type: string
-          examples:
-            - "0173-1#02-AAA119#002"
         data:
           $ref: https://raw.githubusercontent.com/admin-shell-io/aas-specs-metamodel/refs/heads/master/schemas/json/aas.json#/definitions/AssetAdministrationShell
 

@@ -267,7 +267,7 @@ components:
         time:
           $ref: '#/components/schemas/base/properties/time'
         semanticid:
-          description: If the Submodel pointed to in `source` inherited from `HasSemantics` and has `semanticId` set, this property MAY hold the value of the `value` property of the `Key` object at index 0 of the `keys`-array.
+          description: If the Submodel pointed to in `source` has `semanticId` set, this property MAY hold the value of the `value` property of the `Key` object at index 0 of the `keys`-array.
           type: string
           examples:
             - "0173-1#02-AAA119#002"

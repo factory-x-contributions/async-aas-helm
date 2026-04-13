@@ -9,7 +9,7 @@
   "roles": {
     "realm": [
       { "name": "user", "description": "default user" },
-      { "name": "admin", "description": "realm administrator" }
+      { "name": "admin", "description": "application administrator" }
     ]
   },
   "users": [
@@ -38,6 +38,7 @@
       "secret": "<path:factory-x-ci-cd/data/async-aas#basyx-clientsecret>",
       "publicClient": false,
       "serviceAccountsEnabled": true,
+      "authorizationServicesEnabled": true,
       "standardFlowEnabled": false,
       "directAccessGrantsEnabled": false,
       "redirectUris": [
@@ -45,7 +46,8 @@
       ],
       "webOrigins": [
         "*"
-      ]
+      ],
+      "serviceAccountRealmRoles": ["admin"]
     }
   ]
 }

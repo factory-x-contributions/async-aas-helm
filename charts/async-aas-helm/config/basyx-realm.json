@@ -29,6 +29,12 @@
         }
       ],
       "realmRoles": ["admin"]
+    },
+    {
+      "username": "service-account-<path:factory-x-ci-cd/data/async-aas#basyx-clientid>",
+      "enabled": true,
+      "serviceAccountClientId": "<path:factory-x-ci-cd/data/async-aas#basyx-clientid>",
+      "realmRoles": ["admin"]
     }
   ],
   "clients": [
@@ -46,8 +52,7 @@
       ],
       "webOrigins": [
         "*"
-      ],
-      "serviceAccountRealmRoles": ["admin"]
+      ]
     }
   ]
 }

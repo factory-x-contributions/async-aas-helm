@@ -40,6 +40,41 @@
             "optionalClientScopes": []
         },
         {
+            "clientId": "<path:factory-x-ci-cd/data/async-aas#keycloak-rabbitmq-mqtt-reader-clientid>",
+            "enabled": true,
+            "protocol": "openid-connect",
+            "clientAuthenticatorType": "client-secret",
+            "secret": "<path:factory-x-ci-cd/data/async-aas#keycloak-rabbitmq-mqtt-reader-clientsecret>",
+            "serviceAccountsEnabled": true,
+            "standardFlowEnabled": false,
+            "directAccessGrantsEnabled": false,
+            "publicClient": false,
+            "redirectUris": [
+                "*"
+            ],
+            "webOrigins": [
+                "*"
+            ],
+            "protocolMappers": [
+                {
+                    "name": "aud",
+                    "protocol": "openid-connect",
+                    "protocolMapper": "oidc-audience-mapper",
+                    "consentRequired": false,
+                    "config": {
+                        "included.client.audience": "rabbitmq",
+                        "id.token.claim": "false",
+                        "access.token.claim": "true",
+                        "userinfo.token.claim": "false"
+                    }
+                }
+            ],
+            "defaultClientScopes": [
+                "rabbitmq.read:*/*/*"
+            ],
+            "optionalClientScopes": []
+        },
+        {
             "clientId": "rabbitmq",
             "name": "",
             "description": "",

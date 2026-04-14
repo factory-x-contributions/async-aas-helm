@@ -46,6 +46,21 @@
             "webOrigins": [
                 "*"
             ]
+        },
+        {
+            "clientId": "<path:factory-x-ci-cd/data/async-aas#fa3st-r-all-two-clientid>",
+            "enabled": true,
+            "secret": "<path:factory-x-ci-cd/data/async-aas#fa3st-r-all-two-clientsecret>",
+            "publicClient": false,
+            "serviceAccountsEnabled": true,
+            "standardFlowEnabled": false,
+            "directAccessGrantsEnabled": true,
+            "redirectUris": [
+                "*"
+            ],
+            "webOrigins": [
+                "*"
+            ]
         }
     ]
 }

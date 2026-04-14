@@ -488,8 +488,8 @@ aas-basyx-v2-full:
       basyx.aasdiscoveryservice.name=digital-twin-registry
       basyx.cors.allowed-methods=GET,POST,PATCH,DELETE,PUT,OPTIONS,HEAD
       basyx.cors.allowed-origins=*
-      basyx.feature.aasregistry.discoveryintegration.enabled=true
-      basyx.feature.aasregistry.discoveryintegration.baseUrl=http://localhost:8081
+      basyx.aasregistry.feature.discoveryintegration.enabled=true
+      basyx.aasregistry.feature.discoveryintegration.baseUrl=http://localhost:8081
       basyx.endpoints.web.exposure.include=health,metrics,mappings
       server.port=8081
       spring.profiles.active=logEvents,MongoDB

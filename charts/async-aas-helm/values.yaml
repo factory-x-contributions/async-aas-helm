@@ -124,6 +124,20 @@ faaast-service:
                         {"$strVal": "<path:factory-x-ci-cd/data/async-aas#fa3st-rwx-nameplate-clientid>"}
                       ]
                     }
+                  },
+                  {
+                    "ACL": {
+                      "ATTRIBUTES": [{"CLAIM": "client_id"}],
+                      "RIGHTS": ["READ"],
+                      "ACCESS": "ALLOW"
+                    },
+                    "OBJECTS": [{"ROUTE": "*"}],
+                    "FORMULA": {
+                      "$eq": [
+                        {"$attribute": {"CLAIM": "client_id"}},
+                        {"$strVal": "<path:factory-x-ci-cd/data/async-aas#fa3st-r-all-two-clientid>"}
+                      ]
+                    }
                   }
                 ]
               }
@@ -327,6 +341,14 @@ aas-basyx-v2-full:
               "@type": "submodel",
               "submodelIds": "*",
               "submodelElementIdShortPaths": "*"
+            }
+          },
+          {
+            "role": "basyx-aas-reader",
+            "action": "READ",
+            "targetInformation": {
+              "@type": "aas",
+              "aasIds": "*"
             }
           },
           {

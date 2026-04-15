@@ -9,7 +9,8 @@
   "roles": {
     "realm": [
       { "name": "user", "description": "default user" },
-      { "name": "admin", "description": "application administrator" }
+      { "name": "admin", "description": "application administrator" },
+      { "name": "basyx-aas-reader", "description": "read access to all AAS shells" }
     ]
   },
   "users": [
@@ -45,6 +46,21 @@
       "publicClient": false,
       "serviceAccountsEnabled": true,
       "authorizationServicesEnabled": true,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "redirectUris": [
+        "*"
+      ],
+      "webOrigins": [
+        "*"
+      ]
+    },
+    {
+      "clientId": "<path:factory-x-ci-cd/data/async-aas#basyx-reader-clientid>",
+      "enabled": true,
+      "secret": "<path:factory-x-ci-cd/data/async-aas#basyx-reader-clientsecret>",
+      "publicClient": false,
+      "serviceAccountsEnabled": true,
       "standardFlowEnabled": false,
       "directAccessGrantsEnabled": false,
       "redirectUris": [

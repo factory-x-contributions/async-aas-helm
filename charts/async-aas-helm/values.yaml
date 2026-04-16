@@ -257,7 +257,7 @@ aas-basyx-v2-full:
 
       basyx.cors.allowed-origins=*
       basyx.cors.allowed-methods=GET,POST,PATCH,DELETE,PUT,OPTIONS,HEAD
-      basyx.aasrepository.feature.registryintegration=https://<path:factory-x-ci-cd/data/async-aas#basyx-reg-url>
+      basyx.aasrepository.feature.registryintegration=https://<path:factory-x-ci-cd/data/async-aas#basyx-dtr-url>
       basyx.externalurl=https://<path:factory-x-ci-cd/data/async-aas#basyx-env-url>
       spring.servlet.multipart.max-file-size=128MB
       spring.servlet.multipart.max-request-size=128MB

@@ -29,22 +29,8 @@ They are generated whenever the state of an AAS, a Submodel (SM), or a SubmodelE
 Events allow external systems to observe these changes without continuously polling the repository. 
 Instead, subscribers receive notifications through the messaging infrastructure whenever relevant updates occur.
 
-This section clarifies when events should be emitted and how the different event types should be used.
-
-### When Events Should Be Emitted
-
-An implementation MUST emit an event whenever an observable state of the AAS repository changes.
-
-Observable changes include:
-
-- creation of AASs 
-- updates to AASs
-- deletion of AASs 
-- creation of SMs or SMEs
-- updates to SMs or SMEs 
-- deletion of SMs or SMEs 
-
-An event SHOULD NOT be emitted if an operation does not actually change the stored data.
+An implementation MUST trigger an event whenever an observable state of the AAS repository changes.
+An event SHOULD NOT be triggered if an operation does not actually change the stored data.
 
 ### Generic Event Types
 
@@ -56,16 +42,16 @@ The following event types are used:
 - `ElementDeleted`
 - `ElementUpdated`
 - `ValueChanged`
+- `OperationInvoked`
+- `OperationFinished`
 
 The chosen event type should reflect the semantic meaning of the change.
 
-### Generic AAS Interfaces
+## Generic AAS Interfaces
 
 [IDTA](https://industrialdigitaltwin.org/) has specified generic interfaces for AAS and its corresponding software: [Details of the AAS, Part 2: Application Programming Interfaces](https://industrialdigitaltwin.io/aas-specifications/IDTA-01002/v3.1.1/query-language.html). 
 The events in this repo are based on these abstract interfaces. 
-
-![Specification](./artifacts/aasid-part2.png)
-
+This section summarizes the spec. 
 The specified generic interface methods are (based on, but not limited to, HTTP REST):
 
 - `GET`: Returning a single resource based on an identifier.
@@ -107,9 +93,9 @@ Example: `PutAssetAdministrationShell` could cause `ElementUpdated` or `ElementD
 
 ### AAS Element Created
 
-`io.admin-shell.events.v1.created` — Emitted when a new AAS is persisted in the repository. 
+`io.admin-shell.events.v1.created` — Triggered when a new AAS is persisted in the repository. 
 If present, the `data` property contains the full representation of the newly created AAS, allowing consumers to immediately act on it without issuing a follow-up retrieval request. 
-This event MUST be emitted exactly once per AAS creation and MUST NOT be emitted for subsequent modifications to the same AAS. 
+This event MUST be triggered exactly once per AAS creation and MUST NOT be triggered for subsequent modifications to the same AAS. 
 The `dataschema` property can only reference the AAS metamodel element.
 
 **HTTP REST Example:**
@@ -117,7 +103,7 @@ The `dataschema` property can only reference the AAS metamodel element.
 POST /shells
 ```
 
-**The following interface operations will emit this event:**
+**The following interface operations will trigger this event:**
 
 - `PostAssetAdministrationShell`
 
@@ -154,7 +140,7 @@ _("*" indicates a mandatory parameter)_
 
 ### AAS Element Updated
 
-`io.admin-shell.events.v1.updated` — Emitted when the metadata or structural composition of an existing AAS changes. 
+`io.admin-shell.events.v1.updated` — Triggered when the metadata or structural composition of an existing AAS changes. 
 Changes that trigger this event include modifications to the AAS's administrative information, asset information, or the set of SM references it holds. 
 If present, the `data` property contains the updated element in its entirety after the change. 
 Consumers SHOULD treat receipt of this event as an authoritative replacement for any previously held state of the element identified by the same identifier. 
@@ -165,7 +151,7 @@ The `dataschema` property can only reference elements with their own HTTP endpoi
 PATCH /shells/{id}
 ```
 
-**The following interface operations will emit this event:**
+**The following interface operations will trigger this event:**
 
 - `PutAssetAdministrationShell` 
 *(in case an AAS with the ID specified in the payload is not existing yet)*
@@ -238,9 +224,9 @@ _("*" indicates a mandatory parameter)_
 
 ### Submodel Created
 
-`io.admin-shell.events.v1.created` — Emitted when a new SM is persisted in the repository. 
+`io.admin-shell.events.v1.created` — Triggered when a new SM is persisted in the repository. 
 If present, the `data` property contains the full SM representation, including its semantic identification and all SM elements present at creation time. 
-This event MUST be emitted exactly once when a SM is first created and MUST NOT be emitted for subsequent changes to that SM. 
+This event MUST be triggered exactly once when a SM is first created and MUST NOT be triggered for subsequent changes to that SM. 
 The `dataschema` property can only reference the SM metamodel element.
 
 **HTTP REST Example:**
@@ -248,7 +234,7 @@ The `dataschema` property can only reference the SM metamodel element.
 POST /submodels
 ```
 
-**The following interface operations will emit this event:**
+**The following interface operations will trigger this event:**
 
 - `PostSubmodel` 
 
@@ -273,7 +259,7 @@ _("*" indicates a mandatory parameter)_
 
 ### Submodel Updated
 
-`io.admin-shell.events.v1.updated` — Emitted when the metadata of an existing SM changes. 
+`io.admin-shell.events.v1.updated` — Triggered when the metadata of an existing SM changes. 
 This event concerns structural or descriptive changes at the SM level itself — such as changes to its semantic identification, administrative information, or kind — and is distinct from any changes to individual SME within it. 
 If present, the `data` property contains the updated SM representation. 
 Consumers SHOULD treat receipt of this event as an authoritative replacement for any previously held state of the shell identified by the same identifier. 
@@ -284,7 +270,7 @@ The `dataschema` property can only reference the SM metamodel element as SMEs ar
 PATCH /submodels/{id}
 ```
 
-**The following interface operations will emit this event:**
+**The following interface operations will trigger this event:**
 
 - `PatchSubmodel`
 
@@ -320,7 +306,7 @@ _("*" indicates a mandatory parameter)_
 
 ### Submodel Deleted
 
-`io.admin-shell.events.v1.deleted` — Emitted when a SM is permanently removed from the repository. 
+`io.admin-shell.events.v1.deleted` — Triggered when a SM is permanently removed from the repository. 
 The AAS payload is absent; the identity of the deleted resource is conveyed through the `source` property in the envelope. 
 Consumers MUST consider any locally cached state for the identified SM invalid upon receipt of this event.
 
@@ -329,7 +315,7 @@ Consumers MUST consider any locally cached state for the identified SM invalid u
 DELETE /submodels/{id}
 ```
 
-**The following interface operations will emit this event:**
+**The following interface operations will trigger this event:**
 
 - `DeleteSubmodelById`
 
@@ -355,17 +341,17 @@ _("*" indicates a mandatory parameter)_
 
 ### SubmodelElement Created
 
-`io.admin-shell.events.v1.created` — Emitted when a new SME is added to an existing Submodel. 
+`io.admin-shell.events.v1.created` — Triggered when a new SME is added to an existing Submodel. 
 The source reference in the envelope identifies the containing element or Submodel into which the new element was inserted. 
 The `data` property contains the full representation of the newly created SME. 
-This event MUST be emitted exactly once per element creation.
+This event MUST be triggered exactly once per element creation.
 
 **HTTP REST Example:**
 ```REST
 POST /submodels/{id}/submodelElements
 ```
 
-**The following interface operations will emit this event:**
+**The following interface operations will trigger this event:**
 
 - `PostSubmodelElement`
 
@@ -399,8 +385,8 @@ _("*" indicates a mandatory parameter)_
 
 ### Value Changed
 
-`io.admin-shell.events.v1.valueChanged` — Emitted when the value of a DataElement changes while the element itself remains structurally unmodified. 
-If any other attribute changes, a SME Updated event is emitted. 
+`io.admin-shell.events.v1.valueChanged` — Triggered when the value of a DataElement changes while the element itself remains structurally unmodified. 
+If any other attribute changes, a SME Updated event is triggered. 
 If present, the `data` property contains the SME in its updated state. 
 Consumers SHOULD use this event as the primary mechanism for tracking live data updates in an AAS deployment.
 
@@ -410,7 +396,7 @@ PATCH /submodelElements/power/value
 value = 10
 ```
 
-**The following interface operations will emit this event:**
+**The following interface operations will trigger this event:**
 
 - `PatchSubmodelElementByPath`
 
@@ -445,7 +431,7 @@ _("*" indicates a mandatory parameter)_
 
 ### SubmodelElement Updated
 
-`io.admin-shell.events.v1.updated` — Emitted when the structure or metadata of an existing SME changes in a way other than a pure value change. 
+`io.admin-shell.events.v1.updated` — Triggered when the structure or metadata of an existing SME changes in a way other than a pure value change. 
 This includes changes to semantic identification, qualifiers, or category. 
 If present, the `data` property contains the updated element representation. Consumers SHOULD replace any previously held state of the identified element upon receipt.
 
@@ -457,7 +443,7 @@ PATCH /submodelElements/{id}
 }
 ```
 
-**The following interface operations will emit this event:**
+**The following interface operations will trigger this event:**
 
 - `PutSubmodelElementByPath`
 
@@ -472,7 +458,7 @@ _("*" indicates a mandatory parameter)_
 
 ### SubmodelElement Deleted
 
-`io.admin-shell.events.v1.deleted` — Emitted when a SME is removed from its containing Submodel, SubmodelElementList or SubmodelElementCollection. 
+`io.admin-shell.events.v1.deleted` — Triggered when a SME is removed from its containing Submodel, SubmodelElementList or SubmodelElementCollection. 
 The `source` property in the envelope identifies the deleted SME. 
 The SME payload is absent from the event. 
 Consumers MUST invalidate any locally cached state for the deleted element upon receipt.
@@ -482,7 +468,7 @@ Consumers MUST invalidate any locally cached state for the deleted element upon 
 DELETE /submodelElements/{id}
 ```
 
-**The following interface operations will emit this event:**
+**The following interface operations will trigger this event:**
 
 - `DeleteSubmodelElementByPath`
 
@@ -502,19 +488,65 @@ DELETE /submodelElements/{id}
     | Submodel element object*  | Status code*   |
     | idShortPath via relative Reference/Keys to a submodel element which shall be replaced*  | New state of the submodel element |
 
-#### Operation Invoked
+### Operation Invoked
 
-`io.admin-shell.events.v1.invoked` — Emitted when an Operation SME is invoked by a client. 
+`io.admin-shell.events.v1.invoked` — Triggered when an Operation SME is invoked by a client. 
 If present, the `data` property contains the Operation element including the InputArguments and InoutputArguments supplied by the invoking client. 
 Receipt of this event does not imply that the Operation has completed or succeeded.
 
-<!-- Invoking Operations are not specified in the Event Types -->
+**The following interface operations will trigger this event:**
 
-#### Operation Finished
+- `Operation InvokeOperationSync`
 
-`io.admin-shell.events.v1.finished` — Emitted when an Operation completes, regardless of whether it succeeded or failed. 
+    Synchronously invokes an Operation at a specified path
+
+    | Input Parameter | Output Parameter |
+    |----------|----------|
+    | idShortPath via relative Reference/Keys to a submodel element, in this case an operation*  | Status code*   |
+    | Input argument | The Operation Result* |
+    | Inoutput argument  |   |
+
+- `Operation InvokeOperationAsync`
+
+    Asynchronously invokes an Operation at a specified path
+
+    | Input Parameter | Output Parameter |
+    |----------|----------|
+    | idShortPath via relative Reference/Keys to a submodel element, in this case an operation*  | Status code*   |
+    | Duration indicating when the client suggests the server to have finished execution of the invoked operation. The server may take this value into account to decide on its effective timeout, however, the server may or may not use by its own discretion.*  | The returned handle of an operation’s asynchronous invocation used to request the current state of the operation’s execution* |
+    | Input argument  |  |
+    | Inoutput argument |  |
+
+_("*" indicates a mandatory parameter)_
+
+### Operation Finished
+
+`io.admin-shell.events.v1.finished` — Triggered when an Operation completes, regardless of whether it succeeded or failed. 
 If present, the `data` property contains the InoutputArguments and OutputArguments as produced as the operation result. 
 Consumers correlate this event with a Operation using the `source` property in the envelope. 
-This event MUST be emitted exactly once per completed Operation.
+This event MUST be triggered exactly once per completed Operation.
 
-<!-- Invoking Operations are not specified in the Event Types -->
+**The following interface operations will trigger this event:**
+
+- `Operation InvokeOperationSync`
+
+    Synchronously invokes an Operation at a specified path
+
+    | Input Parameter | Output Parameter |
+    |----------|----------|
+    | idShortPath via relative Reference/Keys to a submodel element, in this case an operation*  | Status code*   |
+    | Input argument | The Operation Result* |
+    | Inoutput argument  |   |
+
+- `Operation InvokeOperationAsync`
+
+    Asynchronously invokes an Operation at a specified path
+
+    | Input Parameter | Output Parameter |
+    |----------|----------|
+    | idShortPath via relative Reference/Keys to a submodel element, in this case an operation*  | Status code*   |
+    | Duration indicating when the client suggests the server to have finished execution of the invoked operation. The server may take this value into account to decide on its effective timeout, however, the server may or may not use by its own discretion.*  | The returned handle of an operation’s asynchronous invocation used to request the current state of the operation’s execution* |
+    | Input argument  |  |
+    | Inoutput argument |  |
+
+_("*" indicates a mandatory parameter)_

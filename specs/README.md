@@ -101,6 +101,20 @@ The `dataschema` property can only reference the AAS metamodel element.
 **HTTP REST Example:**
 ```REST
 POST /shells
+
+Headers: 
+Accept: aaplication/json
+Content-Type: application/json
+
+Body:
+{
+   "id":"aas-id",
+   "idShort":"aas-short-id",
+   "assetInformation":{
+      "assetKind":"Instance",
+      "globalAssetId":"asset-id"
+   }
+}
 ```
 
 **The following interface operations will trigger this event:**
@@ -148,7 +162,18 @@ The `dataschema` property can only reference elements with their own HTTP endpoi
 
 **HTTP REST Example:**
 ```REST
-PATCH /shells/{id}
+PUT /shells/{aas-id-base64}/asset-information
+
+Headers: 
+Accept: aaplication/json
+Content-Type: application/json
+
+Body:
+{
+  "assetKind": "Instance",
+  "globalAssetId": "new-asset-id"
+}
+
 ```
 
 **The following interface operations will trigger this event:**
@@ -232,6 +257,18 @@ The `dataschema` property can only reference the SM metamodel element.
 **HTTP REST Example:**
 ```REST
 POST /submodels
+
+Headers: 
+Accept: aaplication/json
+Content-Type: application/json
+
+Body:
+{
+  "id": "sm-id",
+  "idShort": "sm-id-short",
+  "submodelElements": []
+}
+
 ```
 
 **The following interface operations will trigger this event:**
@@ -267,7 +304,19 @@ The `dataschema` property can only reference the SM metamodel element as SMEs ar
 
 **HTTP REST Example:**
 ```REST
-PATCH /submodels/{id}
+PUT /submodels/{sm-id-base64}
+
+Headers: 
+Accept: aaplication/json
+Content-Type: application/json
+
+Body:
+{
+  "id": "sm-id",
+  "idShort": "new-sm-id-short",
+  "submodelElements": []
+}
+
 ```
 
 **The following interface operations will trigger this event:**
@@ -312,7 +361,11 @@ Consumers MUST consider any locally cached state for the identified SM invalid u
 
 **HTTP REST Example:**
 ```REST
-DELETE /submodels/{id}
+DELETE /submodels/{sm-id-base64}
+
+Headers: 
+Accept: aaplication/json
+Content-Type: application/json
 ```
 
 **The following interface operations will trigger this event:**
@@ -348,7 +401,19 @@ This event MUST be triggered exactly once per element creation.
 
 **HTTP REST Example:**
 ```REST
-POST /submodels/{id}/submodelElements
+POST /submodels/{sm-id-base64}/submodelElements
+
+Headers: 
+Accept: aaplication/json
+Content-Type: application/json
+
+Body:
+{
+  "idShort": "test-property",
+  "modelType": "Property",
+  "valueType": "xs:double",
+  "value": "25.0"
+}
 ```
 
 **The following interface operations will trigger this event:**
@@ -392,8 +457,14 @@ Consumers SHOULD use this event as the primary mechanism for tracking live data 
 
 **HTTP REST Example:**
 ```REST
-PATCH /submodelElements/power/value
-value = 10
+PATCH /submodels/{sm-id-base64}/submodel-elements/{sme}/value
+
+Headers: 
+Accept: aaplication/json
+Content-Type: application/json
+
+Body:
+10.0
 ```
 
 **The following interface operations will trigger this event:**
@@ -437,9 +508,18 @@ If present, the `data` property contains the updated element representation. Con
 
 **HTTP REST Example:**
 ```REST
-PATCH /submodelElements/{id}
+PUT /submodels/{sm-id-base64}/submodel-elements/{sme}
+
+Headers: 
+Accept: aaplication/json
+Content-Type: application/json
+
+Body: 
 {
-  "idShort": "newName"
+  "idShort": "new-test-property",
+  "modelType": "Property",
+  "valueType": "xs:double",
+  "value": "25.0"
 }
 ```
 
@@ -465,7 +545,11 @@ Consumers MUST invalidate any locally cached state for the deleted element upon 
 
 **HTTP REST Example:**
 ```REST
-DELETE /submodelElements/{id}
+DELETE /submodels/{sm-id-base64}/submodel-elements/{sme}
+
+Headers: 
+Accept: aaplication/json
+Content-Type: application/json
 ```
 
 **The following interface operations will trigger this event:**

@@ -98,11 +98,6 @@ If present, the `data` property contains the full representation of the newly cr
 This event MUST be triggered exactly once per AAS creation and MUST NOT be triggered for subsequent modifications to the same AAS. 
 The `dataschema` property can only reference the AAS metamodel element.
 
-**HTTP REST Example:**
-```REST
-POST /shells
-```
-
 **The following interface operations will trigger this event:**
 
 - `PostAssetAdministrationShell`
@@ -137,6 +132,24 @@ POST /shells
 
 _("*" indicates a mandatory parameter)_
 
+**HTTP REST Example:**
+```REST
+POST /shells
+
+Headers: 
+Accept: aaplication/json
+Content-Type: application/json
+
+Body:
+{
+   "id":"aas-id",
+   "idShort":"aas-short-id",
+   "assetInformation":{
+      "assetKind":"Instance",
+      "globalAssetId":"asset-id"
+   }
+}
+```
 
 ### AAS Element Updated
 
@@ -145,11 +158,6 @@ Changes that trigger this event include modifications to the AAS's administrativ
 If present, the `data` property contains the updated element in its entirety after the change. 
 Consumers SHOULD treat receipt of this event as an authoritative replacement for any previously held state of the element identified by the same identifier. 
 The `dataschema` property can only reference elements with their own HTTP endpoint and schema, for example `asset-information` or `submodel-refs`.
-
-**HTTP REST Example:**
-```REST
-PATCH /shells/{id}
-```
 
 **The following interface operations will trigger this event:**
 
@@ -172,7 +180,6 @@ PATCH /shells/{id}
     |----------|----------|
     | Asset Administration Shell object*  | Status code*   |
     |   | 	Replaced Asset Administration Shell   |
-
 
 - `PutAssetInformation`
     
@@ -215,10 +222,24 @@ PATCH /shells/{id}
     |----------|----------|
     | The unique ID of the Submodel for the reference to be deleted*  | Status code*   |
 
-
 _("*" indicates a mandatory parameter)_
 
 <!-- If submodel is newly created, does it automatically create a submodel reference eithin the AAS, i.e. updating the AAS? -->
+
+**HTTP REST Example:**
+```REST
+PUT /shells/{aas-id-base64}/asset-information
+
+Headers: 
+Accept: aaplication/json
+Content-Type: application/json
+
+Body:
+{
+  "assetKind": "Instance",
+  "globalAssetId": "new-asset-id"
+}
+```
 
 ## Submodel Events
 
@@ -228,11 +249,6 @@ _("*" indicates a mandatory parameter)_
 If present, the `data` property contains the full SM representation, including its semantic identification and all SM elements present at creation time. 
 This event MUST be triggered exactly once when a SM is first created and MUST NOT be triggered for subsequent changes to that SM. 
 The `dataschema` property can only reference the SM metamodel element.
-
-**HTTP REST Example:**
-```REST
-POST /submodels
-```
 
 **The following interface operations will trigger this event:**
 
@@ -257,6 +273,22 @@ POST /submodels
 
 _("*" indicates a mandatory parameter)_
 
+**HTTP REST Example:**
+```REST
+POST /submodels
+
+Headers: 
+Accept: aaplication/json
+Content-Type: application/json
+
+Body:
+{
+  "id": "sm-id",
+  "idShort": "sm-id-short",
+  "submodelElements": []
+}
+```
+
 ### Submodel Updated
 
 `io.admin-shell.events.v1.updated` — Triggered when the metadata of an existing SM changes. 
@@ -264,11 +296,6 @@ This event concerns structural or descriptive changes at the SM level itself —
 If present, the `data` property contains the updated SM representation. 
 Consumers SHOULD treat receipt of this event as an authoritative replacement for any previously held state of the shell identified by the same identifier. 
 The `dataschema` property can only reference the SM metamodel element as SMEs are handled elsewhere.
-
-**HTTP REST Example:**
-```REST
-PATCH /submodels/{id}
-```
 
 **The following interface operations will trigger this event:**
 
@@ -304,16 +331,27 @@ _("*" indicates a mandatory parameter)_
 
 <!-- If a new SubmodelElement is created (PostSubmodelElement) or deleted (DeleteSubmodelElementByPath), does this update the Submodel itself? -->
 
+**HTTP REST Example:**
+```REST
+PUT /submodels/{sm-id-base64}
+
+Headers: 
+Accept: aaplication/json
+Content-Type: application/json
+
+Body:
+{
+  "id": "sm-id",
+  "idShort": "new-sm-id-short",
+  "submodelElements": []
+}
+```
+
 ### Submodel Deleted
 
 `io.admin-shell.events.v1.deleted` — Triggered when a SM is permanently removed from the repository. 
 The AAS payload is absent; the identity of the deleted resource is conveyed through the `source` property in the envelope. 
 Consumers MUST consider any locally cached state for the identified SM invalid upon receipt of this event.
-
-**HTTP REST Example:**
-```REST
-DELETE /submodels/{id}
-```
 
 **The following interface operations will trigger this event:**
 
@@ -337,6 +375,15 @@ DELETE /submodels/{id}
 
 _("*" indicates a mandatory parameter)_
 
+**HTTP REST Example:**
+```REST
+DELETE /submodels/{sm-id-base64}
+
+Headers: 
+Accept: aaplication/json
+Content-Type: application/json
+```
+
 ## SubmodelElement Events
 
 ### SubmodelElement Created
@@ -345,11 +392,6 @@ _("*" indicates a mandatory parameter)_
 The source reference in the envelope identifies the containing element or Submodel into which the new element was inserted. 
 The `data` property contains the full representation of the newly created SME. 
 This event MUST be triggered exactly once per element creation.
-
-**HTTP REST Example:**
-```REST
-POST /submodels/{id}/submodelElements
-```
 
 **The following interface operations will trigger this event:**
 
@@ -383,18 +425,29 @@ POST /submodels/{id}/submodelElements
 
 _("*" indicates a mandatory parameter)_
 
+**HTTP REST Example:**
+```REST
+POST /submodels/{sm-id-base64}/submodelElements
+
+Headers: 
+Accept: aaplication/json
+Content-Type: application/json
+
+Body:
+{
+  "idShort": "test-property",
+  "modelType": "Property",
+  "valueType": "xs:double",
+  "value": "25.0"
+}
+```
+
 ### Value Changed
 
 `io.admin-shell.events.v1.valueChanged` — Triggered when the value of a DataElement changes while the element itself remains structurally unmodified. 
 If any other attribute changes, a SME Updated event is triggered. 
 If present, the `data` property contains the SME in its updated state. 
 Consumers SHOULD use this event as the primary mechanism for tracking live data updates in an AAS deployment.
-
-**HTTP REST Example:**
-```REST
-PATCH /submodelElements/power/value
-value = 10
-```
 
 **The following interface operations will trigger this event:**
 
@@ -429,19 +482,23 @@ value = 10
 
 _("*" indicates a mandatory parameter)_
 
+**HTTP REST Example:**
+```REST
+PATCH /submodels/{sm-id-base64}/submodel-elements/{sme}/value
+
+Headers: 
+Accept: aaplication/json
+Content-Type: application/json
+
+Body:
+10.0
+```
+
 ### SubmodelElement Updated
 
 `io.admin-shell.events.v1.updated` — Triggered when the structure or metadata of an existing SME changes in a way other than a pure value change. 
 This includes changes to semantic identification, qualifiers, or category. 
 If present, the `data` property contains the updated element representation. Consumers SHOULD replace any previously held state of the identified element upon receipt.
-
-**HTTP REST Example:**
-```REST
-PATCH /submodelElements/{id}
-{
-  "idShort": "newName"
-}
-```
 
 **The following interface operations will trigger this event:**
 
@@ -456,17 +513,29 @@ PATCH /submodelElements/{id}
 
 _("*" indicates a mandatory parameter)_
 
+**HTTP REST Example:**
+```REST
+PUT /submodels/{sm-id-base64}/submodel-elements/{sme}
+
+Headers: 
+Accept: aaplication/json
+Content-Type: application/json
+
+Body: 
+{
+  "idShort": "new-test-property",
+  "modelType": "Property",
+  "valueType": "xs:double",
+  "value": "25.0"
+}
+```
+
 ### SubmodelElement Deleted
 
 `io.admin-shell.events.v1.deleted` — Triggered when a SME is removed from its containing Submodel, SubmodelElementList or SubmodelElementCollection. 
 The `source` property in the envelope identifies the deleted SME. 
 The SME payload is absent from the event. 
 Consumers MUST invalidate any locally cached state for the deleted element upon receipt.
-
-**HTTP REST Example:**
-```REST
-DELETE /submodelElements/{id}
-```
 
 **The following interface operations will trigger this event:**
 
@@ -487,6 +556,17 @@ DELETE /submodelElements/{id}
     |----------|----------|
     | Submodel element object*  | Status code*   |
     | idShortPath via relative Reference/Keys to a submodel element which shall be replaced*  | New state of the submodel element |
+
+_("*" indicates a mandatory parameter)_
+
+**HTTP REST Example:**
+```REST
+DELETE /submodels/{sm-id-base64}/submodel-elements/{sme}
+
+Headers: 
+Accept: aaplication/json
+Content-Type: application/json
+```
 
 ### Operation Invoked
 

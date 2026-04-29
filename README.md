@@ -50,15 +50,15 @@ This umbrella chart includes the following dependencies:
    ```
 
 2. **Install the chart:**
+   ```sh
+   # help / options
+   python3 charts/deploy.py --help
 
-   ```bash
-   helm install async-aas-helm ./charts/async-aas-helm -n <namespace> --create-namespace
-   ```
+   # install
+   python3 charts/deploy.py
 
-3. **Upgrade existing installation:**
-
-   ```bash
-   helm upgrade async-aas-helm ./charts/async-aas-helm -n <namespace>
+   # upgrade
+   python3 charts/deploy.py --upgrade
    ```
 
 ## Service Dependencies

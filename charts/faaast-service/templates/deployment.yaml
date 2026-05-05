@@ -45,7 +45,7 @@ spec:
                 sleep 5
               done
               echo "MongoDB is ready!"
-      {{- if and (eq .Values.messageBus.class "de.fraunhofer.iosb.ilt.faaast.service.messagebus.cloudevents.MessageBusCloudevents") (ne .Values.messageBus.host "rabbitmq-broker-url") }}
+      {{- if and (eq .Values.messageBus.class "de.fraunhofer.iosb.ilt.faaast.service.messagebus.cloudevents.MessageBusCloudevents") (ne .Values.messageBus.host "wss://rabbitmq-broker-url:443") }}
         - name: wait-for-mqtt
           image: busybox:1.35
           {{- $hp := splitList ":" .Values.messageBus.host }}

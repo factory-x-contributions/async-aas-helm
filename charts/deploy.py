@@ -5,11 +5,12 @@ import json
 import subprocess
 import sys
 from pathlib import Path
+import textwrap
 
 DEFAULT_VAULT = "charts/vault.json"
 DEFAULT_VALUES_YAML = "charts/async-aas-helm/values.yaml"
-DEFAULT_VALUES_NEW_YAML = "charts/values_injected.yaml"
-DEFAULT_CHART_PATH = "./charts/async-aas-helm"
+DEFAULT_VALUES_NEW_YAML = "charts/values.local.yaml"
+DEFAULT_CHART_PATH = "charts/async-aas-helm"
 DEFAULT_RELEASE = "async-aas-helm"
 
 _PATH_PATTERN = "<path:factory-x-ci-cd/data/async-aas#"
@@ -64,7 +65,47 @@ def inject_values(values_yaml: str, output_yaml: str, vault: dict) -> None:
         values_new_fd.writelines(nlines)
 
 
-def run_helm(release: str, namespace: str | None, chart: str, values_file: str, upgrade: bool) -> None:
+
+def tweak_rabbitmq_values(values_path: str) -> None:
+    """Adjust RabbitMQ-related settings in the injected values file."""
+    p = Path(values_path)
+    text = p.read_text()
+
+    # Comment out listeners.tcp
+    text = text.replace(
+        "    listeners.tcp = none  # disable AMQP",
+        "    # listeners.tcp = none  # disable AMQP",
+    )
+
+    # Comment out web_mqtt.ws_path
+    # text = text.replace(
+    #     "    web_mqtt.ws_path = /mqtt  # this MUST be set for Basyx (paho default, non-configurable in basyx)",
+    #     "    # web_mqtt.ws_path = /mqtt  # this MUST be set for Basyx (paho default, non-configurable in basyx)",
+    # )
+    text = text.replace(
+        "mqtt.hostname=rabbitmq",
+        "mqtt.hostname=rabbitmq-mqtt",
+    )
+    text = text.replace(
+        "mqtt.protocol=wss",
+        "mqtt.protocol=tcp"
+    )          
+    text = text.replace(
+        "mqtt.port=443",
+        "mqtt.port=1883",
+    )
+
+
+    # Set ingress hostname
+    text = text.replace(
+        '    hostname: ""  # only for management interface, "disable"',
+        '    hostname: "rabbitmq"  # only for management interface, "disable"',
+    )
+
+    p.write_text(text)
+
+
+def run_helm(release: str, namespace: str | None, chart: str, values_file: str, upgrade: bool, seeding: bool, vault: dict) -> None:
     cmd = [
         "helm",
         "upgrade" if upgrade else "install",
@@ -72,6 +113,9 @@ def run_helm(release: str, namespace: str | None, chart: str, values_file: str, 
         chart,
         "--values",
         values_file,
+        "--set",
+        f"faaast-service.seeding.enabled={'true' if seeding else 'false'}," 
+        f"faaast-service.messageBus.host=tcp://{replacement_strategy('rabbitmq-broker-url', vault)}-mqtt:1883"
     ]
     if namespace:
         cmd.extend(["--namespace", namespace])
@@ -83,6 +127,39 @@ def run_helm(release: str, namespace: str | None, chart: str, values_file: str, 
         print("Deployment failed.")
         sys.exit(1)
 
+
+def ensure_rabbitmq_mqtt_service(release: str, namespace: str | None) -> None:
+    """Create/patch a Service exposing RabbitMQ MQTT on port 1883."""
+    ns = namespace or "default"
+    manifest = textwrap.dedent(f"""
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: rabbitmq-mqtt
+      namespace: {ns}
+      labels:
+        app.kubernetes.io/name: rabbitmq-mqtt
+        app.kubernetes.io/instance: {release}
+    spec:
+      selector:
+        app.kubernetes.io/name: rabbitmq
+        app.kubernetes.io/instance: {release}
+      ports:
+        - name: mqtt
+          port: 1883
+          targetPort: 1883
+          protocol: TCP
+    """).lstrip()
+
+    try:
+        subprocess.run(
+            ["kubectl", "apply", "-f", "-"],
+            input=manifest.encode("utf-8"),
+            check=True,
+        )
+    except subprocess.CalledProcessError:
+        print("Failed to create/patch rabbitmq-mqtt Service.", file=sys.stderr)
+        sys.exit(1)
 
 def run_helm_uninstall(release: str, namespace: str | None) -> None:
     cmd = ["helm", "uninstall", release]
@@ -149,6 +226,12 @@ def main():
         action="store_true",
         help="Uninstall the Helm release and exit",
     )
+    parser.add_argument(
+        "-s",
+        "--seeding",
+        required=False,
+        help="Use seeding for FA³ST Service (required vault fields: initial-aas-file-name, initial-aas-file-location, initial-aas-github-token)",
+    )
 
     args = parser.parse_args()
 
@@ -164,6 +247,7 @@ def main():
         f"  values in:  {args.values}\n"
         f"  values out: {args.output}\n"
         f"  vault:      {vault_text}\n"
+        f"  seed:       {args.seeding}\n"
     )
 
     try:
@@ -180,7 +264,10 @@ def main():
     # Normal inject + install/upgrade flow
     vault = load_vault(args.vault)
     inject_values(args.values, args.output, vault)
-    run_helm(args.release, args.namespace, args.chart, args.output, args.upgrade)
+    tweak_rabbitmq_values(args.output)
+    run_helm(args.release, args.namespace, args.chart, args.output, args.upgrade, args.seeding, vault)
+    # Ensure MQTT TCP Service exists
+    ensure_rabbitmq_mqtt_service(args.release, args.namespace)
 
 
 if __name__ == "__main__":

@@ -14,9 +14,10 @@
   "faaast-service-jwk-provider": "http://basyx-keycloak:8080/realms/fa3st/protocol/openid-connect/certs",
   "faaast-service-acl-folder": "config/fa3st-acl",
   "mongo-user": "my-mongodb-user",
+  "mongodb-auth-source": "admin",
   "mongodb-admin-user": "admin",
   "mongodb-admin-pw": "password",
   "keycloak-user": "keycloakuser",
-  "rabbitmq-broker-url": "localhost",
+  "rabbitmq-broker-url": "rabbitmq",
   "fx-edc4-dataplane-url": "fa3st.local"
 }

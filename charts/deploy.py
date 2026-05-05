@@ -76,8 +76,12 @@ def run_helm(release: str, namespace: str | None, chart: str, values_file: str, 
     if namespace:
         cmd.extend(["--namespace", namespace])
 
-    print("Running:", " ".join(cmd))
-    subprocess.run(cmd, check=True)
+    print("\nRunning:", " ".join(cmd), "\n")
+    try:
+        subprocess.run(cmd, check=True)
+    except subprocess.CalledProcessError:
+        print("Deployment failed.")
+        sys.exit(1)
 
 
 def run_helm_uninstall(release: str, namespace: str | None) -> None:
@@ -86,7 +90,11 @@ def run_helm_uninstall(release: str, namespace: str | None) -> None:
         cmd.extend(["--namespace", namespace])
 
     print("Running:", " ".join(cmd))
-    subprocess.run(cmd, check=True)
+    try:
+        subprocess.run(cmd, check=True)
+    except subprocess.CalledProcessError:
+        print("Uninstalling deployment failed.")
+        sys.exit(1)
 
 
 def main():
@@ -102,13 +110,13 @@ def main():
     parser.add_argument(
         "-f",
         "--values",
-        help=f"Path to input values.yaml (default: {DEFAULT_VALUES_YAML})",
+        help=f"Path to input values YAML file (default: {DEFAULT_VALUES_YAML})",
         default=DEFAULT_VALUES_YAML,
     )
     parser.add_argument(
         "-o",
         "--output",
-        help=f"Path to output values_new.yaml (default: {DEFAULT_VALUES_NEW_YAML})",
+        help=f"Path to injected values YAML file (default: {DEFAULT_VALUES_NEW_YAML})",
         default=DEFAULT_VALUES_NEW_YAML,
     )
     parser.add_argument(
@@ -127,7 +135,7 @@ def main():
         "-n",
         "--namespace",
         required=False,
-        help="Kubernetes namespace for the Helm release (optional)",
+        help="Kubernetes namespace for the Helm release (optional, default: \"default\")",
     )
     parser.add_argument(
         "-u",
@@ -157,6 +165,12 @@ def main():
         f"  values out: {args.output}\n"
         f"  vault:      {vault_text}\n"
     )
+
+    try:
+        input("Confirm by pressing enter\n")
+    except (KeyboardInterrupt, EOFError):
+        print("\nOperation cancelled")
+        sys.exit(0)
 
     # If cleanup requested, just uninstall and exit
     if args.cleanup:

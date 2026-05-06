@@ -1,0 +1,30 @@
+# Notices for Factory-X async-aas-helm
+
+This content is produced and maintained by the Factory-X project.
+
+* Project home: <https://factory-x.org>
+* Source: <https://github.com/factory-x-contributions/async-aas-helm>
+
+## Copyright
+
+Copyright 2024-2026 Contributors to the Factory-X project. Please see [REUSE.toml](./REUSE.toml) for copyright and license information. Detailed information including third-party components and their licensing/copyright information is available via the [REUSE tool](https://api.reuse.software/info/github.com/factory-x-contributions/async-aas-helm).
+
+## Trademarks
+
+Factory-X is a trademark of Factory-X.
+
+## Declared Project Licenses
+
+This project uses a dual-license model:
+
+- **Apache-2.0** for source code — see [LICENCE](./LICENCE)
+- **CC-BY-4.0** for documentation — see [LICENCE_non-code](./LICENCE_non-code)
+
+## Cryptography
+
+Content may contain encryption software. The country in which you are currently
+may have restrictions on the import, possession, and use, and/or re-export to
+another country, of encryption software. BEFORE using any encryption software,
+please check the country's laws, regulations and policies concerning the import,
+possession, or use, and re-export of encryption software, to see if this is
+permitted.

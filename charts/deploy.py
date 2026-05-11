@@ -9,9 +9,10 @@ import textwrap
 
 DEFAULT_VAULT = "charts/vault.json"
 DEFAULT_VALUES_YAML = "charts/async-aas-helm/values.yaml"
-DEFAULT_VALUES_NEW_YAML = "charts/values.local.yaml"
 DEFAULT_CHART_PATH = "charts/async-aas-helm"
+DEFAULT_VALUES_NEW_YAML = "charts/values.local.yaml"
 DEFAULT_RELEASE = "async-aas-helm"
+REALM_FILES = [ DEFAULT_CHART_PATH + "/config/fa3st-realm.json", DEFAULT_CHART_PATH + "/config/basyx-realm.json", DEFAULT_CHART_PATH + "/config/rabbitmq-realm.json"]
 
 _PATH_PATTERN = "<path:factory-x-ci-cd/data/async-aas#"
 
@@ -42,12 +43,12 @@ def load_vault(vault_path: str | None) -> dict:
         return {}
 
 
-def inject_values(values_yaml: str, output_yaml: str, vault: dict) -> None:
-    with open(values_yaml, "r") as templated_fd:
+def inject_values(to_inject: str, injected: str, vault: dict) -> None:
+    with open(to_inject, "r") as templated_fd:
         templated_content = templated_fd.read().splitlines()
 
     nlines = []
-    print("Injection could not find the following variables in the vault: [", end="", flush=True)
+    print(f"\n{to_inject.split('/')[-1]}: following values weren't present in vault:\n[", end="", flush=True)
     for line in templated_content:
         nline = line + "\n"
         while _PATH_PATTERN in nline:
@@ -61,7 +62,7 @@ def inject_values(values_yaml: str, output_yaml: str, vault: dict) -> None:
 
         nlines.append(nline)
     print("].\nInjection complete!")
-    with open(output_yaml, "w+") as values_new_fd:
+    with open(injected, "w+") as values_new_fd:
         values_new_fd.writelines(nlines)
 
 
@@ -105,10 +106,12 @@ def tweak_rabbitmq_values(values_path: str) -> None:
     p.write_text(text)
 
 
-def run_helm(release: str, namespace: str | None, chart: str, values_file: str, upgrade: bool, seeding: bool, vault: dict) -> None:
+def run_helm(release: str, namespace: str | None, chart: str, values_file: str, seeding: bool, vault: dict) -> None:
     cmd = [
         "helm",
-        "upgrade" if upgrade else "install",
+        "upgrade",
+        "--install",
+        "--create-namespace",
         release,
         chart,
         "--values",
@@ -176,7 +179,7 @@ def run_helm_uninstall(release: str, namespace: str | None) -> None:
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Inject values.yaml with secrets from vault.json and run helm install/upgrade/uninstall."
+        description="Inject values.yaml with secrets from vault.json and run helm upgrade --install/helm uninstall."
     )
     parser.add_argument(
         "-v",
@@ -215,12 +218,6 @@ def main():
         help="Kubernetes namespace for the Helm release (optional, default: \"default\")",
     )
     parser.add_argument(
-        "-u",
-        "--upgrade",
-        action="store_true",
-        help="Use 'helm upgrade' instead of 'helm install'",
-    )
-    parser.add_argument(
         "-x",
         "--cleanup",
         action="store_true",
@@ -236,7 +233,7 @@ def main():
     args = parser.parse_args()
 
     # Summary message
-    operation = "cleanup (uninstall)" if args.cleanup else ("upgrade" if args.upgrade else "install")
+    operation = "cleanup (uninstall)" if args.cleanup else "install"
     ns_text = args.namespace if args.namespace else "(default namespace)"
     vault_text = args.vault if args.vault else f"{DEFAULT_VAULT} (if present, otherwise no vault)"
     print(
@@ -261,11 +258,17 @@ def main():
         run_helm_uninstall(args.release, args.namespace)
         return
 
-    # Normal inject + install/upgrade flow
+    # Normal inject + install flow
     vault = load_vault(args.vault)
     inject_values(args.values, args.output, vault)
+    for realm in REALM_FILES:
+        inject_values(realm, realm, vault)
+
+    print("Variable references not present in the vault were replaced with their variable names.")
+    print("Example: <path:mypath/morepath#myvar> => myvar")
+
     tweak_rabbitmq_values(args.output)
-    run_helm(args.release, args.namespace, args.chart, args.output, args.upgrade, args.seeding, vault)
+    run_helm(args.release, args.namespace, args.chart, args.output, args.seeding, vault)
     # Ensure MQTT TCP Service exists
     ensure_rabbitmq_mqtt_service(args.release, args.namespace)
 

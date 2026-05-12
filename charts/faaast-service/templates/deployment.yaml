@@ -45,6 +45,21 @@ spec:
                 sleep 5
               done
               echo "MongoDB is ready!"
+      {{- if and (eq .Values.messageBus.class "de.fraunhofer.iosb.ilt.faaast.service.messagebus.cloudevents.MessageBusCloudevents") (ne .Values.messageBus.host "wss://rabbitmq-broker-url:443") }}
+        - name: wait-for-mqtt
+          image: busybox:1.35
+          {{- $hp := splitList ":" .Values.messageBus.host }}
+          command:
+            - sh
+            - -c
+            - |
+              echo "Waiting for MQTT broker to be ready..."
+              until nc -z {{ index $hp 1 | trimPrefix "//" }} {{ index $hp 2 }}; do
+                echo "MQTT broker not ready, waiting..."
+                sleep 5
+              done
+              echo "MQTT broker is ready!"
+      {{- end }}
       {{- if .Values.seeding.enabled }}
         - name: git
           image: alpine/git

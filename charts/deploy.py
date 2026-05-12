@@ -6,6 +6,7 @@ import subprocess
 import sys
 from pathlib import Path
 import textwrap
+import re
 
 DEFAULT_VAULT = "charts/vault.json"
 DEFAULT_VALUES_YAML = "charts/async-aas-helm/values.yaml"
@@ -76,22 +77,18 @@ def inject_values(to_inject: str, injected: str, vault: dict) -> None:
 
 
 
-def tweak_rabbitmq_values(values_path: str) -> None:
-    """Adjust RabbitMQ-related settings in the injected values file."""
+def replace_other_config(values_path: str) -> None:
+    """Adjust configuration settings not covered by vault paths."""
     p = Path(values_path)
     text = p.read_text()
 
     # Comment out listeners.tcp
     text = text.replace(
-        "    listeners.tcp = none  # disable AMQP",
-        "    # listeners.tcp = none  # disable AMQP",
+        "listeners.tcp = none",
+        "# listeners.tcp = none",
     )
 
-    # Comment out web_mqtt.ws_path
-    # text = text.replace(
-    #     "    web_mqtt.ws_path = /mqtt  # this MUST be set for Basyx (paho default, non-configurable in basyx)",
-    #     "    # web_mqtt.ws_path = /mqtt  # this MUST be set for Basyx (paho default, non-configurable in basyx)",
-    # )
+    # AAS environment MQTT broker settings -> local config
     text = text.replace(
         "mqtt.hostname=rabbitmq",
         "mqtt.hostname=rabbitmq-mqtt",
@@ -105,11 +102,11 @@ def tweak_rabbitmq_values(values_path: str) -> None:
         "mqtt.port=1883",
     )
 
-
-    # Set ingress hostname
-    text = text.replace(
-        '    hostname: ""  # only for management interface, "disable"',
-        '    hostname: "rabbitmq"  # only for management interface, "disable"',
+    # AAS environment keycloak URL https -> http
+    text = re.sub(
+        r'(spring\.security\.oauth2\.resourceserver\.jwt\.issuer-uri\s*=\s*)https://',
+        r'\1http://',
+        text,
     )
 
     p.write_text(text)
@@ -127,7 +124,8 @@ def run_helm(release: str, namespace: str | None, chart: str, values_file: str, 
         values_file,
         "--set",
         f"faaast-service.seeding.enabled={'true' if seeding else 'false'}," 
-        f"faaast-service.messageBus.host=tcp://{replacement_strategy('rabbitmq-broker-url', vault)[0]}-mqtt:1883"
+        f"faaast-service.messageBus.host=tcp://{replacement_strategy('rabbitmq-broker-url', vault)[0]}-mqtt:1883,"
+        f"faaast-service.endpoints[0].security.jwkProvider=http://{replacement_strategy('keycloak-url', vault)[0]}/realms/fa3st/protocol/openid-connect/certs"
     ]
     if namespace:
         cmd.extend(["--namespace", namespace])
@@ -203,17 +201,14 @@ def inject_templates(template: str, chart: str, namespace: str, vault: dict):
         kubectl_cmd.extend(["-n", namespace])
 
     try:
-        print(f"Running: {' '.join(kubectl_cmd)}")
         subprocess.run(kubectl_cmd, input=bytes("".join(injected), encoding="UTF-8"), check=True)
     except subprocess.CalledProcessError:
         print("Fixing keycloak realms failed. Please modify client ids/secrets as needed.")
 
 
-
-
-def main():
+def cli_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Inject values.yaml with secrets from vault.json and run helm upgrade --install/helm uninstall."
+        description="Inject values.yaml with secrets from vault.json and run helm upgrade --install/helm uninstall. Also injects vault values into other template files and adds a service for RabbitMQ for communication without ingress. It is recommended to always use this script to install / remove this deployment. For development use only."
     )
     parser.add_argument(
         "-v",
@@ -263,6 +258,11 @@ def main():
         required=False,
         help="Use seeding for FA³ST Service (required vault fields: initial-aas-file-name, initial-aas-file-location, initial-aas-github-token)",
     )
+    return parser
+
+
+def main():
+    parser = cli_parser()
 
     args = parser.parse_args()
 
@@ -300,7 +300,7 @@ def main():
     print("Variable references not present in the vault were replaced with their variable names.")
     print("Example: <path:mypath/morepath#myvar> => myvar")
 
-    tweak_rabbitmq_values(args.output)
+    replace_other_config(args.output)
     run_helm(args.release, args.namespace, args.chart, args.output, args.seeding, vault)
 
     # Ensure MQTT TCP Service exists

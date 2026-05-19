@@ -45,7 +45,7 @@ persistence:
 
 messageBus:
   class: "de.fraunhofer.iosb.ilt.faaast.service.messagebus.cloudevents.MessageBusCloudevents"
-  host: ""
+  host: tcp://mqtt-broker:1883
   user: ""
   password: ""
   slimEvents: true

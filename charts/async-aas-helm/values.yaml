@@ -73,7 +73,7 @@ faaast-service:
   debug:
     enabled: false
     port: 5555
-    suspendOnStart: true # /false
+    suspendOnStart: true
 
   core:
     aasRegistries:

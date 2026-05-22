@@ -39,9 +39,6 @@ faaast-registry:
       url: "jdbc:h2:mem:testdb"
       username: "sa"
       password: ""
-  service:
-    type: ClusterIP
-    name: https
 
   ingress:
     enabled: true
@@ -72,18 +69,17 @@ faaast-service:
     repository: ghcr.io/factory-x-contributions/fa3st-service
     tag: 0.2.0
     pullPolicy: Always
-  
+
   debug:
     enabled: false
     port: 5555
     suspendOnStart: true # /false
-  
+
   core:
     aasRegistries:
-      -  "http://faaast-registry:8090"
+      - "http://faaast-registry:8090"
     submodelRegistries:
       - "http://faaast-registry:8090"
-    # Optional: add auth header for registry synchronization requests (e.g. Basic auth for ingress-protected registry)
     registrySynchronization:
       auth:
         header:
@@ -157,7 +153,7 @@ faaast-service:
 
   volumes:
     - name: seeding
-      emptyDir: { }
+      emptyDir: {}
 
 aas-basyx-v2-full:
   # Deprecated legacy BaSyx Mosquitto configuration removed; RabbitMQ (with MQTT/WebSockets) is used instead.
@@ -224,7 +220,7 @@ aas-basyx-v2-full:
 
   # Also needs an ingress.
   aas-environment:
-    enabled: false
+    enabled: true
     image:
       name: eclipsebasyx/aas-environment:2.0.0-SNAPSHOT
       pullPolicy: Always
@@ -472,7 +468,7 @@ aas-basyx-v2-full:
         ]
 
   aas-digitaltwinregistry:
-    enabled: false
+    enabled: true
     image:
       name: eclipsebasyx/digitaltwinregistry:2.0.0-SNAPSHOT
       pullPolicy: Always

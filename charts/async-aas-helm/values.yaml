@@ -3,6 +3,46 @@ faaast-registry:
     repository: docker.io/fraunhoferiosb/faaast-registry
     tag: 1.2.0-SNAPSHOT
     pullPolicy: Always
+  # https://faaast-registry.readthedocs.io
+
+  # possible: q, v, vv, vvv
+  # Important: Don't prefix a dash ("-")
+  # logLevel: v
+
+  server:
+    port: 8090
+    servlet:
+      contextPath: ""
+    error:
+      includeMessage: "always"
+    ssl:
+      enabled: false
+
+  cors:
+    enabled: true
+    allowedOrigins: "*"
+    allowedMethods: "GET, HEAD, POST"
+    allowedHeaders: "*"
+
+  spring:
+    profiles:
+      active: "jpa"
+    jpa:
+      orm: "orm.xml"
+      # the following enables logging of the SQL statements that JPA (Hibernate) executes
+      showSql: false
+      hibernate:
+        ddlAuto: "update"
+        openInView: true
+    datasource:
+      driver: "org.h2.Driver"
+      url: "jdbc:h2:mem:testdb"
+      username: "sa"
+      password: ""
+  service:
+    type: ClusterIP
+    name: https
+
   ingress:
     enabled: true
     annotations:
@@ -10,6 +50,9 @@ faaast-registry:
       nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
       nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
       nginx.ingress.kubernetes.io/proxy-body-size: 150m
+      nginx.ingress.kubernetes.io/auth-type: basic
+      nginx.ingress.kubernetes.io/auth-secret: faaast-registry-basic-auth-secret
+      nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required - FAAAST Registry'
       cert-manager.io/cluster-issuer: "letsencrypt-prod"
     tls:
       - hosts:
@@ -24,50 +67,36 @@ faaast-registry:
       user: "<path:factory-x-ci-cd/data/async-aas#faaast-registry-basic-auth-user>"
       htPassword: "<path:factory-x-ci-cd/data/async-aas#faaast-registry-basic-auth-pw-hash>"
 
-  # possible: q, v, vv, vvv
-  # Important: Don't prefix a dash ("-")
-  # logLevel: v
-
-  server:
-    port: 8090
-    ssl:
-      enabled: false
-
-  persistence:
-    sql:
-      hibernate:
-        # Recommended for first start of database: Creates schema
-        ddlAuto: update
-      datasource:
-        external:
-          enabled: false
-
 faaast-service:
   image:
     repository: ghcr.io/factory-x-contributions/fa3st-service
     tag: 0.2.0
     pullPolicy: Always
-
-  registry:
-    aasRegistryBaseUrl: "http://faaast-registry:443"
-    submodelRegistryBaseUrl: "http://faaast-registry:443"
-
-  # Optional: add auth header for registry synchronization requests (e.g. Basic auth for ingress-protected registry)
-  registrySynchronization:
-    auth:
-      header:
-        name: ""
-        value: ""
+  
+  debug:
+    enabled: false
+    port: 5555
+    suspendOnStart: true # /false
+  
+  core:
+    aasRegistries:
+      -  "http://faaast-registry:8090"
+    submodelRegistries:
+      - "http://faaast-registry:8090"
+    # Optional: add auth header for registry synchronization requests (e.g. Basic auth for ingress-protected registry)
+    registrySynchronization:
+      auth:
+        header:
+          name: ""
+          value: ""
 
   persistence:
-    host: "mongodb"
-    port: "27017"
-    database: "faaast-database"
-    username: "<path:factory-x-ci-cd/data/async-aas#mongodb-admin-user>"
-    password: "<path:factory-x-ci-cd/data/async-aas#mongodb-admin-pw>"
+    "@class": "de.fraunhofer.iosb.ilt.faaast.service.persistence.mongo.PersistenceMongo"
+    connectionString: "mongodb://<path:factory-x-ci-cd/data/async-aas#mongodb-admin-user>:<path:factory-x-ci-cd/data/async-aas#mongodb-admin-pw>@mongodb:27017"
+    database: "faaast-service"
 
   endpoints:
-    - class: "de.fraunhofer.iosb.ilt.faaast.service.endpoint.http.HttpEndpoint"
+    - "@class": "de.fraunhofer.iosb.ilt.faaast.service.endpoint.http.HttpEndpoint"
       port: 8080
       hostname: <path:factory-x-ci-cd/data/async-aas#fx-edc4-dataplane-url>
       subprotocol: DSP
@@ -75,76 +104,11 @@ faaast-service:
       subprotocolBodyEncoding: plain
       corsEnabled: true
       sslEnabled: false
-      security:
-        enabled: true
-        jwkProvider: "https://<path:factory-x-ci-cd/data/async-aas#keycloak-url>/realms/fa3st/protocol/openid-connect/certs"
-        aclFiles:
-          ManufacturerA.json: |
-            {
-              "AllAccessPermissionRules": {
-                "rules": [
-                  {
-                    "ACL": {
-                      "ATTRIBUTES": [{"CLAIM": "client_id"}],
-                      "RIGHTS": ["ALL"],
-                      "ACCESS": "ALLOW"
-                    },
-                    "OBJECTS": [{"ROUTE": "*"}],
-                    "FORMULA": {
-                      "$eq": [
-                        {"$attribute": {"CLAIM": "client_id"}},
-                        {"$strVal": "<path:factory-x-ci-cd/data/async-aas#fa3st-rwx-all-clientid>"}
-                      ]
-                    }
-                  },
-                  {
-                    "ACL": {
-                      "ATTRIBUTES": [{"CLAIM": "client_id"}],
-                      "RIGHTS": ["READ"],
-                      "ACCESS": "ALLOW"
-                    },
-                    "OBJECTS": [{"ROUTE": "*"}],
-                    "FORMULA": {
-                      "$eq": [
-                        {"$attribute": {"CLAIM": "client_id"}},
-                        {"$strVal": "<path:factory-x-ci-cd/data/async-aas#fa3st-r-all-clientid>"}
-                      ]
-                    }
-                  },
-                  {
-                    "ACL": {
-                      "ATTRIBUTES": [{"CLAIM": "client_id"}],
-                      "RIGHTS": ["ALL"],
-                      "ACCESS": "ALLOW"
-                    },
-                    "OBJECTS": [{"IDENTIFIABLE": "(Submodel)https://example.com/ids/sm/1150_3131_5052_5787"}],
-                    "FORMULA": {
-                      "$eq": [
-                        {"$attribute": {"CLAIM": "client_id"}},
-                        {"$strVal": "<path:factory-x-ci-cd/data/async-aas#fa3st-rwx-nameplate-clientid>"}
-                      ]
-                    }
-                  },
-                  {
-                    "ACL": {
-                      "ATTRIBUTES": [{"CLAIM": "client_id"}],
-                      "RIGHTS": ["READ"],
-                      "ACCESS": "ALLOW"
-                    },
-                    "OBJECTS": [{"ROUTE": "*"}],
-                    "FORMULA": {
-                      "$eq": [
-                        {"$attribute": {"CLAIM": "client_id"}},
-                        {"$strVal": "<path:factory-x-ci-cd/data/async-aas#fa3st-r-all-two-clientid>"}
-                      ]
-                    }
-                  }
-                ]
-              }
-            }
+      jwkProvider: "https://<path:factory-x-ci-cd/data/async-aas#keycloak-url>/realms/fa3st/protocol/openid-connect/certs"
+      aclFolder: config/acl
 
   messageBus:
-    class: "de.fraunhofer.iosb.ilt.faaast.service.messagebus.cloudevents.MessageBusCloudevents"
+    "@class": "de.fraunhofer.iosb.ilt.faaast.service.messagebus.cloudevents.MessageBusCloudevents"
     host: "wss://<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-url>:443"
     user: "<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-user>"
     password: "<path:factory-x-ci-cd/data/async-aas#rabbitmq-broker-pw>"
@@ -152,12 +116,15 @@ faaast-service:
     topicPrefix: "mqtt/noauth"
 
   ingress:
+    enabled: true
+    className: "nginx"
     annotations:
       nginx.ingress.kubernetes.io/enable-cors: "true"
       nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
       nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
       nginx.ingress.kubernetes.io/proxy-body-size: 150m
       cert-manager.io/cluster-issuer: "letsencrypt-prod"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     tls:
       - hosts:
           - "<path:factory-x-ci-cd/data/async-aas#faaast-service-url>"
@@ -167,13 +134,30 @@ faaast-service:
         paths:
           - path: /
             pathType: Prefix
+            servicePort: 8080
+  # Seeding
+  initContainers:
+    - name: git
+      enabled: true
+      image: alpine/git
+      command: ["git", "clone"]
+      args:
+        - |
+          https://<path:factory-x-ci-cd/data/async-aas#initial-aas-github-token>@github.com/<path:factory-x-ci-cd/data/async-aas#initial-aas-file-location>
+          /app/resources/<path:factory-x-ci-cd/data/async-aas#initial-aas-file-name>
+      volumeMounts:
+        - name: seeding
+          mountPath: /app/resources/<path:factory-x-ci-cd/data/async-aas#initial-aas-file-name>
 
-  seeding:
-    enabled: true
-    filename: "<path:factory-x-ci-cd/data/async-aas#initial-aas-file-name>"
-    github:
-      repository: "<path:factory-x-ci-cd/data/async-aas#initial-aas-file-location>"
-      personalAccessToken: "<path:factory-x-ci-cd/data/async-aas#initial-aas-github-token>"
+  volumeMounts:
+    - name: seeding
+      enabled: true
+      mountPath: /app/resources/<path:factory-x-ci-cd/data/async-aas#initial-aas-file-name>
+      subPath: <path:factory-x-ci-cd/data/async-aas#initial-aas-file-name>
+
+  volumes:
+    - name: seeding
+      emptyDir: { }
 
 aas-basyx-v2-full:
   # Deprecated legacy BaSyx Mosquitto configuration removed; RabbitMQ (with MQTT/WebSockets) is used instead.
@@ -240,7 +224,7 @@ aas-basyx-v2-full:
 
   # Also needs an ingress.
   aas-environment:
-    enabled: true
+    enabled: false
     image:
       name: eclipsebasyx/aas-environment:2.0.0-SNAPSHOT
       pullPolicy: Always
@@ -488,7 +472,7 @@ aas-basyx-v2-full:
         ]
 
   aas-digitaltwinregistry:
-    enabled: true
+    enabled: false
     image:
       name: eclipsebasyx/digitaltwinregistry:2.0.0-SNAPSHOT
       pullPolicy: Always

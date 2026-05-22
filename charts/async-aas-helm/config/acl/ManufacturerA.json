@@ -1,0 +1,126 @@
+{
+    "AllAccessPermissionRules": {
+        "rules": [
+            {
+                "ACL": {
+                    "ATTRIBUTES": [
+                        {
+                            "CLAIM": "client_id"
+                        }
+                    ],
+                    "RIGHTS": [
+                        "ALL"
+                    ],
+                    "ACCESS": "ALLOW"
+                },
+                "OBJECTS": [
+                    {
+                        "ROUTE": "*"
+                    }
+                ],
+                "FORMULA": {
+                    "$eq": [
+                        {
+                            "$attribute": {
+                                "CLAIM": "client_id"
+                            }
+                        },
+                        {
+                            "$strVal": "<path:factory-x-ci-cd/data/async-aas#fa3st-rwx-all-clientid>"
+                        }
+                    ]
+                }
+            },
+            {
+                "ACL": {
+                    "ATTRIBUTES": [
+                        {
+                            "CLAIM": "client_id"
+                        }
+                    ],
+                    "RIGHTS": [
+                        "READ"
+                    ],
+                    "ACCESS": "ALLOW"
+                },
+                "OBJECTS": [
+                    {
+                        "ROUTE": "*"
+                    }
+                ],
+                "FORMULA": {
+                    "$eq": [
+                        {
+                            "$attribute": {
+                                "CLAIM": "client_id"
+                            }
+                        },
+                        {
+                            "$strVal": "<path:factory-x-ci-cd/data/async-aas#fa3st-r-all-clientid>"
+                        }
+                    ]
+                }
+            },
+            {
+                "ACL": {
+                    "ATTRIBUTES": [
+                        {
+                            "CLAIM": "client_id"
+                        }
+                    ],
+                    "RIGHTS": [
+                        "ALL"
+                    ],
+                    "ACCESS": "ALLOW"
+                },
+                "OBJECTS": [
+                    {
+                        "IDENTIFIABLE": "(Submodel)https://example.com/ids/sm/1150_3131_5052_5787"
+                    }
+                ],
+                "FORMULA": {
+                    "$eq": [
+                        {
+                            "$attribute": {
+                                "CLAIM": "client_id"
+                            }
+                        },
+                        {
+                            "$strVal": "<path:factory-x-ci-cd/data/async-aas#fa3st-rwx-nameplate-clientid>"
+                        }
+                    ]
+                }
+            },
+            {
+                "ACL": {
+                    "ATTRIBUTES": [
+                        {
+                            "CLAIM": "client_id"
+                        }
+                    ],
+                    "RIGHTS": [
+                        "READ"
+                    ],
+                    "ACCESS": "ALLOW"
+                },
+                "OBJECTS": [
+                    {
+                        "ROUTE": "*"
+                    }
+                ],
+                "FORMULA": {
+                    "$eq": [
+                        {
+                            "$attribute": {
+                                "CLAIM": "client_id"
+                            }
+                        },
+                        {
+                            "$strVal": "<path:factory-x-ci-cd/data/async-aas#fa3st-r-all-two-clientid>"
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

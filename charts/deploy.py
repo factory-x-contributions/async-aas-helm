@@ -13,7 +13,7 @@ DEFAULT_VALUES_YAML = "charts/async-aas-helm/values.yaml"
 DEFAULT_CHART_PATH = "charts/async-aas-helm"
 DEFAULT_VALUES_NEW_YAML = "charts/values.local.yaml"
 DEFAULT_RELEASE = "async-aas-helm"
-REALM_FILES = [ "templates/fa3st-realm.yaml", "templates/basyx-realm.yaml", "templates/rabbitmq-realm.yaml"]
+REALM_FILES = [ "templates/fa3st-realm.yaml", "templates/basyx-realm.yaml", "templates/rabbitmq-realm.yaml", "templates/fa3st-acl.yaml" ]
 
 _PATH_PATTERN = "<path:factory-x-ci-cd/data/async-aas#"
 
@@ -123,9 +123,10 @@ def run_helm(release: str, namespace: str | None, chart: str, values_file: str, 
         "--values",
         values_file,
         "--set",
-        f"faaast-service.seeding.enabled={'true' if seeding else 'false'}," 
         f"faaast-service.messageBus.host=tcp://{replacement_strategy('rabbitmq-broker-url', vault)[0]}-mqtt:1883,"
-        f"faaast-service.endpoints[0].security.jwkProvider=http://{replacement_strategy('keycloak-url', vault)[0]}/realms/fa3st/protocol/openid-connect/certs"
+        f"faaast-service.initContainers[0].enabled=false,"
+        f"faaast-service.volumeMounts[0].enabled=false,"
+        f"faaast-service.endpoints[0].jwkProvider=http://{replacement_strategy('keycloak-url', vault)[0]}/realms/fa3st/protocol/openid-connect/certs"
     ]
     if namespace:
         cmd.extend(["--namespace", namespace])
@@ -171,6 +172,7 @@ def ensure_rabbitmq_mqtt_service(release: str, namespace: str | None) -> None:
         print("Failed to create/patch rabbitmq-mqtt Service.", file=sys.stderr)
         sys.exit(1)
 
+
 def run_helm_uninstall(release: str, namespace: str | None) -> None:
     cmd = ["helm", "uninstall", release]
     if namespace:
@@ -183,16 +185,20 @@ def run_helm_uninstall(release: str, namespace: str | None) -> None:
         print("Uninstalling deployment failed.")
         sys.exit(1)
 
-def inject_templates(template: str, chart: str, namespace: str, vault: dict):
 
-    helm_cmd = ["helm", "template", "-s", template, chart]
+def inject_templates(template: str, chart: str, release:str, namespace: str, vault: dict):
+
+    helm_cmd = ["helm", "template", release, "-s", template, chart, "--debug"]
     if namespace:
         helm_cmd.extend(["-n", namespace])
 
     try:
         result = subprocess.run(helm_cmd, capture_output=True, text=True, check=True)
-    except subprocess.CalledProcessError:
-        print("Fixing keycloak realms failed. Please modify client ids/secrets as needed.")
+    except subprocess.CalledProcessError as e:
+        print("Fixing keycloak realms failed miserably. Please modify client ids/secrets as needed.")
+        print(" ".join(helm_cmd))
+        print(e.stderr, e.stdout)
+        return
     
     injected, _ =_inject(result.stdout.splitlines(), vault)
 
@@ -201,9 +207,14 @@ def inject_templates(template: str, chart: str, namespace: str, vault: dict):
         kubectl_cmd.extend(["-n", namespace])
 
     try:
-        subprocess.run(kubectl_cmd, input=bytes("".join(injected), encoding="UTF-8"), check=True)
-    except subprocess.CalledProcessError:
+        subprocess.run(kubectl_cmd, input=bytes("".join(injected), encoding="UTF-8"), capture_output=True, check=True)
+    except subprocess.CalledProcessError as e:
         print("Fixing keycloak realms failed. Please modify client ids/secrets as needed.")
+        print(" ".join(helm_cmd))
+        print(" ".join(kubectl_cmd))
+        print("".join(injected).replace("\n', '", ""))
+        print(e.stderr, e.stdout)
+        return
 
 
 def cli_parser() -> argparse.ArgumentParser:
@@ -308,7 +319,7 @@ def main():
 
     # Realm config-JSONs contain <path..> aswell. Fixing these:
     for realm in REALM_FILES:
-        inject_templates(realm, args.chart, args.namespace, vault)
+        inject_templates(realm, args.chart, args.release, args.namespace, vault)
 
 
 if __name__ == "__main__":

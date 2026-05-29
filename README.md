@@ -30,8 +30,9 @@ helm install -n basyx mongodb bitnami/mongodb --version 18.1.1 -f values.mongodb
 
 This umbrella chart includes the following dependencies:
 
-- **FAAAST Service**: Version 0.1.4 (tag:`cloudevents`, fx-fa³st fork)
-- **Eclipse BaSyx v2**: Version 2.0.11  
+- **FAAAST Service**: Version 0.2.0 (tag:`0.2.0`, fx-fa³st fork)
+- **FAAAST Registry**: Version 1.2.0-SNAPSHOT
+- **Eclipse BaSyx v2**: Version 2.1.12
 - **MongoDB**: Version 18.1.1 (MongoDB 8.2.1, digest-pinned for stability)
 - **RabbitMQ**: Version 16.0.14
 
@@ -56,9 +57,6 @@ This umbrella chart includes the following dependencies:
 
    # install
    python3 charts/deploy.py
-
-   # upgrade
-   python3 charts/deploy.py --upgrade
    ```
 
 ## Service Dependencies
@@ -66,7 +64,5 @@ This umbrella chart includes the following dependencies:
 The services have the following startup order dependencies:
 
 1. MongoDB (database)
-2. RabbitMQ (message broker)  
-3. Keycloak (authentication)
-4. BaSyx services (AAS registry, discovery, environment)
-5. FAAAST service
+2. RabbitMQ (message broker)
+3. Keycloak, FA³ST Service and Registry, BaSyx services (AAS registry, discovery, environment)

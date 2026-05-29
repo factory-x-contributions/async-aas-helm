@@ -124,8 +124,8 @@ def run_helm(release: str, namespace: str | None, chart: str, values_file: str, 
         values_file,
         "--set",
         f"faaast-service.messageBus.host=tcp://{replacement_strategy('rabbitmq-broker-url', vault)[0]}-mqtt:1883,"
-        f"faaast-service.initContainers[0].enabled=false,"
-        f"faaast-service.volumeMounts[0].enabled=false,"
+        f"faaast-service.initContainers[0].enabled={'true'  if seeding else 'false'},"
+        f"faaast-service.volumeMounts[0].enabled={'true'  if seeding else 'false'},"
         f"faaast-service.endpoints[0].jwkProvider=http://{replacement_strategy('keycloak-url', vault)[0]}/realms/fa3st/protocol/openid-connect/certs"
     ]
     if namespace:
@@ -267,6 +267,7 @@ def cli_parser() -> argparse.ArgumentParser:
         "-s",
         "--seeding",
         required=False,
+        action="store_true",
         help="Use seeding for FA³ST Service (required vault fields: initial-aas-file-name, initial-aas-file-location, initial-aas-github-token)",
     )
     return parser

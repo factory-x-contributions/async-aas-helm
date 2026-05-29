@@ -90,6 +90,8 @@ faaast-service:
     "@class": "de.fraunhofer.iosb.ilt.faaast.service.persistence.mongo.PersistenceMongo"
     connectionString: "mongodb://<path:factory-x-ci-cd/data/async-aas#mongodb-admin-user>:<path:factory-x-ci-cd/data/async-aas#mongodb-admin-pw>@mongodb:27017"
     database: "faaast-service"
+    initialModelFile: /app/resources/<path:factory-x-ci-cd/data/async-aas#initial-aas-file-name>
+    override: false
 
   endpoints:
     - "@class": "de.fraunhofer.iosb.ilt.faaast.service.endpoint.http.HttpEndpoint"
@@ -138,9 +140,8 @@ faaast-service:
       image: alpine/git
       command: ["git", "clone"]
       args:
-        - |
-          https://<path:factory-x-ci-cd/data/async-aas#initial-aas-github-token>@github.com/<path:factory-x-ci-cd/data/async-aas#initial-aas-file-location>
-          /app/resources
+        - "https://<path:factory-x-ci-cd/data/async-aas#initial-aas-github-token>@github.com/<path:factory-x-ci-cd/data/async-aas#initial-aas-file-location>"
+        - "/app/resources"
       volumeMounts:
         - name: seeding
           mountPath: /app/resources

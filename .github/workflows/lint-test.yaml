@@ -75,6 +75,7 @@ jobs:
           # Remove <path:... directives
           sed -Ei 's/<path:factory-x-ci-cd\/data\/async-aas\#([a-zA-Z0-9-]+)>/\1/g' charts/async-aas-helm/values.yaml
           # Disable git init phase, we don't need initial model for testing the FA³ST deployment
+          sed -Ez 's/\n[[:space:]]*initialModelFile:[^\n]*//' -i charts/async-aas-helm/values.yaml
           sed -Ez 's/(initContainers:\s*\n[[:space:]]*-\s*name:\s*git\s*\n)[[:space:]]*enabled:\s*true/\1      enabled: false/' -i charts/async-aas-helm/values.yaml
           sed -Ez 's/(volumeMounts:\s*\n[[:space:]]*-\s*name:\s*seeding\s*\n)[[:space:]]*enabled:\s*true/\1      enabled: false/' -i charts/async-aas-helm/values.yaml
           sed -Ez 's/messageBus:\n( *)\"@class\": \"de.fraunhofer.iosb.ilt.faaast.service.messagebus.cloudevents.MessageBusCloudevents\"/messageBus:\n\1\"@class\": \"de.fraunhofer.iosb.ilt.faaast.service.messagebus.internal.MessageBusInternal\"/' -i charts/async-aas-helm/values.yaml

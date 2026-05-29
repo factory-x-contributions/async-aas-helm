@@ -140,10 +140,10 @@ faaast-service:
       args:
         - |
           https://<path:factory-x-ci-cd/data/async-aas#initial-aas-github-token>@github.com/<path:factory-x-ci-cd/data/async-aas#initial-aas-file-location>
-          /app/resources/<path:factory-x-ci-cd/data/async-aas#initial-aas-file-name>
+          /app/resources
       volumeMounts:
         - name: seeding
-          mountPath: /app/resources/<path:factory-x-ci-cd/data/async-aas#initial-aas-file-name>
+          mountPath: /app/resources
 
   volumeMounts:
     - name: seeding

@@ -122,7 +122,7 @@ faaast-service:
       nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
       nginx.ingress.kubernetes.io/proxy-body-size: 150m
       cert-manager.io/cluster-issuer: "letsencrypt-prod"
-      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
     tls:
       - hosts:
           - "<path:factory-x-ci-cd/data/async-aas#faaast-service-url>"

@@ -3,7 +3,7 @@ name: umbrella-rabbitmq-aas
 description: A Helm chart for AAS deployment with RabbitMQ messaging
 dependencies:
   - name: faaast-service
-    version: 1.0.0
+    version: 1.0.1
     repository: "https://fraunhoferiosb.github.io/helm-charts-snapshot/"
   - name: faaast-registry
     version: 1.0.0
@@ -39,4 +39,4 @@ version: 0.7.1
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
-appVersion: "1.16.1"
+appVersion: "1.16.2"

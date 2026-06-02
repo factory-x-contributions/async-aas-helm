@@ -1,0 +1,22 @@
+version = 1
+SPDX-PackageName = "async-aas-helm"
+SPDX-PackageSupplier = "info@factory-x.org"
+SPDX-PackageDownloadLocation = "https://github.com/factory-x-contributions/async-aas-helm"
+
+[[annotations]]
+path = ["README.md", "specs/**", "CODE_OF_CONDUCT.md", "SECURITY.md"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2024-2026 Contributors to the Factory-X project"
+SPDX-License-Identifier = "CC-BY-4.0"
+
+[[annotations]]
+path = ["charts/**", ".github/**", ".gitignore", ".helmignore", "lintconf.yaml"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2024-2026 Contributors to the Factory-X project"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = ["LICENCE", "LICENCE_non-code", "LICENSES/**", "NOTICE"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2024-2026 Contributors to the Factory-X project"
+SPDX-License-Identifier = "Apache-2.0"

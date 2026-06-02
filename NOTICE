@@ -17,8 +17,8 @@ Factory-X is a trademark of Factory-X.
 
 This project uses a dual-license model:
 
-- **Apache-2.0** for source code — see [LICENCE](./LICENCE)
-- **CC-BY-4.0** for documentation — see [LICENCE_non-code](./LICENCE_non-code)
+- **Apache-2.0** for source code — see [LICENSES/Apache-2.0.txt](./LICENSES/Apache-2.0.txt)
+- **CC-BY-4.0** for documentation — see [LICENSES/CC-BY-4.0.txt](./LICENSES/CC-BY-4.0.txt)
 
 ## Cryptography
 

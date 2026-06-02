@@ -86,4 +86,4 @@ This Code of Conduct is adapted from the [Contributor Covenant](https://www.cont
 
 ---
 
-**Questions?** For questions about this Code of Conduct, please open an issue on [GitHub](https://github.com/factory-x-contributions/architecture-decisions/issues).
+**Questions?** For questions about this Code of Conduct, please open an issue on [GitHub](https://github.com/factory-x-contributions/async-aas-helm/issues).

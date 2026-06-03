@@ -32,6 +32,9 @@ Instead, subscribers receive notifications through the messaging infrastructure 
 An implementation MUST trigger an event whenever an observable state of the AAS repository changes.
 An event SHOULD NOT be triggered if an operation does not actually change the stored data.
 
+Events are emitted on the resource level directly addressed by the operation. 
+Changes MUST NOT automatically propagate to parent resources.
+
 ### Generic Event Types
 
 The messaging model distinguishes several event types that describe the type of change that occurred.
@@ -109,7 +112,8 @@ The `dataschema` property can only reference the AAS metamodel element.
     | Asset Administration Shell object*  | Status code*   |
     |   | 	Created Asset Administration Shell*   |
     
-
+<!--
+This part is deprecated.
 - `PutAssetAdministrationShell` 
 *(in case an AAS with the ID specified in the payload is not existing yet)*
 
@@ -119,7 +123,10 @@ The `dataschema` property can only reference the AAS metamodel element.
     |----------|----------|
     | Asset Administration Shell object*  | Status code*   |
     |   | 	Replaced Asset Administration Shell   |
+-->
 
+<!--
+This part is deprecated.
 - `PutAssetAdministrationShellById` 
 *(in case an AAS with the ID specified in the operation (e.g., URL for HTTP REST) is not existing yet)*
 
@@ -129,6 +136,7 @@ The `dataschema` property can only reference the AAS metamodel element.
     |----------|----------|
     | Asset Administration Shell object*  | Status code*   |
     |   | 	Replaced Asset Administration Shell   |
+-->
 
 _("*" indicates a mandatory parameter)_
 
@@ -161,8 +169,12 @@ The `dataschema` property can only reference elements with their own HTTP endpoi
 
 **The following interface operations will trigger this event:**
 
+<!--
 - `PutAssetAdministrationShell` 
+This part is deprecated.
 *(in case an AAS with the ID specified in the payload already exists)*
+-->
+- `PutAssetAdministrationShell` 
 
     Creates or replaces an existing Asset Administration Shell Descriptor, i.e., replaces registration information
 
@@ -171,8 +183,12 @@ The `dataschema` property can only reference elements with their own HTTP endpoi
     | Asset Administration Shell object*  | Status code*   |
     |   | 	Replaced Asset Administration Shell   |
 
+<!--
 - `PutAssetAdministrationShellById` 
+This part is deprecated.
 *(in case an AAS with the ID specified in the operation (e.g., URL for HTTP REST) already exists)*
+-->
+- `PutAssetAdministrationShellById` 
 
     Creates or replaces an existing Asset Administration Shell
 
@@ -214,6 +230,8 @@ The `dataschema` property can only reference elements with their own HTTP endpoi
     | Reference to the Submodel*  | Status code*   |
     |  | Created Submodel Reference*   |
 
+    _Note: Creation or deletion of a Submodel itself does not imply an AAS update event unless the AAS Submodel reference list is modified._
+
 - `DeleteSubmodelReference`
 
     Deletes the Submodel Reference from the Asset Administration Shell
@@ -221,6 +239,8 @@ The `dataschema` property can only reference elements with their own HTTP endpoi
     | Input Parameter | Output Parameter |
     |----------|----------|
     | The unique ID of the Submodel for the reference to be deleted*  | Status code*   |
+
+    _Note: Creation or deletion of a Submodel itself does not imply an AAS update event unless the AAS Submodel reference list is modified._
 
 _("*" indicates a mandatory parameter)_
 
@@ -259,6 +279,8 @@ The `dataschema` property can only reference the SM metamodel element.
     | Submodel object*  | Status code*   |
     |   |  Created Submodel*   |
 
+<!-- 
+This part is deprecated.
 - `PutSubmodel`
 *(in case a SM with the specified ID is not existing yet)*
 
@@ -268,6 +290,7 @@ The `dataschema` property can only reference the SM metamodel element.
     |----------|----------|
     | Submodel object*  | Status code*   |
     |   |  Replaced submodel*   |
+-->
 
 _("*" indicates a mandatory parameter)_
 
@@ -315,8 +338,12 @@ The `dataschema` property can only reference the SM metamodel element as SMEs ar
     | Submodel object*  | Status code*   |
     |   |  Updated  submodel*   |
 
+<!--
 - `PutSubmodel`
+This part is deprecated.
 *(in case a SM with the specified ID already exists)*
+-->
+- `PutSubmodel`
 
     Replaces the Submodel
 
@@ -324,6 +351,14 @@ The `dataschema` property can only reference the SM metamodel element as SMEs ar
     |----------|----------|
     | Submodel object*  | Status code*   |
     |   |  Replaced submodel*   |
+
+    _Note: Changes to contained SMEs do not by themselves require a SubmodelUpdated event when the operation addresses a SubmodelElement endpoint._
+    
+    _When a **PutSubmodel** operation replaces an existing Submodel, a SubmodelUpdated event MUST be emitted. 
+    Additional SubmodelElementCreated, SubmodelElementUpdated, or SubmodelElementDeleted events MUST NOT be emitted._
+
+    _When a **PutSubmodel** operation creates a new SM, a SubmodelUpdated event MUST be emitted, not a SubmodelCreated event. 
+    Further information can be specified in the payload._
 
 _("*" indicates a mandatory parameter)_
 
@@ -359,6 +394,8 @@ Consumers MUST consider any locally cached state for the identified SM invalid u
     |----------|----------|
     | The Submodel’s unique ID*  | Status code*   |
 
+<!--
+This part is deprecated.
 - `PutSubmodel`
 *(in case a SM with the specified ID already exists)*
 
@@ -368,6 +405,7 @@ Consumers MUST consider any locally cached state for the identified SM invalid u
     |----------|----------|
     | Submodel object*  | Status code*   |
     |   |  Replaced submodel*   |
+-->
 
 _("*" indicates a mandatory parameter)_
 
@@ -409,6 +447,8 @@ This event MUST be triggered exactly once per element creation.
     | Submodel element object*  | Status code*   |
     | idShortPath via relative Reference/Keys to a submodel element under which the new SubmodelElement shall be added*  |  Created submodel element*   |
 
+<!--
+This part is deprecated.
 - `PutSubmodelElementByPath`
 *(in case a SME with the ID specified in the operation (e.g., URL for HTTP REST) is not existing yet)*
 
@@ -418,6 +458,7 @@ This event MUST be triggered exactly once per element creation.
     |----------|----------|
     | Submodel element object*  | Status code*   |
     | idShortPath via relative Reference/Keys to a submodel element which shall be replaced*  | New state of the submodel element   |
+-->
 
 _("*" indicates a mandatory parameter)_
 
@@ -466,6 +507,8 @@ Consumers SHOULD use this event as the primary mechanism for tracking live data 
     | The new value of the submodel element*  | Status code*   |
     | idShortPath via relative Reference/Keys to a submodel element*  |  |
 
+<!--
+This part is deprecated.
 - `PutSubmodelElementByPath`
 *(in case a SME with the specified ID already exists)*
 
@@ -475,6 +518,7 @@ Consumers SHOULD use this event as the primary mechanism for tracking live data 
     |----------|----------|
     | Submodel element object*  | Status code*   |
     | idShortPath via relative Reference/Keys to a submodel element which shall be replaced*  | New state of the submodel element |
+-->
 
 _("*" indicates a mandatory parameter)_
 
@@ -543,8 +587,12 @@ Consumers MUST invalidate any locally cached state for the deleted element upon 
     |----------|----------|
     | idShortPath via relative Reference/Keys to a submodel element*  | Status code*   |
 
+<!--
 - `PutSubmodelElementByPath`
+This part is deprecated.
 *(in case a SME with the specified ID already exists)*
+-->
+- `PutSubmodelElementByPath`
 
     Replaces an existing submodel element or creates a new submodel element at a specified path within the submodel element hierarchy
 

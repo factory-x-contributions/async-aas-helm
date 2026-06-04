@@ -1,8 +1,7 @@
-{{- if .Values.rabbitmq.ingress.certManager.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}-rabbitmq-mqtt
+  name: rabbitmq-mqtt
   labels:
     app.kubernetes.io/name: rabbitmq-mqtt
     app.kubernetes.io/instance: {{ .Release.Name }}
@@ -16,4 +15,3 @@ spec:
   selector:
     app.kubernetes.io/name: rabbitmq
     app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end }}

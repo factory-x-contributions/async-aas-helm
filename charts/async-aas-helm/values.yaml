@@ -31,14 +31,18 @@ faaast-registry:
       orm: "orm.xml"
       # the following enables logging of the SQL statements that JPA (Hibernate) executes
       showSql: false
+      properties:
+        hibernate:
+          formatSql: ""
+          dialect: org.hibernate.dialect.PostgreSQLDialect
       hibernate:
         ddlAuto: "update"
         openInView: true
     datasource:
-      driver: "org.h2.Driver"
-      url: "jdbc:h2:mem:testdb"
-      username: "sa"
-      password: ""
+      driver: org.postgresql.Driver
+      url: jdbc:postgresql://postgresql:5432/fa3st-registry
+      username: <path:factory-x-ci-cd/data/async-aas#kc-pg-user>
+      password: <path:factory-x-ci-cd/data/async-aas#kc-pg-pw>
 
   ingress:
     enabled: true
@@ -69,11 +73,6 @@ faaast-service:
     repository: ghcr.io/factory-x-contributions/fa3st-service
     tag: 0.2.0
     pullPolicy: Always
-
-  debug:
-    enabled: false
-    port: 5555
-    suspendOnStart: true
 
   core:
     aasRegistries:
@@ -168,12 +167,21 @@ aas-basyx-v2-full:
     enabled: true
     postgresql:
       enabled: true
+      fullnameOverride: postgresql
       image:
         repository: "bitnamilegacy/postgresql"
       auth:
         username: <path:factory-x-ci-cd/data/async-aas#kc-pg-user>
         password: <path:factory-x-ci-cd/data/async-aas#kc-pg-pw>
         database: <path:factory-x-ci-cd/data/async-aas#kc-pg-db>
+      primary:
+        initdb:
+          # Runs only on first init (empty data dir). To re-trigger on an
+          # existing cluster, delete the PVC: data-postgresql-0
+          scripts:
+            10-create-fa3st-registry-db.sql: |
+              CREATE DATABASE "fa3st-registry";
+              GRANT ALL PRIVILEGES ON DATABASE "fa3st-registry" TO "<path:factory-x-ci-cd/data/async-aas#kc-pg-user>";
     ingress:
       enabled: true
       ingressClassName: "nginx"
@@ -230,7 +238,7 @@ aas-basyx-v2-full:
     config: |-
       server.port=8081
 
-      basyx.backend = InMemory
+      basyx.backend=MongoDB
 
       #basyx.environment=file:aas
 
@@ -263,6 +271,7 @@ aas-basyx-v2-full:
       spring.data.mongodb.uri=mongodb://mongodb
       spring.data.mongodb.port=27017
       spring.data.mongodb.database=factoryx-mongo-db
+      spring.data.mongodb.authentication-database=<path:factory-x-ci-cd/data/async-aas#mongodb-auth-source>
       spring.data.mongodb.username=<path:factory-x-ci-cd/data/async-aas#mongodb-admin-user>
       spring.data.mongodb.password=<path:factory-x-ci-cd/data/async-aas#mongodb-admin-pw>
 

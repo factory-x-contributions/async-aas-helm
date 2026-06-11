@@ -166,7 +166,7 @@ _("*" indicates a mandatory parameter)_
 POST /shells
 
 Headers: 
-Accept: aaplication/json
+Accept: application/json
 Content-Type: application/json
 
 Body:
@@ -260,7 +260,7 @@ _("*" indicates a mandatory parameter)_
 PUT /shells/{aas-id-base64}/asset-information
 
 Headers: 
-Accept: aaplication/json
+Accept: application/json
 Content-Type: application/json
 
 Body:
@@ -307,7 +307,7 @@ _("*" indicates a mandatory parameter)_
 POST /submodels
 
 Headers: 
-Accept: aaplication/json
+Accept: application/json
 Content-Type: application/json
 
 Body:
@@ -365,7 +365,7 @@ _("*" indicates a mandatory parameter)_
 PUT /submodels/{sm-id-base64}
 
 Headers: 
-Accept: aaplication/json
+Accept: application/json
 Content-Type: application/json
 
 Body:
@@ -409,7 +409,7 @@ _("*" indicates a mandatory parameter)_
 DELETE /submodels/{sm-id-base64}
 
 Headers: 
-Accept: aaplication/json
+Accept: application/json
 Content-Type: application/json
 ```
 
@@ -459,7 +459,7 @@ _("*" indicates a mandatory parameter)_
 POST /submodels/{sm-id-base64}/submodelElements
 
 Headers: 
-Accept: aaplication/json
+Accept: application/json
 Content-Type: application/json
 
 Body:
@@ -516,7 +516,7 @@ _("*" indicates a mandatory parameter)_
 PATCH /submodels/{sm-id-base64}/submodel-elements/{sme}/value
 
 Headers: 
-Accept: aaplication/json
+Accept: application/json
 Content-Type: application/json
 
 Body:
@@ -547,7 +547,7 @@ _("*" indicates a mandatory parameter)_
 PUT /submodels/{sm-id-base64}/submodel-elements/{sme}
 
 Headers: 
-Accept: aaplication/json
+Accept: application/json
 Content-Type: application/json
 
 Body: 
@@ -593,7 +593,7 @@ _("*" indicates a mandatory parameter)_
 DELETE /submodels/{sm-id-base64}/submodel-elements/{sme}
 
 Headers: 
-Accept: aaplication/json
+Accept: application/json
 Content-Type: application/json
 ```
 

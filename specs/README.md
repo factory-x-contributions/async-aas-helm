@@ -10,18 +10,33 @@ Specifically, it ensures that data consumers are immediately informed of any cha
 
 ![MQTT Concept](./artifacts/aas-sync-mqtt-concept.svg)
 
-### Flow: event with `Referable` in `source`
+### Flow: slim event with `Referable` in `source`
 
-When the server places the `Referable` directly as the event's `source`, the
-consumer fetches the data in a single round-trip — no event-element
+For slim events — where the envelope carries only the `Referable` reference
+in `source` and no payload — the consumer fetches the data in a single
+round-trip, then isolates the ex post state locally. No event-element
 indirection, no diff query.
 
 ```mermaid
 sequenceDiagram
     autonumber
-    Server->>Client: cloud event with Referable in source
+    Server->>Client: cloud event
     Client->>Server: GET event.source
     Server-->>Client: data
+    Client->>Client: isolate ex post state
+```
+
+### Flow: fat event with payload in `data`
+
+For fat events — where the server inlines the full `Referable` payload in
+the event's `data` property — the consumer isolates the ex post state
+directly from the event. No follow-up fetch required.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    Server->>Client: cloud event
+    Client->>Client: isolate ex post state
 ```
 
 ### Normative Disclaimer 

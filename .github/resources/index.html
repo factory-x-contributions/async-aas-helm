@@ -86,5 +86,17 @@
 <p id="readme">
 <!-- README_CONTENT -->
 </p>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({ startOnLoad: false });
+  // marked renders ```mermaid fences as <pre><code class="language-mermaid">…</code></pre>;
+  // rewrite to the <pre class="mermaid">…</pre> shape mermaid.run() expects.
+  document.querySelectorAll('pre > code.language-mermaid').forEach((code) => {
+    const pre = code.parentElement;
+    pre.className = 'mermaid';
+    pre.textContent = code.textContent;
+  });
+  mermaid.run();
+</script>
 </body>
 </html>

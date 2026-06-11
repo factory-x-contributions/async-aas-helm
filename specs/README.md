@@ -10,6 +10,20 @@ Specifically, it ensures that data consumers are immediately informed of any cha
 
 ![MQTT Concept](./artifacts/aas-sync-mqtt-concept.svg)
 
+### Flow: event with `Referable` in `source`
+
+When the server places the `Referable` directly as the event's `source`, the
+consumer fetches the data in a single round-trip — no event-element
+indirection, no diff query.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    Server->>Client: cloud event with Referable in source
+    Client->>Server: GET event.source
+    Server-->>Client: data
+```
+
 ### Normative Disclaimer 
 The key words **MUST**, **MUST NOT**, **SHOULD**, **SHOULD NOT**, and **MAY** in this document are to be interpreted as described in RFC 2119.
 

@@ -70,6 +70,21 @@
     .button:hover {
       background-color: #333;
     }
+
+    #readme table {
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+
+    #readme table th,
+    #readme table td {
+      border: 1px solid #ddd;
+      padding: 0.4rem 0.75rem;
+    }
+
+    #readme table th {
+      background-color: #f6f6f6;
+    }
   </style>
 
 </head>
@@ -83,9 +98,9 @@
 <p>
   <a href="./submodel-repository-submodelelement/" class="button"><b>SubmodelElement-level</b> Events emitted by <b>Submodel Repositories</b></a>
 </p>
-<p id="readme">
+<div id="readme">
 <!-- README_CONTENT -->
-</p>
+</div>
 <script type="module">
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
   mermaid.initialize({ startOnLoad: false });

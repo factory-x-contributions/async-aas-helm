@@ -178,7 +178,7 @@ The `dataschema` property can only reference elements with their own HTTP endpoi
 - `PutAssetAdministrationShell` 
 *(in case an AAS with the ID specified in the payload is not existing yet)*
 
-    Creates or replaces an existing Asset Administration Shell Descriptor, i.e., replaces registration information
+    Creates or replaces an existing Asset Administration Shell, i.e. replaces registration information
 
     | Input Parameter | Output Parameter |
     |----------|----------|

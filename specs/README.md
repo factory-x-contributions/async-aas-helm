@@ -34,7 +34,7 @@ An event SHOULD NOT be triggered if an operation does not actually change the st
 
 Events are emitted on the resource level directly addressed by the operation. 
 Changes MUST NOT automatically propagate to parent resources.
-
+Events MAY be emitted by the more low-level resources.
 ### Generic Event Types
 
 The messaging model distinguishes several event types that describe the type of change that occurred.

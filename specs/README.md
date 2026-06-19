@@ -10,6 +10,35 @@ Specifically, it ensures that data consumers are immediately informed of any cha
 
 ![MQTT Concept](./artifacts/aas-sync-mqtt-concept.svg)
 
+### Flow: slim event with `Referable` in `source`
+
+For slim events — where the envelope carries only the `Referable` reference
+in `source` and no payload — the consumer fetches the data in a single
+round-trip, then isolates the ex post state locally. No event-element
+indirection, no diff query.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    Server->>Client: cloud event
+    Client->>Server: GET event.source
+    Server-->>Client: data
+    Client->>Client: isolate ex post state
+```
+
+### Flow: fat event with payload in `data`
+
+For fat events — where the server inlines the full `Referable` payload in
+the event's `data` property — the consumer isolates the ex post state
+directly from the event. No follow-up fetch required.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    Server->>Client: cloud event
+    Client->>Client: isolate ex post state
+```
+
 ### Normative Disclaimer 
 The key words **MUST**, **MUST NOT**, **SHOULD**, **SHOULD NOT**, and **MAY** in this document are to be interpreted as described in RFC 2119.
 
@@ -141,7 +170,7 @@ _("*" indicates a mandatory parameter)_
 POST /shells
 
 Headers: 
-Accept: aaplication/json
+Accept: application/json
 Content-Type: application/json
 
 Body:
@@ -237,7 +266,7 @@ _("*" indicates a mandatory parameter)_
 PUT /shells/{aas-id-base64}/asset-information
 
 Headers: 
-Accept: aaplication/json
+Accept: application/json
 Content-Type: application/json
 
 Body:
@@ -284,7 +313,7 @@ _("*" indicates a mandatory parameter)_
 POST /submodels
 
 Headers: 
-Accept: aaplication/json
+Accept: application/json
 Content-Type: application/json
 
 Body:
@@ -347,7 +376,7 @@ _("*" indicates a mandatory parameter)_
 PUT /submodels/{sm-id-base64}
 
 Headers: 
-Accept: aaplication/json
+Accept: application/json
 Content-Type: application/json
 
 Body:
@@ -391,7 +420,7 @@ _("*" indicates a mandatory parameter)_
 DELETE /submodels/{sm-id-base64}
 
 Headers: 
-Accept: aaplication/json
+Accept: application/json
 Content-Type: application/json
 ```
 
@@ -441,7 +470,7 @@ _("*" indicates a mandatory parameter)_
 POST /submodels/{sm-id-base64}/submodelElements
 
 Headers: 
-Accept: aaplication/json
+Accept: application/json
 Content-Type: application/json
 
 Body:
@@ -498,7 +527,7 @@ _("*" indicates a mandatory parameter)_
 PATCH /submodels/{sm-id-base64}/submodel-elements/{sme}/value
 
 Headers: 
-Accept: aaplication/json
+Accept: application/json
 Content-Type: application/json
 
 Body:
@@ -529,7 +558,7 @@ _("*" indicates a mandatory parameter)_
 PUT /submodels/{sm-id-base64}/submodel-elements/{sme}
 
 Headers: 
-Accept: aaplication/json
+Accept: application/json
 Content-Type: application/json
 
 Body: 
@@ -575,7 +604,7 @@ _("*" indicates a mandatory parameter)_
 DELETE /submodels/{sm-id-base64}/submodel-elements/{sme}
 
 Headers: 
-Accept: aaplication/json
+Accept: application/json
 Content-Type: application/json
 ```
 

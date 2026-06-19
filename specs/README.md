@@ -354,7 +354,6 @@ This part is deprecated.
 
     _Note: Changes to contained SMEs do not by themselves require a SubmodelUpdated event when the operation addresses a SubmodelElement endpoint._
     
-    _When a **PutSubmodel** operation replaces an existing Submodel, a SubmodelUpdated event MUST be emitted. 
     Additional SubmodelElementCreated, SubmodelElementUpdated, or SubmodelElementDeleted events MUST NOT be emitted._
 
     _When a **PutSubmodel** operation creates a new SM, a SubmodelUpdated event MUST be emitted, not a SubmodelCreated event. 

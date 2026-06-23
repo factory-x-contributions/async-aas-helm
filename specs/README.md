@@ -362,12 +362,8 @@ The `dataschema` property can only reference the SM metamodel element as SMEs ar
     | Submodel object*  | Status code*   |
     |   |  Replaced submodel*   |
 
-    _Note: Changes to contained SMEs do not by themselves require a SubmodelUpdated event when the operation addresses a SubmodelElement endpoint._
-    
-    Additional SubmodelElementCreated, SubmodelElementUpdated, or SubmodelElementDeleted events MUST NOT be emitted._
-
-    _When a **PutSubmodel** operation creates a new SM, a SubmodelUpdated event MUST be emitted, not a SubmodelCreated event. 
-    Further information can be specified in the payload._
+    _Note: Changes to contained SMEs do not by themselves require a SubmodelUpdated event, when the operation addresses a SubmodelElement endpoint._
+    _Additional SubmodelElementCreated, SubmodelElementUpdated, or SubmodelElementDeleted events MUST NOT be emitted._
 
 _("*" indicates a mandatory parameter)_
 

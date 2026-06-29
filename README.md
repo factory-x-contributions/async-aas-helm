@@ -1,5 +1,8 @@
 # AAS over MQTT
 
+> [!IMPORTANT]
+> **This repository is archived.** It will receive no further development or maintenance. Interested parties are invited to fork the repository and continue the work independently.
+
 This repository contains material to discuss the current state of asynchronous communication with Asset Administration
 Shell payloads. IDTA 01002-3-1 does not specify anything to this regard which is a major inhibitor for use-cases that
 require low-overhead, high-veracity messaging. To serve such use-cases in the Factory-X project, this repository hosts

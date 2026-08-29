@@ -9,7 +9,7 @@ dependencies:
     version: 1.0.0
     repository: "https://fraunhoferiosb.github.io/helm-charts-snapshot/"
   - name: aas-basyx-v2-full
-    version: 2.1.12
+    version: 2.1.13
     repository: "https://eclipse-basyx.github.io/charts/"
   - name: mongodb
     version: 18.1.1
